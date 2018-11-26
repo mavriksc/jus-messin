@@ -16,6 +16,7 @@
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
 package main;
+
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -37,23 +38,18 @@ import java.util.Iterator;
  *
  * @author Barak Naveh
  */
-public final class HelloJGraphT
-{
-    private HelloJGraphT()
-    {
+public final class HelloJGraphT {
+    private HelloJGraphT() {
     } // ensure non-instantiability.
 
     /**
      * The starting point for the demo.
      *
      * @param args ignored.
-     *
      * @throws MalformedURLException if invalid URL is constructed.
-     * @throws ExportException if graph cannot be exported.
+     * @throws ExportException       if graph cannot be exported.
      */
-    public static void main(String[] args)
-            throws MalformedURLException, ExportException
-    {
+    public static void main(String[] args) throws MalformedURLException, ExportException {
         Graph<String, DefaultEdge> stringGraph = createStringGraph();
 
         // note undirected edges are printed as: {<v1>,<v2>}
@@ -61,15 +57,12 @@ public final class HelloJGraphT
         System.out.println(stringGraph.toString());
         System.out.println();
 
-
         // create a graph based on URL objects
         Graph<URL, DefaultEdge> hrefGraph = createHrefGraph();
 
         // find the vertex corresponding to www.jgrapht.org
-        URL start = hrefGraph
-                .vertexSet().stream().filter(url -> url.getHost().equals("www.jgrapht.org")).findAny()
+        URL start = hrefGraph.vertexSet().stream().filter(url -> url.getHost().equals("www.jgrapht.org")).findAny()
                 .get();
-
 
         // perform a graph traversal starting from that vertex
         System.out.println("-- traverseHrefGraph output");
@@ -86,9 +79,7 @@ public final class HelloJGraphT
      *
      * @return a graph based on URL objects.
      */
-    private static Graph<URL, DefaultEdge> createHrefGraph()
-            throws MalformedURLException
-    {
+    private static Graph<URL, DefaultEdge> createHrefGraph() throws MalformedURLException {
 
         Graph<URL, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
@@ -107,7 +98,6 @@ public final class HelloJGraphT
         g.addEdge(google, wikipedia);
         g.addEdge(wikipedia, google);
 
-
         return g;
     }
 
@@ -115,11 +105,9 @@ public final class HelloJGraphT
      * Traverse a graph in depth-first order and print the vertices.
      *
      * @param hrefGraph a graph based on URL objects
-     *
-     * @param start the vertex where the traversal should start
+     * @param start     the vertex where the traversal should start
      */
-    private static void traverseHrefGraph(Graph<URL, DefaultEdge> hrefGraph, URL start)
-    {
+    private static void traverseHrefGraph(Graph<URL, DefaultEdge> hrefGraph, URL start) {
         Iterator<URL> iterator = new DepthFirstIterator<>(hrefGraph, start);
         while (iterator.hasNext()) {
             URL url = iterator.next();
@@ -132,28 +120,21 @@ public final class HelloJGraphT
      *
      * @param hrefGraph a graph based on URL objects
      */
-    private static void renderHrefGraph(Graph<URL, DefaultEdge> hrefGraph)
-            throws ExportException
-    {
+    private static void renderHrefGraph(Graph<URL, DefaultEdge> hrefGraph) throws ExportException {
 
         // use helper classes to define how vertices should be rendered,
         // adhering to the DOT language restrictions
-        ComponentNameProvider<URL> vertexIdProvider = new ComponentNameProvider<URL>()
-        {
-            public String getName(URL url)
-            {
+        ComponentNameProvider<URL> vertexIdProvider = new ComponentNameProvider<URL>() {
+            public String getName(URL url) {
                 return url.getHost().replace('.', '_');
             }
         };
-        ComponentNameProvider<URL> vertexLabelProvider = new ComponentNameProvider<URL>()
-        {
-            public String getName(URL url)
-            {
+        ComponentNameProvider<URL> vertexLabelProvider = new ComponentNameProvider<URL>() {
+            public String getName(URL url) {
                 return url.toString();
             }
         };
-        GraphExporter<URL, DefaultEdge> exporter =
-                new DOTExporter<>(vertexIdProvider, vertexLabelProvider, null);
+        GraphExporter<URL, DefaultEdge> exporter = new DOTExporter<>(vertexIdProvider, vertexLabelProvider, null);
         Writer writer = new StringWriter();
         exporter.exportGraph(hrefGraph, writer);
         System.out.println(writer.toString());
@@ -164,8 +145,7 @@ public final class HelloJGraphT
      *
      * @return a graph based on String objects.
      */
-    private static Graph<String, DefaultEdge> createStringGraph()
-    {
+    private static Graph<String, DefaultEdge> createStringGraph() {
         Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
         String v1 = "v1";
