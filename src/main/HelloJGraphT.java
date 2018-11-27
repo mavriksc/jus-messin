@@ -32,6 +32,8 @@ import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A simple introduction to using JGraphT.
@@ -50,28 +52,32 @@ public final class HelloJGraphT {
      * @throws ExportException       if graph cannot be exported.
      */
     public static void main(String[] args) throws MalformedURLException, ExportException {
-        Graph<String, DefaultEdge> stringGraph = createStringGraph();
+                Graph<String, DefaultEdge> stringGraph = createStringGraph();
 
-        // note undirected edges are printed as: {<v1>,<v2>}
-        System.out.println("-- toString output");
-        System.out.println(stringGraph.toString());
-        System.out.println();
+                // note undirected edges are printed as: {<v1>,<v2>}
+                System.out.println("-- toString output");
+                System.out.println(stringGraph.toString());
+                System.out.println();
 
-        // create a graph based on URL objects
-        Graph<URL, DefaultEdge> hrefGraph = createHrefGraph();
+        //        // create a graph based on URL objects
+        //        Graph<URL, DefaultEdge> hrefGraph = createHrefGraph();
+        //
+        //        // find the vertex corresponding to www.jgrapht.org
+        //        URL start = hrefGraph.vertexSet().stream().filter(url -> url.getHost().equals("www.jgrapht.org")).findAny()
+        //                .get();
+        //
+        //        // perform a graph traversal starting from that vertex
+        //        System.out.println("-- traverseHrefGraph output");
+        //        traverseHrefGraph(hrefGraph, start);
+        //        System.out.println();
+        //
+        //        System.out.println("-- renderHrefGraph output");
+        //        renderHrefGraph(hrefGraph);
+        //        System.out.println();
 
-        // find the vertex corresponding to www.jgrapht.org
-        URL start = hrefGraph.vertexSet().stream().filter(url -> url.getHost().equals("www.jgrapht.org")).findAny()
-                .get();
-
-        // perform a graph traversal starting from that vertex
-        System.out.println("-- traverseHrefGraph output");
-        traverseHrefGraph(hrefGraph, start);
-        System.out.println();
-
-        System.out.println("-- renderHrefGraph output");
-        renderHrefGraph(hrefGraph);
-        System.out.println();
+        Cell[][] map = makeMap(5);
+        Graph<Cell, DefaultEdge> cellGraph = makeCellGraph(map);
+        System.out.println(cellGraph.toString());
     }
 
     /**
@@ -166,5 +172,91 @@ public final class HelloJGraphT {
         g.addEdge(v4, v1);
 
         return g;
+    }
+
+    private static Cell[][] makeMap(int dim) {
+        Cell[][] map = new Cell[dim][dim];
+        for (int i = 0; i < dim; i++) {
+            for (int j = 0; j < dim; j++) {
+                map[i][j] = new Cell(ThreadLocalRandom.current().nextInt(1000), i, j);
+            }
+        }
+        return map;
+    }
+
+    private static Graph<Cell, DefaultEdge> makeCellGraph(Cell[][] map) {
+        Graph<Cell, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                g.addVertex(map[i][j]);
+                if (i > 0) {
+                    g.addEdge(map[i][j], map[i - 1][j]);
+                }
+                if (i == map.length - 1) {
+                    g.addEdge(map[i][j], map[(i + 1) % map.length][j]);
+                }
+                if (j > 0) {
+                    g.addEdge(map[i][j], map[i][j - 1]);
+                }
+                if (j == map[i].length - 1) {
+                    g.addEdge(map[i][j], map[i][(j + 1) % map[i].length]);
+                }
+
+            }
+        }
+        return g;
+    }
+}
+
+class Cell {
+    private int halite;
+    private int x;
+    private int y;
+
+    public Cell(int halite, int x, int y) {
+        this.halite = halite;
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getHalite() {
+        return halite;
+    }
+
+    public void setHalite(int halite) {
+        this.halite = halite;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    @Override public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Cell cell = (Cell) o;
+        return x == cell.x && y == cell.y;
+    }
+
+    @Override public int hashCode() {
+        return Objects.hash(x, y);
+    }
+
+    @Override public String toString() {
+        return "("+x+","+y+")";
     }
 }
