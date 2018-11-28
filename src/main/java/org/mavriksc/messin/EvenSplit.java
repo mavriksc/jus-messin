@@ -15,7 +15,6 @@ public class EvenSplit {
      * @param args
      */
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
         splitPrinter("HACKERS2");
         splitPrinter2("HACKERS2");
     }

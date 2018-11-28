@@ -13,7 +13,7 @@ public class ConvertBinary {
         int rem;
         int bits = (int) Math.floor(Math.log((double) dec) / Math.log((double) 2));
         System.out.println("BITS:" + bits);
-        while (dec > 0) {
+        while (bits > 0) {
             int twoPow = (int) Math.pow((double) 2, (double) bits);
             rem = dec / twoPow;
             dec = dec - rem * twoPow;
