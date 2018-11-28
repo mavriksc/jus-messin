@@ -15,10 +15,10 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class RoomsPuzzle {
 
-    public static final int SIZE = 10000;
+    private static final int SIZE = 10000;
     private static List<String> rooms = new ArrayList<>();
-    public static final String TREASURE = "T";
-    public static final String EMPTY = "e";
+    private static final String TREASURE = "T";
+    private static final String EMPTY = "e";
     private static int currPos = 0;
     private static int moves = 0;
 
