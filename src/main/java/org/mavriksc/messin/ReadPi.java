@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class ReadPi {
     public static void main(String[] args) throws Exception {
         // instantiate input file
-        java.io.File file = new java.io.File("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\pi.txt");
+        java.io.File file = new java.io.File(ClassLoader.getSystemResource("pi.txt").getFile());
 
         // instantiate scanner to read file
         Scanner scanner = new Scanner(file);
