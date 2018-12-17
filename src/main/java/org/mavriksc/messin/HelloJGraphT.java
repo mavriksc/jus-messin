@@ -25,6 +25,7 @@ import org.jgrapht.io.ComponentNameProvider;
 import org.jgrapht.io.DOTExporter;
 import org.jgrapht.io.ExportException;
 import org.jgrapht.io.GraphExporter;
+import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.traverse.DepthFirstIterator;
 
 import java.io.StringWriter;
@@ -52,31 +53,37 @@ public final class HelloJGraphT {
      * @throws ExportException       if graph cannot be exported.
      */
     public static void main(String[] args) throws MalformedURLException, ExportException {
-                Graph<String, DefaultEdge> stringGraph = createStringGraph();
+        Graph<String, DefaultEdge> stringGraph = createStringGraph();
 
-                // note undirected edges are printed as: {<v1>,<v2>}
-                System.out.println("-- toString output");
-                System.out.println(stringGraph.toString());
-                System.out.println();
+        // note undirected edges are printed as: {<v1>,<v2>}
+        // System.out.println("-- toString output");
+        // System.out.println(stringGraph.toString());
+        // System.out.println();
 
-        //        // create a graph based on URL org.mavriksc.messin.objects
-        //        Graph<URL, DefaultEdge> hrefGraph = createHrefGraph();
+        //   // create a graph based on URL org.mavriksc.messin.objects
+        //   Graph<URL, DefaultEdge> hrefGraph = createHrefGraph();
         //
-        //        // find the vertex corresponding to www.jgrapht.org
-        //        URL start = hrefGraph.vertexSet().stream().filter(url -> url.getHost().equals("www.jgrapht.org")).findAny()
-        //                .get();
+        //  // find the vertex corresponding to www.jgrapht.org
+        //     URL start = hrefGraph.vertexSet().stream().filter(url -> url.getHost().equals("www.jgrapht.org")).findAny()
+        //     .get();
         //
-        //        // perform a graph traversal starting from that vertex
-        //        System.out.println("-- traverseHrefGraph output");
-        //        traverseHrefGraph(hrefGraph, start);
-        //        System.out.println();
+        //   // perform a graph traversal starting from that vertex
+        //   System.out.println("-- traverseHrefGraph output");
+        //   traverseHrefGraph(hrefGraph, start);
+        //   System.out.println();
         //
-        //        System.out.println("-- renderHrefGraph output");
-        //        renderHrefGraph(hrefGraph);
-        //        System.out.println();
+        //   System.out.println("-- renderHrefGraph output");
+        //   renderHrefGraph(hrefGraph);
+        //   System.out.println();
 
         Cell[][] map = makeMap(5);
         Graph<Cell, DefaultEdge> cellGraph = makeCellGraph(map);
+        BreadthFirstIterator<Cell, DefaultEdge> cGI = new BreadthFirstIterator<>(cellGraph, map[2][2]);
+        int counter = 1;
+        while (cGI.hasNext()) {
+            Cell c = cGI.next();
+            System.out.println(counter++ + " " + c.toString());
+        }
         System.out.println(cellGraph.toString());
     }
 
@@ -243,7 +250,8 @@ class Cell {
         this.y = y;
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -252,11 +260,13 @@ class Cell {
         return x == cell.x && y == cell.y;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return Objects.hash(x, y);
     }
 
-    @Override public String toString() {
-        return "("+x+","+y+")";
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + ")";
     }
 }
