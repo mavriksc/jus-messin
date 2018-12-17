@@ -78,10 +78,19 @@ public final class HelloJGraphT {
 
         Cell[][] map = makeMap(5);
         Graph<Cell, DefaultEdge> cellGraph = makeCellGraph(map);
-        BreadthFirstIterator<Cell, DefaultEdge> cGI = new BreadthFirstIterator<>(cellGraph, map[2][2]);
+        BreadthFirstIterator<Cell, DefaultEdge> breadthFirstIterator
+                = new BreadthFirstIterator<>(cellGraph, map[2][2]);
         int counter = 1;
-        while (cGI.hasNext()) {
-            Cell c = cGI.next();
+        while (breadthFirstIterator.hasNext()) {
+            Cell c = breadthFirstIterator.next();
+            System.out.println(counter++ + " " + c.toString());
+        }
+
+        DepthFirstIterator<Cell, DefaultEdge> depthFirstIterator
+                = new DepthFirstIterator<>(cellGraph, map[2][2]);
+         counter = 1;
+        while (depthFirstIterator.hasNext()) {
+            Cell c = depthFirstIterator.next();
             System.out.println(counter++ + " " + c.toString());
         }
         System.out.println(cellGraph.toString());
