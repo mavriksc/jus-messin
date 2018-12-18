@@ -1,6 +1,7 @@
 package org.mavriksc.messin;
 
 import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
@@ -16,6 +17,7 @@ import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -25,24 +27,31 @@ public final class HelloJGraphT {
 
     public static void main(String[] args) {
 
-        Cell[][] map = makeMap(5);
+        Cell[][] map = makeMap(32);
         Graph<Cell, DefaultEdge> cellGraph = makeCellGraph(map);
-        BreadthFirstIterator<Cell, DefaultEdge> breadthFirstIterator
-                = new BreadthFirstIterator<>(cellGraph, map[2][2]);
+
+        System.out.println(cellGraph.toString());
+
+        List<Cell> neighbors = Graphs.neighborListOf(cellGraph, map[2][2]);
+        neighbors.forEach(System.out::println);
+    }
+
+    private static void breadthFirstOutput(Graph<Cell, DefaultEdge> g, Cell source){
+        BreadthFirstIterator<Cell, DefaultEdge> breadthFirstIterator = new BreadthFirstIterator<>(g, source);
         int counter = 1;
         while (breadthFirstIterator.hasNext()) {
             Cell c = breadthFirstIterator.next();
             System.out.println(counter++ + " " + c.toString());
         }
+    }
 
-        DepthFirstIterator<Cell, DefaultEdge> depthFirstIterator
-                = new DepthFirstIterator<>(cellGraph, map[2][2]);
-         counter = 1;
+    private static void depthFirstOutput(Graph<Cell, DefaultEdge> g, Cell source){
+        DepthFirstIterator<Cell, DefaultEdge> depthFirstIterator = new DepthFirstIterator<>(g, source);
+        int counter = 1;
         while (depthFirstIterator.hasNext()) {
             Cell c = depthFirstIterator.next();
             System.out.println(counter++ + " " + c.toString());
         }
-        System.out.println(cellGraph.toString());
     }
 
     private static Cell[][] makeMap(int dim) {
