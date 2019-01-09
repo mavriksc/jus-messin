@@ -30,8 +30,6 @@ public final class HelloJGraphT {
         Cell[][] map = makeMap(32);
         Graph<Cell, DefaultEdge> cellGraph = makeCellGraph(map);
 
-        System.out.println(cellGraph.toString());
-
         List<Cell> neighbors = Graphs.neighborListOf(cellGraph, map[2][2]);
         neighbors.forEach(System.out::println);
     }
