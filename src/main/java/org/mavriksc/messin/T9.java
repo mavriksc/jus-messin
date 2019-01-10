@@ -11,7 +11,7 @@ public class T9 {
     private static Map<String, List<String>> t9;
 
     public static void main(String[] args) {
-        String translate = "Translate this string";
+        String translate = "test test test";
         String complete = translate(translate);
         System.out.println(complete);
         System.out.println(complete.length());
