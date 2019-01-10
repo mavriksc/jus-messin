@@ -16,8 +16,10 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -26,15 +28,26 @@ public final class HelloJGraphT {
     }
 
     public static void main(String[] args) {
+        Map<Integer, List<Cell>> schedule = new HashMap<>();
 
         Cell[][] map = makeMap(32);
+        map[7][15].setHalite(0);
         Graph<Cell, DefaultEdge> cellGraph = makeCellGraph(map);
 
-        List<Cell> neighbors = Graphs.neighborListOf(cellGraph, map[2][2]);
-        neighbors.forEach(System.out::println);
+        getSchedule(map[7][15], cellGraph, schedule);
     }
 
-    private static void breadthFirstOutput(Graph<Cell, DefaultEdge> g, Cell source){
+    private static Map<Integer, Cell> getSchedule(Cell origin, Graph<Cell, DefaultEdge> graph, Map<Integer, List<Cell>> schedule) {
+        List<Cell> neighbors = Graphs.neighborListOf(graph, origin);
+        neighbors.sort((c1, c2) -> c2.getHalite() - c1.getHalite());
+        //neighbors.forEach(c -> System.out.println(c.toString() + "Halite:" + c.getHalite()));
+        for (Cell c: neighbors){
+
+        }
+        return null;
+    }
+
+    private static void breadthFirstOutput(Graph<Cell, DefaultEdge> g, Cell source) {
         BreadthFirstIterator<Cell, DefaultEdge> breadthFirstIterator = new BreadthFirstIterator<>(g, source);
         int counter = 1;
         while (breadthFirstIterator.hasNext()) {
@@ -43,7 +56,7 @@ public final class HelloJGraphT {
         }
     }
 
-    private static void depthFirstOutput(Graph<Cell, DefaultEdge> g, Cell source){
+    private static void depthFirstOutput(Graph<Cell, DefaultEdge> g, Cell source) {
         DepthFirstIterator<Cell, DefaultEdge> depthFirstIterator = new DepthFirstIterator<>(g, source);
         int counter = 1;
         while (depthFirstIterator.hasNext()) {
@@ -84,6 +97,18 @@ public final class HelloJGraphT {
         }
         return g;
     }
+
+    private static int turnsToMine(int halite) {
+        if (halite <= 0) {
+            return 0;
+        } else {
+            int getsMined = (int) Math.ceil((float) halite / 4);
+            System.out.println("Gets mined: " + getsMined);
+            return 1 + turnsToMine(halite - getsMined);
+        }
+    }
+
+
 }
 
 class Cell {
