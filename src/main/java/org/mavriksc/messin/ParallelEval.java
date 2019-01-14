@@ -11,7 +11,7 @@ import java.util.Map;
 public class ParallelEval {
 
     public static void main(String[] args) {
-        Tour[] tours = new Tour[5];
+        Tour[] tours = new Tour[120];
         Node[] path = new Node[5];
         path[0] = new Node(1, 1, 1);
         path[1] = new Node(2, 5, 6);
@@ -64,14 +64,11 @@ class Tour {
         } else {
             double len = 0;
             for (int i = 0; i < path.length - 1; i++) {
-                len = +path[i].getDistance(path[1 + 1]);
+                len += path[i].getDistance(path[1 + 1]);
             }
             return len;
         }
     }
-
-    ;
-
 }
 
 class Node {
