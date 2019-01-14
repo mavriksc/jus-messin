@@ -13,8 +13,9 @@ public class MergeListItemMaxMin {
     private static List<Integer> merge(List<Integer> things, int merges){
         List<Integer> result = new ArrayList<>(things);
         for (int i = 0; i < merges; i++) {
-            Collections.m
+            //Collections.m
 
         }
+        return null;
     }
 }
