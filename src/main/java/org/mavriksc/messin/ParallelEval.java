@@ -30,7 +30,6 @@ public class ParallelEval {
         List<Map.Entry<Tour, Double>> lengths = new ArrayList<>();
         Arrays.stream(tours).parallel()
                 .forEach(t -> lengths.add(new AbstractMap.SimpleEntry<Tour, Double>(t, t.getLength())));
-        System.out.println("TOUR:" + lengths.get(0).getKey() + " length:" + lengths.get(0).getValue());
         return Collections.min(lengths, Comparator.comparingDouble(Map.Entry::getValue)).getKey();
     }
 
@@ -64,7 +63,7 @@ class Tour {
         } else {
             double len = 0;
             for (int i = 0; i < path.length - 1; i++) {
-                len += path[i].getDistance(path[1 + 1]);
+                len += path[i].getDistance(path[i + 1]);
             }
             return len;
         }
