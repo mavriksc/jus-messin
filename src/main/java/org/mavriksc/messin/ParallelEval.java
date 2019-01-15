@@ -22,15 +22,15 @@ public class ParallelEval {
         for (int i = 0; i < tours.length; i++) {
             tours[i] = new Tour(randPath(path));
         }
-        getFittest(tours);
+        System.out.println(getFittest(tours));
 
     }
 
     private static Tour getFittest(Tour[] tours) {
-        List<Map.Entry<Tour, Double>> lengths = new ArrayList<>();
-        Arrays.stream(tours).parallel()
-                .forEach(t -> lengths.add(new AbstractMap.SimpleEntry<Tour, Double>(t, t.getLength())));
-        return Collections.min(lengths, Comparator.comparingDouble(Map.Entry::getValue)).getKey();
+
+        return Arrays.stream(tours).parallel()
+                .map(t -> new AbstractMap.SimpleEntry<>(t, t.getLength()))
+                .min(Comparator.comparingDouble(Map.Entry::getValue)).get().getKey();
     }
 
     private static Node[] randPath(Node[] path) {
@@ -46,7 +46,7 @@ public class ParallelEval {
 }
 
 class Tour {
-    Node[] path;
+    private Node[] path;
 
     Tour(Node[] path) {
         this.path = path;
@@ -71,9 +71,9 @@ class Tour {
 }
 
 class Node {
-    int id;
-    int x;
-    int y;
+    private int id;
+    private int x;
+    private int y;
 
     Node(int id, int x, int y) {
         this.id = id;
@@ -86,7 +86,7 @@ class Node {
         return "" + id;
     }
 
-    public double getDistance(Node that) {
+    double getDistance(Node that) {
 
         return Math.sqrt(Math.pow(this.x - that.x, 2) + Math.pow(this.y - that.y, 2));
     }
