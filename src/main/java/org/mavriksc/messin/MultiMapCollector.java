@@ -14,7 +14,8 @@ public class MultiMapCollector {
         things.add(new Item("4321","stats","more stuff"));
         things.add(new Item("4321","stats2","more stuff"));
         things.add(new Item("5432","stats","more stuff"));
-        Map<String,List<Item>> map = things.stream().collect(Collectors.groupingBy(Item::getD1,Collectors.mapping(i-> i, Collectors.toList())));
+        Map<String,List<Item>> map = things.stream().collect(Collectors.groupingBy(
+                Item::getD1,Collectors.mapping(i-> i, Collectors.toList())));
         System.out.println("done mapping");
     }
 }

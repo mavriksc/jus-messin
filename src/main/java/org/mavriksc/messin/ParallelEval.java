@@ -11,7 +11,7 @@ import java.util.Map;
 public class ParallelEval {
 
     public static void main(String[] args) {
-        Tour[] tours = new Tour[120];
+        Tour[] tours = new Tour[10];
         Node[] path = new Node[5];
         path[0] = new Node(1, 1, 1);
         path[1] = new Node(2, 5, 6);
@@ -22,15 +22,15 @@ public class ParallelEval {
         for (int i = 0; i < tours.length; i++) {
             tours[i] = new Tour(randPath(path));
         }
-        System.out.println(getFittest(tours));
+        Tour t = getFittest(tours);
+        System.out.println("Tours: "+t+"Length: "+t.getLength());
 
     }
 
     private static Tour getFittest(Tour[] tours) {
 
         return Arrays.stream(tours).parallel()
-                .map(t -> new AbstractMap.SimpleEntry<>(t, t.getLength()))
-                .min(Comparator.comparingDouble(Map.Entry::getValue)).get().getKey();
+                .min(Comparator.comparingDouble(Tour::getLength)).get();
     }
 
     private static Node[] randPath(Node[] path) {
