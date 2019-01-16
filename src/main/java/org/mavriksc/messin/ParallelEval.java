@@ -18,7 +18,6 @@ public class ParallelEval {
         path[2] = new Node(3, 1, 10);
         path[3] = new Node(4, 10, 1);
         path[4] = new Node(5, 4, 8);
-
         for (int i = 0; i < tours.length; i++) {
             tours[i] = new Tour(randPath(path));
         }
