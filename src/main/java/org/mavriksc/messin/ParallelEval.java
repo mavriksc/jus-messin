@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class ParallelEval {
 
@@ -22,15 +23,14 @@ public class ParallelEval {
         for (int i = 0; i < tours.length; i++) {
             tours[i] = new Tour(randPath(path));
         }
-        Tour t = getFittest(tours);
-        System.out.println("Tours: "+t+"Length: "+t.getLength());
-
+        Optional<Tour> tour= getFittest(tours);
+        tour.ifPresent(t->System.out.println("Tours: "+t+"Length: "+t.getLength()));
     }
 
-    private static Tour getFittest(Tour[] tours) {
+    private static Optional<Tour> getFittest(Tour[] tours) {
 
         return Arrays.stream(tours).parallel()
-                .min(Comparator.comparingDouble(Tour::getLength)).get();
+                .min(Comparator.comparingDouble(Tour::getLength));
     }
 
     private static Node[] randPath(Node[] path) {
