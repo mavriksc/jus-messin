@@ -21,4 +21,6 @@ dependencies {
     compile group: 'javax.el', name: 'javax.el-api', version: '2.2.1'
     compile group: 'com.fasterxml', name: 'classmate', version: '1.3.4'
     compile group: 'org.jboss.logging', name: 'jboss-logging', version: '3.3.2.Final'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.7.0'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
 }

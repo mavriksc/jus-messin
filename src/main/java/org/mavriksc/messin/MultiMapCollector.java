@@ -20,6 +20,7 @@ public class MultiMapCollector {
         System.out.println("done mapping:" + map);
         // mapping items by id to their average score.
         Map<String, Double> map2 = things.stream().collect(Collectors.groupingBy(Item::getD1, Collectors.averagingDouble(Item::getScore)));
+        Map<String, Long> map3 = things.stream().collect(Collectors.groupingBy(Item::getD1, Collectors.counting()));
         map2.forEach((s, d) -> System.out.println(s + "'s average=" + d));
 
     }
