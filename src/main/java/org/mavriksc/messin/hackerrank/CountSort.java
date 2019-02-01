@@ -18,11 +18,12 @@ public class CountSort {
 
         // Complete the countSort function below.
         static void countSort(List<List<String>> arr) {
+            final String hy ="-";
             StringBuilder sb = new StringBuilder();
 
             IntStream.range(0,arr.size())
                     .mapToObj(i-> {if (i<arr.size()/2) {
-                        arr.get(i).set(1,"-");
+                        arr.get(i).set(1,hy);
                     } return arr.get(i);
                     }).collect(Collectors.groupingBy(strings -> strings.get(0),
                     Collectors.mapping(i ->i.get(1), Collectors.toList())))
@@ -34,8 +35,9 @@ public class CountSort {
         }
 
         static void countSortONE(List<List<String>> arr) {
+            final String hy ="-";
             StringBuilder sb = new StringBuilder();
-            arr.subList(0,arr.size()/2).parallelStream().forEach(l->l.set(1,"-"));
+            arr.subList(0,arr.size()/2).parallelStream().forEach(l->l.set(1,hy));
 
             int count = 0;
             arr.stream()
@@ -68,14 +70,14 @@ public class CountSort {
                     throw new RuntimeException(ex);
                 }
             });
-            startAlg = new  Date().getTime();
-            //countSort(arr);
-            countSortONE(arr);
+            startAlg = new Date().getTime();
+            countSort(arr);
+//            countSortONE(arr);
             end = new Date().getTime();
 
-            //System.out.println("READ:"+(startAlg-startread));
+            // System.out.println("READ:"+(startAlg-startread));
             System.out.println("ALG:"+(end-startAlg));
-           // System.out.println("TOT:"+(end-startread));
+            // System.out.println("TOT:"+(end-startread));
             bufferedReader.close();
         }
 
