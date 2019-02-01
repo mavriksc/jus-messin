@@ -1,10 +1,14 @@
 package org.mavriksc.messin.hackerrank;
 
+import org.mavriksc.messin.Item;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Stuff {
     public static void main(String[] args){
@@ -101,6 +105,11 @@ public class Stuff {
     static void countSort(List<List<String>> arr) {
         int len = Integer.parseInt(arr.get(0).get(0));
         assert len == arr.size();
+
+    }
+
+    static int simpleArraySum(int[] ar) {
+        return Arrays.stream(ar).parallel().sum();
 
     }
 
