@@ -18,7 +18,29 @@ public class CountSort {
 
         // Complete the countSort function below.
         static void countSort(List<List<String>> arr) {
-            System.out.println(new Date().getTime());
+            StringBuilder sb = new StringBuilder();
+            long start,end;
+            start = new Date().getTime();
+            IntStream.range(0,arr.size())
+                    .mapToObj(i-> {if (i<arr.size()/2) {
+                        arr.get(i).set(1,"-");
+                    } return arr.get(i);
+                    }).collect(Collectors.groupingBy(strings -> strings.get(0),
+                    Collectors.mapping(i ->i.get(1), Collectors.toList())))
+                    .entrySet().stream()
+                    .sorted((kv1,kv2)->Integer.parseInt(kv1.getKey())-Integer.parseInt(kv2.getKey()))
+                    .forEach(kv->kv.getValue().forEach(s -> sb.append(s).append(" ")));
+            System.out.println(sb.toString());
+            end = new Date().getTime();
+
+            System.out.println("\n"+(end-start));
+        }
+
+        static void countSortONE(List<List<String>> arr) {
+            StringBuilder sb = new StringBuilder();
+            long start,end;
+            start = new Date().getTime();
+            arr.subList(0,arr.size()/2).parallelStream().forEach(l->l.set(1,"-"));
 
             int count = 0;
             arr.stream()
@@ -26,20 +48,13 @@ public class CountSort {
                             Collectors.mapping(i ->i.get(1), Collectors.toList())))
                     .entrySet().stream()
                     .sorted((kv1,kv2)->Integer.parseInt(kv1.getKey())-Integer.parseInt(kv2.getKey()))
-            .forEach(kv->kv.getValue().forEach(s -> System.out.print(s+" ")));
+                    .forEach(kv->kv.getValue().forEach(s ->sb.append(s).append(" ")));
 
-            System.out.println("\n"+new Date().getTime());
 
-            IntStream.range(0,arr.size())
-                    .mapToObj(i-> {if (i<arr.size()/2) {
-                        arr.get(i).set(1,"");
-                    } return arr.get(i);
-                    }).collect(Collectors.groupingBy(strings -> strings.get(0),
-                    Collectors.mapping(i ->i.get(1), Collectors.toList())))
-                    .entrySet().stream()
-                    .sorted((kv1,kv2)->Integer.parseInt(kv1.getKey())-Integer.parseInt(kv2.getKey()))
-                    .forEach(kv->kv.getValue().forEach(s -> System.out.print(s+" ")));;
+            System.out.println(sb.toString());
+            end = new Date().getTime();
 
+            System.out.println("\n"+(end-start));
         }
 
         public static void main(String[] args) throws IOException {
@@ -60,7 +75,8 @@ public class CountSort {
                 }
             });
 
-            countSort(arr);
+           countSort(arr);
+            //countSortONE(arr);
 
             bufferedReader.close();
         }
