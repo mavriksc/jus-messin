@@ -50,9 +50,9 @@ public class CountSort {
         }
 
         public static void main(String[] args) throws IOException {
-            long start,end;
-            start = new Date().getTime();
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("D:/code/jus-messin/src/main/resources/input05.txt"));
+            long startread,end,startAlg;
+            //startread = new Date().getTime();
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(ClassLoader.getSystemResource("input05.txt").getFile()));
 
             int n = Integer.parseInt(bufferedReader.readLine().trim());
 
@@ -68,12 +68,14 @@ public class CountSort {
                     throw new RuntimeException(ex);
                 }
             });
-
-           countSort(arr);
-            //countSortONE(arr);
+            startAlg = new  Date().getTime();
+            //countSort(arr);
+            countSortONE(arr);
             end = new Date().getTime();
 
-            System.out.println("\n"+(end-start));
+            //System.out.println("READ:"+(startAlg-startread));
+            System.out.println("ALG:"+(end-startAlg));
+           // System.out.println("TOT:"+(end-startread));
             bufferedReader.close();
         }
 
