@@ -2,7 +2,6 @@ package org.mavriksc.messin.hackerrank;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -97,6 +96,12 @@ public class Stuff {
             e.printStackTrace();
         }
         return hour24.format(convertMe);
+    }
+
+    static void countSort(List<List<String>> arr) {
+        int len = Integer.parseInt(arr.get(0).get(0));
+        assert len == arr.size();
+
     }
 
 

@@ -36,3 +36,5 @@ hs_err_pid*
 /.gradle/buildOutputCleanup/cache.properties
 /.gradle/buildOutputCleanup/outputFiles.bin
 /.gradle/vcsWorkingDirs/gc.properties
+/out/production/classes/META-INF
+/out/production/classes/META-INF
