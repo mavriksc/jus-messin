@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
@@ -31,6 +32,5 @@ public class LastYearWasSoRandom {
         }
         System.out.println(nov5th1955.getTime());
         System.out.println(nov5th1955);
-
     }
 }
