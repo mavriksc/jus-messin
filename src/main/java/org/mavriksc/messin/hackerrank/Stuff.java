@@ -1,7 +1,5 @@
 package org.mavriksc.messin.hackerrank;
 
-import org.mavriksc.messin.Item;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
