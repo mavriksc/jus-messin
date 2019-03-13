@@ -9,11 +9,11 @@ import static java.util.Arrays.asList;
 public class Permuter {
 
     public static void main(String[] args) throws InterruptedException {
-        List<String> source = asList("A", "B", "C", "D", "E", "F", "G", "H", "I");
-        List<String> permutations = returnPermutations(source, 9, 0);
+        List<String> source = asList("A", "B", "C", "D", "E");
+        List<String> permutations = returnPermutations(source, 5, 0);
         System.out.println(permutations.size());
         Thread.sleep(2000);
-        permutations.forEach(s->System.out.println(s));
+        permutations.forEach(System.out::println);
     }
 
     private static List<String> returnPermutations(List<String> source, int choose, int len) {

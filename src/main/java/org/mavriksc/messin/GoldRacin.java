@@ -9,17 +9,31 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GoldRacin {
     private static final int N = 100;
     private static final int MAX_RAND = 10;
-    private static int recurseCount = 0;
+    private static long recurseCount = 0;
     private static int dynamicCount = 0;
 
     public static void main(String[] args) {
         List<List<Integer>> pyramid = new ArrayList<>();
-        for (int i = 1; i <= N; i++) {
-            List<Integer> level = new ArrayList<>();
-            for (int j = 0; j < i; j++) {
-                level.add(ThreadLocalRandom.current().nextInt(MAX_RAND));
+        for (int n = 2; n < N; n++) {
+
+            for (int i = 1; i <= n; i++) {
+                List<Integer> level = new ArrayList<>();
+                for (int j = 0; j < i; j++) {
+                    level.add(ThreadLocalRandom.current().nextInt(MAX_RAND));
+                }
+                pyramid.add(level);
             }
-            pyramid.add(level);
+
+            int dynamicSolution = dynamicSolution(pyramid);
+            // System.out.println("Dynamic solution: " + dynamicSolution + " and the steps:" + dynamicCount);
+            System.out.println("N: " + n + "\tand the steps:" + dynamicCount);
+
+            //int slrSolution = sumLeftRightAndSelf(pyramid, 0, 0);
+            //System.out.println("N: " + n + "\tand the steps:" + recurseCount);
+            pyramid.clear();
+            //recurseCount=0;
+            dynamicCount=0;
+            //System.out.println("Recursive solution: " + slrSolution + " and the steps:" + recurseCount);
         }
         int dynamicSolution = dynamicSolution(pyramid);
         System.out.println("Dynamic solution: " + dynamicSolution + " and the steps:" + dynamicCount);
