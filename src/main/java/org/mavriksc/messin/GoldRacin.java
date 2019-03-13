@@ -35,6 +35,10 @@ public class GoldRacin {
             dynamicCount=0;
             //System.out.println("Recursive solution: " + slrSolution + " and the steps:" + recurseCount);
         }
+        int dynamicSolution = dynamicSolution(pyramid);
+        System.out.println("Dynamic solution: " + dynamicSolution + " and the steps:" + dynamicCount);
+        int slrSolution = sumLeftRightAndSelf(pyramid, 0, 0);
+        System.out.println("Recursive solution: " + slrSolution + " and the steps:" + recurseCount);
     }
 
     private static int sumLeftRightAndSelf(List<List<Integer>> pyramid, int level, int position) {
