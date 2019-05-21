@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -62,7 +63,7 @@ public class RemoveDupes {
 
     private static List<String> getDirs(String path) {
         File f = new File(path);
-        return Arrays.asList(f.list((dir, name) -> !name.contains(".")));
+        return Arrays.asList(Objects.requireNonNull(f.list((dir, name) -> !name.contains("."))));
     }
 
     private static List<String> readTxtFile(String aFileName) {
