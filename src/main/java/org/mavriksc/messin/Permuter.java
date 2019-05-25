@@ -1,30 +1,49 @@
 package org.mavriksc.messin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
 public class Permuter {
-    private static int N = 5;
+    private static List<String> source = asList("A", "B", "C", "D", "E","F");
+    private static int N = source.size();
 
     public static void main(String[] args) throws InterruptedException {
 
-        List<String> source = asList("A", "B", "C", "D", "E");
+
 
         //List<String> permutations = returnPermutations(source, N, 0);
         String[][] permutations = permutationsViaRotation(source);
+        List<String> permArray = convertToArray(permutations);
+       // String guess = "ABCDEABCDAEBCDABECDABCEDABCADEBCADBECADBCEADBCAEDBCABDECABDCEABDCAEBDCABEDCABACDEBACDBEACDBAECDBACEDBACBDEACBDAECBDACEBDACBEDACBADECBADCEBADCBEADCBAEDCBA";
+//        StringBuilder sb = new StringBuilder(guess);
+//        String reverse = sb.reverse().toString();
+        //System.out.println(reverse);
+        //System.out.println(isSuperPermutation(permArray, guess));
+        //System.out.println(isSuperPermutation(permArray,reverse));
+        outputPerm2DArray(permutations);
+    }
+
+    private static void outputPerm2DArray(String[][] permutations) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < permutations.length; i++) {
-            for (int j = 0; j < permutations[i].length; j++) {
-                sb.append(permutations[i][j]).append(" ");
+        for (String[] permutation : permutations) {
+            for (String s : permutation) {
+                sb.append(s).append(" ");
             }
             sb.append("\n");
         }
         System.out.println(sb.toString());
+    }
 
-
+    private static List<String> convertToArray(String[][] permutations) {
+        List<String> perms = new ArrayList<>();
+        for (String[] permutation : permutations) {
+            Collections.addAll(perms, permutation);
+        }
+        return perms;
     }
 
     private static List<String> returnPermutations(List<String> source, int choose, int len) {
@@ -55,7 +74,7 @@ public class Permuter {
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < row1.size(); j++) {
-                perms[i][j] = i == 0 ? row1.get(j) : rotateString(perms[i-1][j]);
+                perms[i][j] = i == 0 ? row1.get(j) : rotateString(perms[i - 1][j]);
             }
         }
         return perms;
@@ -67,5 +86,15 @@ public class Permuter {
             StringBuilder sb = new StringBuilder();
             return sb.append(s.substring(1)).append(s.substring(0, 1)).toString();
         }
+    }
+
+    private static boolean isSuperPermutation(List<String> perms, String guess) {
+        for (String s : perms) {
+            if (!guess.contains(s)) {
+                System.out.println(s);
+                return false;
+            }
+        }
+        return true;
     }
 }
