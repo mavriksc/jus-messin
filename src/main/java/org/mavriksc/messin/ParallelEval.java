@@ -22,14 +22,13 @@ public class ParallelEval {
         for (int i = 0; i < tours.length; i++) {
             tours[i] = new Tour(randPath(path));
         }
-        Optional<Tour> tour= getFittest(tours);
-        tour.ifPresent(t->System.out.println("Tours: "+t+"Length: "+t.getLength()));
+        Optional<Tour> tour = getFittest(tours);
+        tour.ifPresent(t -> System.out.println("Tours: " + t + "Length: " + t.getLength()));
     }
 
     private static Optional<Tour> getFittest(Tour[] tours) {
 
-        return Arrays.stream(tours).parallel()
-                .min(Comparator.comparingDouble(Tour::getLength));
+        return Arrays.stream(tours).parallel().min(Comparator.comparingDouble(Tour::getLength));
     }
 
     private static Node[] randPath(Node[] path) {
