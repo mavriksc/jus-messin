@@ -40,3 +40,12 @@ hs_err_pid*
 /out/production/classes/META-INF
 /out
 out
+/.gradle/4.8/fileContent/annotation-processors.bin
+/.gradle/4.8/fileContent/fileContent.lock
+/.gradle/4.8/fileHashes/resourceHashesCache.bin
+/build/resources/main/input04.txt
+/build/resources/main/input05.txt
+/build/resources/main/pi.txt
+/build/resources/main/response.json
+/build/resources/main/stats.txt
+/build/tmp/jar/MANIFEST.MF

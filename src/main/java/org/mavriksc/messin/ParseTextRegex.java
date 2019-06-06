@@ -13,10 +13,10 @@ public class ParseTextRegex {
         Matcher m = pattern.matcher(thing);
         int index = 0;
         while (m.find()) {
-            if (!m.group(0).trim().isEmpty())
-                parsed[index] = Integer.parseInt(m.group(0).trim());
+            if (!" ".equals(m.group(1)))
+                parsed[index] = Integer.parseInt(m.group(1));
             else
-                parsed[index] = -1; //or what ever your missing data value should be.
+                parsed[index] = -9999; //or what ever your missing data value should be.
             index++;
         }
         Arrays.asList(parsed).forEach(System.out::println);
