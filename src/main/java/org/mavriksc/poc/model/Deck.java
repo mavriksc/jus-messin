@@ -39,4 +39,10 @@ public class Deck {
             throw new EmptyDeckException();
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb  = new StringBuilder();
+        cards.forEach(c->sb.append(c.toString()));
+        return sb.toString();
+    }
 }
