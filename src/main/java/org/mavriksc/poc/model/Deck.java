@@ -28,6 +28,15 @@ public class Deck {
         }
     }
 
+    public void shuffleInPlace() {
+        for (int i = cards.size() - 1; i > 0; i--) {
+            int swap = ThreadLocalRandom.current().nextInt(i);
+            Card c = cards.get(swap);
+            cards.set(swap, cards.get(i));
+            cards.set(i, c);
+        }
+    }
+
     public int size(){
         return cards.size();
     }
