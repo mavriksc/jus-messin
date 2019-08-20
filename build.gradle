@@ -23,6 +23,7 @@ dependencies {
     compile group: 'org.jboss.logging', name: 'jboss-logging', version: '3.3.2.Final'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.7.0'
     compile 'com.sun.activation:javax.activation:1.2.0'
+    compile group: 'commons-codec', name: 'commons-codec', version: '1.13'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.4'

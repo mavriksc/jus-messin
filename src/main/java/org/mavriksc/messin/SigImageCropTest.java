@@ -19,8 +19,9 @@ public class SigImageCropTest {
         File file = new File(ClassLoader.getSystemResource(FILE).getFile());
         List<String> lines = Files.readAllLines(file.toPath());
         byte[] bytes = Base64.getDecoder().decode(lines.get(0).substring(HEADER.length()));
+        //byte[] bytes = org.apache.commons.codec.binary.Base64.decodeBase64(lines.get(0).substring(HEADER.length()));
         BufferedImage img = ImageUtil.bytesToBufferedImage(bytes);
-        File out = new File("saved-new.png");
+        File out = new File("saved-new-1.png");
         ImageIO.write(trimImage(img), "png", out);
     }
 
