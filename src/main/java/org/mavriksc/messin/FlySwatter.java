@@ -11,16 +11,14 @@ public class FlySwatter {
 
     public static void main(String[] args) throws Exception {
         getInput();
-        cases.forEach(c -> {
-            String output = String.format("Case #%d: %.6f", cases.indexOf(c) + 1, simulateCase(c));
-            System.out.println(output);
-        });
-
+        List<String> answers = new ArrayList<>();
+        cases.forEach(c -> answers.add(String.format("Case #%d: %.6f", cases.indexOf(c) + 1, simulateCase(c))));
+        answers.forEach(System.out::println);
     }
 
     private static double simulateCase(Case c) {
         double p = 2, lastP;
-        double epsilon = 0.00000001;
+        double epsilon = 0.00000000000001;
         int count = 0;
         int MAX_SIMS = 1_000_000;
         do {
@@ -30,13 +28,15 @@ public class FlySwatter {
             //System.out.println(String.format("Case #%d,trial #%d p: %.6f", cases.indexOf(c) + 1, count, ans));
             p += (ans - p) / count;
         } while (count < MAX_SIMS && Math.abs(p - lastP) > epsilon);
+        System.out.println(String.format("Count needed:%d Last adjustment size : %.15f", count, Math.abs(p - lastP)));
         return p;
     }
 
     private static double runSims(Case c) {
-        int numTrials = Integer.MAX_VALUE/2;
+        int numTrials = 10_000_000;
         int hits = 0;
         for (int i = 0; i < numTrials; i++) {
+
             hits += didItHit(c) ? 1 : 0;
         }
         return (double) hits / numTrials;
