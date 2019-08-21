@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 
 public class FlySwatter {
     private static final String FILE_NAME = "C-sample.in";
@@ -18,13 +19,13 @@ public class FlySwatter {
 
     private static double simulateCase(Case c) {
         double p = 2, lastP;
-        double epsilon = 0.00000000000001;
+        double epsilon = 0.00000000001;
         int count = 0;
         int MAX_SIMS = 1_000_000;
         do {
             lastP = p;
             count++;
-            double ans = runSims(c);
+            double ans = runSimsParallel(c);
             //System.out.println(String.format("Case #%d,trial #%d p: %.6f", cases.indexOf(c) + 1, count, ans));
             p += (ans - p) / count;
         } while (count < MAX_SIMS && Math.abs(p - lastP) > epsilon);
@@ -40,6 +41,14 @@ public class FlySwatter {
             hits += didItHit(c) ? 1 : 0;
         }
         return (double) hits / numTrials;
+    }
+
+    private static double runSimsParallel(Case c) {
+        int numTrials = 10_000_000;
+        long hits =  IntStream.range(0,numTrials).parallel()
+                .filter(i->didItHit(c))
+                .count();
+        return hits /(double) numTrials;
     }
 
     private static boolean didItHit(Case c) {
