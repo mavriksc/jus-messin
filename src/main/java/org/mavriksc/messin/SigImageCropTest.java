@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 public class SigImageCropTest {
@@ -20,7 +21,9 @@ public class SigImageCropTest {
         List<String> lines = Files.readAllLines(file.toPath());
         byte[] bytes = Base64.getDecoder().decode(lines.get(0).substring(HEADER.length()));
         //byte[] bytes = org.apache.commons.codec.binary.Base64.decodeBase64(lines.get(0).substring(HEADER.length()));
+        long start = new Date().getTime();
         BufferedImage img = ImageUtil.bytesToBufferedImage(bytes);
+        System.out.println(new Date().getTime()-start);
         File out = new File("saved-new-1.png");
         ImageIO.write(trimImage(img), "png", out);
     }
