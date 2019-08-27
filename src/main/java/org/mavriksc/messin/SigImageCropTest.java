@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 public class SigImageCropTest {
-    private static final String FILE = "sig-image1.dat";
+    private static final String FILE = "sig-image-2.dat";
     private static final String HEADER = "data:image/png;base64,";
 
     public static void main(String[] args) throws IOException {
@@ -24,8 +24,9 @@ public class SigImageCropTest {
         long start = new Date().getTime();
         BufferedImage img = ImageUtil.bytesToBufferedImage(bytes);
         System.out.println(new Date().getTime()-start);
-        File out = new File("saved-new-1.png");
-        ImageIO.write(trimImage(img), "png", out);
+        File out = new File("saved-2.png");
+        //ImageIO.write(trimImage(img), "png", out);
+        ImageIO.write(img,"png",out);
     }
 
     private static byte[] getBytes(BufferedImage image) {
