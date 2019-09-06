@@ -9,11 +9,10 @@ import java.util.stream.IntStream;
 public class BetweenTwoFerns {
 
     static int getTotalX(List<Integer> a, List<Integer> b) {
-        b.sort(Comparator.naturalOrder());
-        return (int) IntStream.range(1,b.get(0)+1).parallel()
-                .filter(i->b.parallelStream().allMatch(n->n%i==0))
-                .filter(i->a.parallelStream().allMatch(n->i%n==0))
-                .count();
+        int smallestList2 = b.stream().min(Integer::compareTo).orElse(1);
+        return (int) IntStream.range(1, smallestList2 + 1).parallel()
+                .filter(i -> b.parallelStream().allMatch(n -> n % i == 0))
+                .filter(i -> a.parallelStream().allMatch(n -> i % n == 0)).count();
 
     }
 
