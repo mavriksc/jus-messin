@@ -7,10 +7,11 @@ public class DayOfTheProgrammer {
 
     }
     static String getDate(int year){
-        int day;
-        int month;
+        int day=0;
+        int month=0;
         if (year==1918){
-
+            month = 10;
+            day = 2;
         }else if (year<1918){
 
         }else {
