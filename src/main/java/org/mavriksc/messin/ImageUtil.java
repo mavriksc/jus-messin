@@ -1,5 +1,12 @@
 package org.mavriksc.messin;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -124,5 +131,14 @@ public class ImageUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    static public byte[] getBinaryFile(URL url) throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet(url.toExternalForm());
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            HttpEntity entity = response.getEntity();
+            return entity != null ? EntityUtils.toByteArray(entity) : null;
+        }
     }
 }

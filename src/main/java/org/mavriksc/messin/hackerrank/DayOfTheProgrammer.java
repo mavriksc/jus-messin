@@ -9,17 +9,14 @@ public class DayOfTheProgrammer {
     }
     static String getDate(int year){
         int day=0;
-        int month=0;
+        int month=9;
         if (year==1918){
-            month = 10;
-            day = 2;
+            day = 26;
         }else if (year<1918){
-            month = 9;
-            day = year%4==0?12:11;
+            day = year%4==0?12:13;
 
         }else {
-            month = 9;
-            day = year%400==0||(year%4==0&&year%100!=0)?12:11;
+            day = year%400==0||(year%4==0&&year%100!=0)?12:13;
         }
         return String.format("%02d.%02d.%d", day, month, year);
     }

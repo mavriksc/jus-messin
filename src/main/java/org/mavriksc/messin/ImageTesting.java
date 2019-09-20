@@ -1,6 +1,7 @@
 package org.mavriksc.messin;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -9,9 +10,11 @@ public class ImageTesting {
     private static final String GOOD_IMAGE1 = "https://www.att.com/catalog/en/idse/Apple/Apple%20iPhone%20XR/Black-hero-zoom.png";
     private static final String GOOD_IMAGE2 = "https://www.fileformat.info/format/bmp/sample/4cb74cda027a43f3b278c05c3770950f/download";
     private static final String GIF = "https://media.giphy.com/media/13gvXfEVlxQjDO/giphy.gif";
+
+
     public static void main(String[] args) throws IOException {
 
-        byte[] image = ImageUtil.getBytes(GIF);
+        byte[] image = ImageUtil.getBinaryFile(new URL(BAD_IMAGE1));
         System.out.println("IMAGE VALID?:" + ImageUtil.isValidImage(image));
         byte[] image300 = ImageUtil.scaleImageToSquare(image, 300);
         byte[] image80 = ImageUtil.scaleImageToSquare(image, 80);
