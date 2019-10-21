@@ -1,0 +1,8 @@
+Settings
+(1) thasldnfao asd;lfwondfawnwdfwdf
+(2) thasldnfao asd;lfwondfawnfwdfas
+(3) thasldnfao asd;lfwondfawnwdfwdf
+(4) thasldnfao asd;fwdf
+(5) thasldnfao asd;lfwondfawn
+(6) thasldnfao asd;lfwondfawnwdfwdfwdwew wdfwdf
+(31) chromeVersion(76/77/78), if you don't know this field will be filled automatically upon the first run of the bot): " + chromeVersion
