@@ -14,7 +14,6 @@ fun bonAppetit(bill: Array<Int>, k: Int, b: Int) {
 
 fun pageCount(n: Int, p: Int) = min(p / 2, if (n % 2 == 0) ((n - p) + 1) / 2 else (n - p) / 2)
 
-
 fun countingValleys(n: Int, s: String): Int {
     var height = 0
     var valCount = 0
@@ -29,4 +28,11 @@ fun countingValleys(n: Int, s: String): Int {
         oldHeight = height
     }
     return valCount
+}
+
+fun getMoneySpent(keyboards: Array<Int>, drives: Array<Int>, b: Int): Int {
+    /*
+     * Write your code here.
+     */
+
 }

@@ -31,6 +31,11 @@ dependencies {
     compile group: 'com.google.apis', name: 'google-api-services-youtube', version: 'v3-rev212-1.25.0'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.16'
+    compile group: 'org.apache.poi', name: 'poi', version: '4.0.1' //required for converter to work 4.0.1
+    compile group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.poi.xwpf.converter.pdf', version: '2.0.2'
+
+
+
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
