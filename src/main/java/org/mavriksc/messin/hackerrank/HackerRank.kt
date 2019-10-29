@@ -30,9 +30,17 @@ fun countingValleys(n: Int, s: String): Int {
     return valCount
 }
 
-fun getMoneySpent(keyboards: Array<Int>, drives: Array<Int>, b: Int): Int {
-    /*
-     * Write your code here.
-     */
+fun getMoneySpent(keyboards: Array<Int>, drives: Array<Int>, b: Int) =
+        keyboards.flatMap { k -> drives.map { it + k } }.filter { it <= b }.max() ?: -1
 
+
+fun catAndMouse(x: Int, y: Int, z: Int): String {
+    val distComp = abs(x - z) - abs(y - z)
+    return when {
+        distComp > 0 -> "Cat A"
+        distComp < 0 -> "Cat B"
+        else-> "Mouse C"
+    }
 }
+
+//https://www.hackerrank.com/challenges/magic-square-forming/problem?h_r=next-challenge&h_v=zen
