@@ -3,8 +3,7 @@ package org.mavriksc.messin.hackerrank
 import kotlin.math.*
 
 fun main() {
-    val sq = arrayOf(arrayOf(2, 9, 4), arrayOf(7, 5, 3), arrayOf(6, 1, 8))
-    println(formingMagicSquare(sq))
+    println(pickingNumbers(arrayOf(1, 1, 3, 1, 2, 2, 2, 1, 1, 4)))
 }
 
 fun designerPdfViewer(h: Array<Int>, word: String) = word.length * word.toLowerCase().chars().map { h[it - 'a'.toInt()] }.max().asInt
@@ -91,7 +90,6 @@ fun formingMagicSquare(s: Array<Array<Int>>): Int {
     return sqList.map { it - s }.min()!!
 }
 
-
 fun <T : Comparable<T>> Iterable<T>.maxWithLimit(limit: T): T? {
     val iterator = iterator()
     if (!iterator.hasNext()) return null
@@ -99,7 +97,22 @@ fun <T : Comparable<T>> Iterable<T>.maxWithLimit(limit: T): T? {
     while (iterator.hasNext()) {
         val e = iterator.next()
         if (e == limit) return e
-        if (max < e&&e<limit) max = e
+        if (max < e && e < limit) max = e
     }
     return max
 }
+
+fun pickingNumbers(a: Array<Int>): Int {
+    val numCountMap = a.groupingBy { it }.eachCount()
+    return numCountMap.map { it.value + max(numCountMap[it.key - 1] ?: 0, numCountMap[it.key + 1] ?: 0) }.max()!!
+}
+
+fun climbingLeaderboard(scores: Array<Int>, alice: Array<Int>): Array<Int> {
+    // 12PT solution times out on 4 tests.
+    val disScores = scores.distinct()
+    return alice.map { score ->
+        val idx = disScores.indexOfFirst { it <= score }
+        if (idx == -1) disScores.size + 1 else idx + 1
+    }.toTypedArray()
+}
+
