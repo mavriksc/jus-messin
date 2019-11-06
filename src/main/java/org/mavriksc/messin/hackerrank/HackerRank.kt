@@ -3,19 +3,17 @@ package org.mavriksc.messin.hackerrank
 import com.google.common.io.Resources
 import java.io.File
 import java.lang.management.ManagementFactory
+import java.util.stream.IntStream
 import kotlin.math.*
 
 fun main() {
     //climbingLeaderboard(arrayOf(1), arrayOf(1,1)).forEach { println(it) }
-    val clbInput = getCLBINPUT(readFile("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\input06.txt"))
-    val ans = climbingLeaderboard(clbInput.first,clbInput.second)
-    val realAns = readFile("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\output06.txt").map { it.toInt() }.toTypedArray()
-    for (i in ans.indices){
-        if (ans[i]!=realAns[i]){
-            println("$i : Thought :${ans[i]} was :${realAns[i]}")
-        }
-    }
+    IntStream.range(0,6).forEach { println(utopianTree(it)) }
 
+}
+
+fun readFile(path:String):List<String>{
+    return File(path).readLines()
 }
 
 fun designerPdfViewer(h: Array<Int>, word: String) = word.length * word.toLowerCase().chars().map { h[it - 'a'.toInt()] }.max().asInt
@@ -146,14 +144,26 @@ fun climbingLeaderboard(scores: Array<Int>, alice: Array<Int>): Array<Int> {
         }
     }
     return out
-}
 
-fun readFile(path:String):List<String>{
-    return File(path).readLines()
 }
-
 fun getCLBINPUT(lines:List<String>):Pair<Array<Int>,Array<Int>>{
     val first = lines[1].trim().split(" ").map { it.toInt() }.toTypedArray()
     val second = lines[3].trim().split(" ").map { it.toInt() }.toTypedArray()
     return Pair(first,second)
+}
+
+fun utopianTree(n: Int): Int {
+    if (n==0) return 1
+    var height = 1
+    for (x in 1..n) {
+        when{
+            x%2!=0->{
+                height*=2
+            }
+            x%2==0->{
+               height+=1
+            }
+        }
+    }
+    return height
 }
