@@ -3,7 +3,7 @@ package org.mavriksc.messin.hackerrank
 import kotlin.math.*
 
 fun main() {
-    println(pickingNumbers(arrayOf(1, 1, 3, 1, 2, 2, 2, 1, 1, 4)))
+    climbingLeaderboard(arrayOf(1), arrayOf(1,1)).forEach { println(it) }
 }
 
 fun designerPdfViewer(h: Array<Int>, word: String) = word.length * word.toLowerCase().chars().map { h[it - 'a'.toInt()] }.max().asInt
@@ -107,12 +107,36 @@ fun pickingNumbers(a: Array<Int>): Int {
     return numCountMap.map { it.value + max(numCountMap[it.key - 1] ?: 0, numCountMap[it.key + 1] ?: 0) }.max()!!
 }
 
+//7
+//100 100 50 40 40 20 10
+//4
+//5 25 50 120
+
 fun climbingLeaderboard(scores: Array<Int>, alice: Array<Int>): Array<Int> {
     // 12PT solution times out on 4 tests.
+    val out = Array<Int>(alice.size) { 0 }
     val disScores = scores.distinct()
-    return alice.map { score ->
-        val idx = disScores.indexOfFirst { it <= score }
-        if (idx == -1) disScores.size + 1 else idx + 1
-    }.toTypedArray()
+    var lastScoreIndex = disScores.size
+
+    for ((i, n) in alice.withIndex()) {
+        if (lastScoreIndex == 0) {
+            out[i] = 1
+        } else {
+            var found = false
+            do {
+                if (disScores[lastScoreIndex - 1] > n) {
+                    out[i] = lastScoreIndex + 1
+                    found = true
+                } else if (disScores[lastScoreIndex - 1] == n) {
+                    out[i] = lastScoreIndex
+                    found = true
+                } else {
+                    lastScoreIndex--
+                }
+            } while (lastScoreIndex > 1 && !found)
+            if (!found) out[i] = 1
+        }
+    }
+    return out
 }
 
