@@ -1,9 +1,21 @@
 package org.mavriksc.messin.hackerrank
 
+import com.google.common.io.Resources
+import java.io.File
+import java.lang.management.ManagementFactory
 import kotlin.math.*
 
 fun main() {
-    climbingLeaderboard(arrayOf(1), arrayOf(1,1)).forEach { println(it) }
+    //climbingLeaderboard(arrayOf(1), arrayOf(1,1)).forEach { println(it) }
+    val clbInput = getCLBINPUT(readFile("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\input06.txt"))
+    val ans = climbingLeaderboard(clbInput.first,clbInput.second)
+    val realAns = readFile("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\output06.txt").map { it.toInt() }.toTypedArray()
+    for (i in ans.indices){
+        if (ans[i]!=realAns[i]){
+            println("$i : Thought :${ans[i]} was :${realAns[i]}")
+        }
+    }
+
 }
 
 fun designerPdfViewer(h: Array<Int>, word: String) = word.length * word.toLowerCase().chars().map { h[it - 'a'.toInt()] }.max().asInt
@@ -33,7 +45,6 @@ fun countingValleys(n: Int, s: String): Int {
 
 fun getMoneySpent(keyboards: Array<Int>, drives: Array<Int>, b: Int) =
         keyboards.flatMap { k -> drives.map { it + k } }.filter { it <= b }.maxWithLimit(b) ?: -1
-
 
 fun catAndMouse(x: Int, y: Int, z: Int): String {
     val distComp = abs(x - z) - abs(y - z)
@@ -107,11 +118,6 @@ fun pickingNumbers(a: Array<Int>): Int {
     return numCountMap.map { it.value + max(numCountMap[it.key - 1] ?: 0, numCountMap[it.key + 1] ?: 0) }.max()!!
 }
 
-//7
-//100 100 50 40 40 20 10
-//4
-//5 25 50 120
-
 fun climbingLeaderboard(scores: Array<Int>, alice: Array<Int>): Array<Int> {
     // 12PT solution times out on 4 tests.
     val out = Array<Int>(alice.size) { 0 }
@@ -124,19 +130,30 @@ fun climbingLeaderboard(scores: Array<Int>, alice: Array<Int>): Array<Int> {
         } else {
             var found = false
             do {
-                if (disScores[lastScoreIndex - 1] > n) {
-                    out[i] = lastScoreIndex + 1
-                    found = true
-                } else if (disScores[lastScoreIndex - 1] == n) {
-                    out[i] = lastScoreIndex
-                    found = true
-                } else {
-                    lastScoreIndex--
+                when {
+                    disScores[lastScoreIndex - 1] > n -> {
+                        out[i] = lastScoreIndex + 1
+                        found = true
+                    }
+                    disScores[lastScoreIndex - 1] == n -> {
+                        out[i] = lastScoreIndex
+                        found = true
+                    }
+                    else -> lastScoreIndex--
                 }
-            } while (lastScoreIndex > 1 && !found)
+            } while (lastScoreIndex >= 1 && !found)
             if (!found) out[i] = 1
         }
     }
     return out
 }
 
+fun readFile(path:String):List<String>{
+    return File(path).readLines()
+}
+
+fun getCLBINPUT(lines:List<String>):Pair<Array<Int>,Array<Int>>{
+    val first = lines[1].trim().split(" ").map { it.toInt() }.toTypedArray()
+    val second = lines[3].trim().split(" ").map { it.toInt() }.toTypedArray()
+    return Pair(first,second)
+}
