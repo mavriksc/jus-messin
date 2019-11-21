@@ -9,9 +9,7 @@ import kotlin.math.*
 fun main() {
     // climbingLeaderboard(arrayOf(1), arrayOf(1,1)).forEach { println(it) }
     // (0..6).forEach { println(utopianTree(it)) }
-    //(1..3).forEach{println(viralAdvertising(it))}
-    println(viralAdvertising(1))
-
+    (1..3).forEach{println(viralAdvertising(it))}
 }
 
 fun readFile(path:String):List<String>{
@@ -179,10 +177,9 @@ fun beautifulDays(i: Int, j: Int, k: Int): Int =
 
 fun viralAdvertising(n: Int): Int {
     val days = Array<Int>(n){0}
-    var total = 2
-    days[0] = total
-    for(x in 1..n) {
-        println(x)
+    days[0] = 2
+    for(x in 2..n) {
+        days[x-1]=(days[x-2]*3/2.0).toInt()
     }
-    return total
+    return days.sum()
 }
