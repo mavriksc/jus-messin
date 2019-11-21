@@ -7,8 +7,10 @@ import java.util.stream.IntStream
 import kotlin.math.*
 
 fun main() {
-    //climbingLeaderboard(arrayOf(1), arrayOf(1,1)).forEach { println(it) }
-    IntStream.range(0,6).forEach { println(utopianTree(it)) }
+    // climbingLeaderboard(arrayOf(1), arrayOf(1,1)).forEach { println(it) }
+    // (0..6).forEach { println(utopianTree(it)) }
+    //(1..3).forEach{println(viralAdvertising(it))}
+    println(viralAdvertising(1))
 
 }
 
@@ -166,4 +168,21 @@ fun utopianTree(n: Int): Int {
         }
     }
     return height
+}
+
+fun angryProfessor(k: Int, a: Array<Int>): String {
+    return if (a.filter { it<=0 }.count()>=k) "NO" else "YES"
+}
+
+fun beautifulDays(i: Int, j: Int, k: Int): Int =
+    (i..j).filter { abs(it-it.toString().reversed().toInt())%k==0}.count()
+
+fun viralAdvertising(n: Int): Int {
+    val days = Array<Int>(n){0}
+    var total = 2
+    days[0] = total
+    for(x in 1..n) {
+        println(x)
+    }
+    return total
 }
