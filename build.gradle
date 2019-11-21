@@ -33,12 +33,12 @@ dependencies {
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.16'
     compile group: 'org.apache.poi', name: 'poi', version: '4.0.1' //required for converter to work 4.0.1
     compile group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.poi.xwpf.converter.pdf', version: '2.0.2'
-
-
-
+    compile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
 }
 compileKotlin {
     kotlinOptions {

@@ -14,7 +14,7 @@ public class ValidationStuff {
     
     private static void validation (ValidateMe v) {
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        validator.validate(v).stream().forEach(violation -> System.out.println(violation.getMessage()));
+        validator.validate(v).forEach(violation -> System.out.println(violation.getMessage()));
         System.out.println(v);
     }
 }

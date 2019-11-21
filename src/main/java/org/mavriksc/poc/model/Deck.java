@@ -10,11 +10,7 @@ public class Deck {
     private static int SHUFFLES = 1;
     private List<Card> cards;
     public Deck(){
-        cards = new ArrayList<>(52);
-
-        for (Card.Suit suit: Card.Suit.values())
-            for (Card.Rank rank: Card.Rank.values())
-                cards.add(new Card(rank, suit));
+        cards = Card.getAllCards();
     }
 
     public void shuffle(){

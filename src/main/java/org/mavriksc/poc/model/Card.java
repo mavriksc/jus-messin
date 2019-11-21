@@ -39,7 +39,7 @@ public final class Card {
     private final Rank rank;
     private final Suit suit;
 
-    Card(Rank rank, Suit suit) {
+    public Card(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
     }
@@ -50,6 +50,15 @@ public final class Card {
 
     public Suit suit() {
         return suit;
+    }
+
+    public static List<Card> getAllCards(){
+        List<Card> cards=new ArrayList<>(52);
+
+        for (Card.Suit suit: Card.Suit.values())
+            for (Card.Rank rank: Card.Rank.values())
+                cards.add(new Card(rank, suit));
+            return  cards;
     }
 
     @Override

@@ -6,14 +6,35 @@ import org.mavriksc.poc.model.Deck;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class PocTest {
-    private static int TEST_SIZE = 52*2000;
+    private static int TEST_SIZE = 52 * 2000;
 
     public static void main(String[] args) {
-        testShuffle();
+        //testShuffle();
+        Map<Set<Card>, String> startingHands = new HashMap<>();
+        List<Card> cards = Card.getAllCards();
+        for (int first = 0; first < cards.size() - 1; first++) {
+            Card fc = cards.get(first);
+            for (int second = first + 1; second < cards.size(); second++) {
+                Card sc = cards.get(second);
+                Set<Card> hand = new HashSet<>();
+                hand.add(fc);
+                hand.add(sc);
+                startingHands.put(hand,fc.toString()+sc.toString());
+            }
+        }
+        System.out.println("Count all starting hands: "+startingHands.size());
+        //startingHands.forEach((k,v)-> System.out.println(v));
+        Set<Card> hand = new HashSet<>();
+        hand.add(new Card(Card.Rank.ACE,Card.Suit.SPADES));
+        hand.add(new Card(Card.Rank.ACE,Card.Suit.CLUBS));
+
+        System.out.println("ACES:"+startingHands.get(hand));
     }
 
     private static void testShuffle() {
