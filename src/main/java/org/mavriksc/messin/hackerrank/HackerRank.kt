@@ -7,12 +7,10 @@ import java.util.stream.IntStream
 import kotlin.math.*
 
 fun main() {
-    // climbingLeaderboard(arrayOf(1), arrayOf(1,1)).forEach { println(it) }
-    // (0..6).forEach { println(utopianTree(it)) }
-    (1..3).forEach{println(viralAdvertising(it))}
+    println(saveThePrisoner(4, 6, 2))
 }
 
-fun readFile(path:String):List<String>{
+fun readFile(path: String): List<String> {
     return File(path).readLines()
 }
 
@@ -146,22 +144,23 @@ fun climbingLeaderboard(scores: Array<Int>, alice: Array<Int>): Array<Int> {
     return out
 
 }
-fun getCLBINPUT(lines:List<String>):Pair<Array<Int>,Array<Int>>{
+
+fun getCLBINPUT(lines: List<String>): Pair<Array<Int>, Array<Int>> {
     val first = lines[1].trim().split(" ").map { it.toInt() }.toTypedArray()
     val second = lines[3].trim().split(" ").map { it.toInt() }.toTypedArray()
-    return Pair(first,second)
+    return Pair(first, second)
 }
 
 fun utopianTree(n: Int): Int {
-    if (n==0) return 1
+    if (n == 0) return 1
     var height = 1
     for (x in 1..n) {
-        when{
-            x%2!=0->{
-                height*=2
+        when {
+            x % 2 != 0 -> {
+                height *= 2
             }
-            x%2==0->{
-               height+=1
+            x % 2 == 0 -> {
+                height += 1
             }
         }
     }
@@ -169,17 +168,22 @@ fun utopianTree(n: Int): Int {
 }
 
 fun angryProfessor(k: Int, a: Array<Int>): String {
-    return if (a.filter { it<=0 }.count()>=k) "NO" else "YES"
+    return if (a.filter { it <= 0 }.count() >= k) "NO" else "YES"
 }
 
 fun beautifulDays(i: Int, j: Int, k: Int): Int =
-    (i..j).filter { abs(it-it.toString().reversed().toInt())%k==0}.count()
+        (i..j).filter { abs(it - it.toString().reversed().toInt()) % k == 0 }.count()
 
 fun viralAdvertising(n: Int): Int {
-    val days = Array<Int>(n){0}
+    val days = Array<Int>(n) { 0 }
     days[0] = 2
-    for(x in 2..n) {
-        days[x-1]=(days[x-2]*3/2.0).toInt()
+    for (x in 2..n) {
+        days[x - 1] = (days[x - 2] * 3 / 2.0).toInt()
     }
     return days.sum()
+}
+
+fun saveThePrisoner(n: Int, m: Int, s: Int): Int {
+    val pos = (((s - 1) + m) % n)
+    return if (pos == 0) n else pos
 }
