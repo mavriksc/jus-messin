@@ -7,7 +7,7 @@ import java.util.stream.IntStream
 import kotlin.math.*
 
 fun main() {
-    println(saveThePrisoner(4, 6, 2))
+    println(jumpingOnClouds(arrayOf(0, 0, 1, 0, 0, 1, 1, 0), 2))
 }
 
 fun readFile(path: String): List<String> {
@@ -186,4 +186,22 @@ fun viralAdvertising(n: Int): Int {
 fun saveThePrisoner(n: Int, m: Int, s: Int): Int {
     val pos = (((s - 1) + m) % n)
     return if (pos == 0) n else pos
+}
+
+fun circularArrayRotation(a: Array<Int>, k: Int, queries: Array<Int>): Array<Int> {
+    return queries.map { a[Math.floorMod((it - k), a.size)] }.toTypedArray()
+}
+
+fun permutationEquation(p: Array<Int>): Array<Int> {
+    return (1..p.size).map { p.indexOf(p.indexOf(it) + 1) + 1 }.toTypedArray()
+}
+
+fun jumpingOnClouds(c: Array<Int>, k: Int): Int {
+    var pos = 0
+    var ernrg = 100
+    do {
+        pos = (pos + k) % c.size
+        if (c[pos] == 0) ernrg-- else ernrg -= 3
+    } while (pos != 0)
+    return ernrg
 }
