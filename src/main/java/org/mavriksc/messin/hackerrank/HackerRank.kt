@@ -210,14 +210,18 @@ fun jumpingOnClouds(c: Array<Int>, k: Int): Int {
 }
 
 fun findDigits(n: Int): Int {
-    fun Int.digitStream():Stream<Int>{
-        
-
+    fun Int.digitStream(): Stream<Int> {
+        var num = this
+        val things = mutableListOf<Int>()
+        do {
+            things.add(num % 10)
+            num /= 10
+        } while (num > 0)
+        return things.stream()
     }
-    val divMap= mutableMapOf<String, Boolean>("1" to true, "0" to false);
-    return n.toString()
-            .split("")
-            .filter { it !="" }
-            .filter { divMap.computeIfAbsent(it) { key -> n % key.toInt() == 0 } }
-            .count()
+    val divMap= mutableMapOf<Int, Boolean>(1 to true, 0 to false);
+
+    return n.digitStream()
+            .filter { divMap.computeIfAbsent(it) { key -> n % key == 0 } }
+            .count().toInt()
 }
