@@ -7,7 +7,7 @@ import java.util.stream.IntStream
 import kotlin.math.*
 
 fun main() {
-    println(jumpingOnClouds(arrayOf(0, 0, 1, 0, 0, 1, 1, 0), 2))
+    println(findDigits(1102))
 }
 
 fun readFile(path: String): List<String> {
@@ -204,4 +204,13 @@ fun jumpingOnClouds(c: Array<Int>, k: Int): Int {
         if (c[pos] == 0) ernrg-- else ernrg -= 3
     } while (pos != 0)
     return ernrg
+}
+
+fun findDigits(n: Int): Int {
+    val divMap= mutableMapOf<String, Boolean>("1" to true, "0" to false);
+    return n.toString()
+            .split("")
+            .filter { it !="" }
+            .filter { divMap.computeIfAbsent(it) { key -> n % key.toInt() == 0 } }
+            .count()
 }
