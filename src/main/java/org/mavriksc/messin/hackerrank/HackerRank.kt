@@ -3,14 +3,16 @@ package org.mavriksc.messin.hackerrank
 import com.google.common.io.Resources
 import java.io.File
 import java.lang.management.ManagementFactory
+import java.math.BigInteger
 import java.util.*
 import java.util.function.IntConsumer
 import java.util.stream.IntStream
 import java.util.stream.Stream
 import kotlin.math.*
+import kotlin.random.Random
 
 fun main() {
-    println(findDigits(1102))
+    extraLongFactorials(5)
 }
 
 fun readFile(path: String): List<String> {
@@ -224,4 +226,34 @@ fun findDigits(n: Int): Int {
     return n.digitStream()
             .filter { divMap.computeIfAbsent(it) { key -> n % key == 0 } }
             .count().toInt()
+}
+
+
+fun sortLists(){
+    val lists = listOf<MutableList<Long>>(mutableListOf(),mutableListOf(),mutableListOf(),mutableListOf(),mutableListOf())
+    Random.nextInt(lists.size)
+    (1..144000).forEach { _ -> lists[Random.nextInt(lists.size)].add(Random.nextLong()) }
+    val start = Date()
+    lists.forEach{it.sort()}
+    val end = Date()
+    println(end.time-start.time)
+
+
+}
+
+fun extraLongFactorials(n: Int): Unit {
+    var x= BigInteger.ONE;
+    for (i in 1..n){
+        x *= i.toBigInteger()
+    }
+    print(x)
+}
+
+//https://www.hackerrank.com/challenges/non-divisible-subset/problem
+fun nonDivisibleSubset(k: Int, s: Array<Int>): Int {
+    for((i,n) in s.withIndex()){
+        for(j in s.slice(i..s.lastIndex))
+
+    }
+
 }
