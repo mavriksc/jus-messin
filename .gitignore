@@ -22,30 +22,10 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-/bin
-/.idea
-/.settings
-/out/production/resources/pi.txt
-/out/production/resources/response.json
-/.gradle/4.8/fileChanges/last-build.bin
-/.gradle/4.8/fileHashes/fileHashes.bin
-/.gradle/4.8/fileHashes/fileHashes.lock
-/.gradle/4.8/taskHistory/taskHistory.bin
-/.gradle/4.8/taskHistory/taskHistory.lock
-/.gradle/buildOutputCleanup/buildOutputCleanup.lock
-/.gradle/buildOutputCleanup/cache.properties
-/.gradle/buildOutputCleanup/outputFiles.bin
-/.gradle/vcsWorkingDirs/gc.properties
-/out/production/classes/META-INF
-/out/production/classes/META-INF
+
 /out
 out
-/.gradle/4.8/fileContent/annotation-processors.bin
-/.gradle/4.8/fileContent/fileContent.lock
-/.gradle/4.8/fileHashes/resourceHashesCache.bin
-/build/resources/main/input04.txt
-/build/resources/main/input05.txt
-/build/resources/main/pi.txt
-/build/resources/main/response.json
-/build/resources/main/stats.txt
-/build/tmp/jar/MANIFEST.MF
+/.gradle
+/build
+/.idea
+/.settings

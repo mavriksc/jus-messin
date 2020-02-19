@@ -4,7 +4,7 @@ import kotlin.math.min
 
 //https://www.hackerrank.com/challenges/queens-attack-2/problem
 
-10/22 failing 
+// 10/22 failing
 
 fun main() {
     print(queensAttack(8, 0, 5, 4, arrayOf(arrayOf(6, 5))))
