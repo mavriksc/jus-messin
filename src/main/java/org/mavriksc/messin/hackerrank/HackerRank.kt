@@ -12,7 +12,7 @@ import kotlin.math.*
 import kotlin.random.Random
 
 fun main() {
-    extraLongFactorials(5)
+    print(nonDivisibleSubset(3, arrayOf(1, 7, 2, 4)))
 }
 
 fun readFile(path: String): List<String> {
@@ -221,7 +221,8 @@ fun findDigits(n: Int): Int {
         } while (num > 0)
         return things.stream()
     }
-    val divMap= mutableMapOf<Int, Boolean>(1 to true, 0 to false);
+
+    val divMap = mutableMapOf<Int, Boolean>(1 to true, 0 to false);
 
     return n.digitStream()
             .filter { divMap.computeIfAbsent(it) { key -> n % key == 0 } }
@@ -229,21 +230,21 @@ fun findDigits(n: Int): Int {
 }
 
 
-fun sortLists(){
-    val lists = listOf<MutableList<Long>>(mutableListOf(),mutableListOf(),mutableListOf(),mutableListOf(),mutableListOf())
+fun sortLists() {
+    val lists = listOf<MutableList<Long>>(mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
     Random.nextInt(lists.size)
     (1..144000).forEach { _ -> lists[Random.nextInt(lists.size)].add(Random.nextLong()) }
     val start = Date()
-    lists.forEach{it.sort()}
+    lists.forEach { it.sort() }
     val end = Date()
-    println(end.time-start.time)
+    println(end.time - start.time)
 
 
 }
 
 fun extraLongFactorials(n: Int): Unit {
-    var x= BigInteger.ONE;
-    for (i in 1..n){
+    var x = BigInteger.ONE;
+    for (i in 1..n) {
         x *= i.toBigInteger()
     }
     print(x)
@@ -251,9 +252,15 @@ fun extraLongFactorials(n: Int): Unit {
 
 //https://www.hackerrank.com/challenges/non-divisible-subset/problem
 fun nonDivisibleSubset(k: Int, s: Array<Int>): Int {
-    for((i,n) in s.withIndex()){
-        for(j in s.slice(i..s.lastIndex))
-
+    val modMap: Map<Int, List<Int>> = s.groupBy { it % k }
+    var size = if (modMap[0].isNullOrEmpty()) 0 else 1;
+    for (x in 1..k / 2) {
+        size += if (x == k / 2 && k % 2 == 0)
+            if (modMap[x].isNullOrEmpty()) 0 else 1;
+        else {
+            fun len(i: Int) = modMap[i]?.size ?: 0
+            max(len(x), len(k - x))
+        }
     }
-
+    return size
 }
