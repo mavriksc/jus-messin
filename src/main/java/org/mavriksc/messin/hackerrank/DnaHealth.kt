@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
     print("$low $high")
 }
 // working but failing all but 2 tests. need to not recalc lps
-https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/
+//https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/
 fun scoreStrand(d: String, first: Int, last: Int, genes: Array<String>, health: Array<Int>): Int {
     var score = 0
     for (i in first..last) {
