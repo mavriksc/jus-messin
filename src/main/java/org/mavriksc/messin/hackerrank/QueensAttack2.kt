@@ -5,7 +5,6 @@ import kotlin.math.min
 
 //https://www.hackerrank.com/challenges/queens-attack-2/problem
 
-
 fun main() {
     val qaInput = qaInput()
     print(queensAttack(qaInput.n, qaInput.k, qaInput.r_q, qaInput.c_q, qaInput.obstacles))
@@ -28,10 +27,7 @@ fun qaInput(): QAInput {
     return QAInput(n, k, r_q, c_q, obstacles.toTypedArray())
 }
 
-class QAInput(val n: Int, val k: Int, val r_q: Int, val c_q: Int, val obstacles: Array<Array<Int>>) {
-
-}
-
+class QAInput(val n: Int, val k: Int, val r_q: Int, val c_q: Int, val obstacles: Array<Array<Int>>)
 
 fun queensAttack(n: Int, k: Int, r_q: Int, c_q: Int, obstacles: Array<Array<Int>>): Int {
     val queenMainDiagDistance = r_q - c_q
