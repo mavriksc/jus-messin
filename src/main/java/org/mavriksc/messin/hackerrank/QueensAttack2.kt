@@ -41,7 +41,7 @@ fun queensAttack(n: Int, k: Int, r_q: Int, c_q: Int, obstacles: Array<Array<Int>
     var br = min(n - r_q, n - c_q)
     var bl = min(n - r_q, c_q - 1)
 
-    obstacles.forEach {
+    obstacles.takeWhile { top + bottom + left + right + tl + tr + bl + br > 0 }.forEach {
         val r = it[0]
         val c = it[1]
         if (c == c_q) {
@@ -60,7 +60,7 @@ fun queensAttack(n: Int, k: Int, r_q: Int, c_q: Int, obstacles: Array<Array<Int>
             if (r < r_q) {//tl
                 tl = min(tl, (r_q - r) - 1)
             } else {//br
-                br = min(br, (r - r_q)- 1)
+                br = min(br, (r - r_q) - 1)
             }
         } else if (r + c == queenAltDiagDistance) {
             if (r > r_q) {
