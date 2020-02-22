@@ -12,7 +12,12 @@ import kotlin.math.*
 import kotlin.random.Random
 
 fun main() {
-    print(nonDivisibleSubset(3, arrayOf(1, 7, 2, 4)))
+    var a = IntPtr(0)
+    val b = a
+    a.value=1
+    print(b.value)
+
+
 }
 
 fun readFile(path: String): List<String> {
