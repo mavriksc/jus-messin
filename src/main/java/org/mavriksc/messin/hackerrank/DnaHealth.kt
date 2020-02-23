@@ -22,7 +22,7 @@ import kotlin.math.min
 
 fun main(args: Array<String>) {
 
-    val tree = UKKSuffixTree("abcabxabcdz")
+    val tree = UKKSuffixTree("abcabxabcd\$")
     tree.buildSufFixTree()
 //    val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
 //
@@ -142,6 +142,10 @@ class UKKSuffixTree(val text: String) {
         return SuffixNode(start, end).apply { suffixLink = root }
     }
 
+    fun nodeString(node: SuffixNode): String {
+        return if (node.start<0)  "" else text.substring(node.start, node.end.value + 1)
+    }
+
     fun edgeLength(node: SuffixNode): Int = node.end.value - node.start + 1
 
     fun walkDown(currNode: SuffixNode): Boolean {
@@ -187,7 +191,7 @@ class UKKSuffixTree(val text: String) {
                 activeNode!!.children[text[activeEdge]] = split
                 split.children[text[activeEdge]] = newNode(pos, leafEnd) // here
                 next.start += activeLength
-                split.children[text[activeEdge]] = next // and here
+                split.children[text[next.start]] = next // and here
                 // probably need to add 1 or active length to one of them
                 // look at algo to figure it out continuing transcription
 
@@ -206,7 +210,7 @@ class UKKSuffixTree(val text: String) {
 
     private fun setSuffixIndexByDFS(n: SuffixNode, labelHeight: Int) {
         if (n.start != -1)
-            print(text.subSequence(n.start, n.end.value))
+            print(text.substring(n.start, n.end.value + 1))
         var leaf = 1
         n.children.forEach {
             if (leaf == 1 && n.start != -1)
