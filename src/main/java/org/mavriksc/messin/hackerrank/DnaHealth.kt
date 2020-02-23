@@ -186,14 +186,11 @@ class UKKSuffixTree(val text: String) {
                 splitEnd = IntPtr(next.start + activeLength - 1)
                 val split = newNode(next.start, splitEnd!!)
 
-                // Something here isn't right i need to set the position of something different
-                // or else i'm overwriting it
+
                 activeNode!!.children[text[activeEdge]] = split
-                split.children[text[activeEdge]] = newNode(pos, leafEnd) // here
+                split.children[text[activeEdge]] = newNode(pos, leafEnd)
                 next.start += activeLength
-                split.children[text[next.start]] = next // and here
-                // probably need to add 1 or active length to one of them
-                // look at algo to figure it out continuing transcription
+                split.children[text[next.start]] = next 
 
                 lastNewNode?.suffixLink = split
                 lastNewNode = split
