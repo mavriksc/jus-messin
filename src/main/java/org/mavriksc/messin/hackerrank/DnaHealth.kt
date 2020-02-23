@@ -17,7 +17,7 @@ package org.mavriksc.messin.hackerrank
 
 fun main(args: Array<String>) {
 
-    val tree = UKKSuffixTree("THIS IS A TEST TEXTZ")
+    val tree = UKKSuffixTree("THIS IS A TEST TEXT\$")
     tree.buildSufFixTree()
     println(tree.checkForSubString("TEST"))
     println(tree.checkForSubString("A"))
@@ -198,7 +198,7 @@ class UKKSuffixTree(val text: String) {
 
 
                 activeNode!!.children[text[activeEdge]] = split
-                split.children[text[activeEdge]] = newNode(pos, leafEnd)
+                split.children[text[pos]] = newNode(pos, leafEnd)
                 next.start += activeLength
                 split.children[text[next.start]] = next
 
@@ -243,6 +243,7 @@ class UKKSuffixTree(val text: String) {
     }
 
     private fun traverseEdge(str: String, idx: Int, start: Int, end: Int): Int {
+        println("NODE: ${text.substring(start,end+1)} \t PATTERN: ${str.substring(idx)}")
         var k = start
         var index = idx
         do {
