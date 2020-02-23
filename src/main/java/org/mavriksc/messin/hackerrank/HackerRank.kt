@@ -12,10 +12,6 @@ import kotlin.math.*
 import kotlin.random.Random
 
 fun main() {
-    var a = IntPtr(0)
-    val b = a
-    a.value=1
-    print(b.value)
 
 
 }

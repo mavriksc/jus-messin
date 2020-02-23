@@ -22,7 +22,7 @@ import kotlin.math.min
 
 fun main(args: Array<String>) {
 
-    val tree = UKKSuffixTree("banana")
+    val tree = UKKSuffixTree("abcabxabcdz")
     tree.buildSufFixTree()
 //    val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
 //
@@ -133,7 +133,7 @@ class UKKSuffixTree(val text: String) {
     var activeEdge = -1
     var activeLength = 0
     var remainingSuffixCount = 0
-    var leafEnd = -1
+    var leafEnd = IntPtr(-1)
     var rootEnd: IntPtr? = null
     var splitEnd: IntPtr? = null
     var size = text.length
@@ -156,7 +156,7 @@ class UKKSuffixTree(val text: String) {
     }
 
     private fun extendSuffixTree(pos: Int) {
-        val leafEnd = pos
+        leafEnd.value = pos
         remainingSuffixCount++
         lastNewNode = null
 
@@ -164,7 +164,7 @@ class UKKSuffixTree(val text: String) {
             if (activeLength == 0)
                 activeEdge = pos
             if (activeNode!!.children[text[activeEdge]] == null) {
-                activeNode!!.children[text[activeEdge]] = newNode(pos, IntPtr(leafEnd))
+                activeNode!!.children[text[activeEdge]] = newNode(pos, leafEnd)
                 lastNewNode?.suffixLink = activeNode
                 lastNewNode = null
             } else {
@@ -185,7 +185,7 @@ class UKKSuffixTree(val text: String) {
                 // Something here isn't right i need to set the position of something different
                 // or else i'm overwriting it
                 activeNode!!.children[text[activeEdge]] = split
-                split.children[text[activeEdge]] = newNode(pos, IntPtr(leafEnd)) // here
+                split.children[text[activeEdge]] = newNode(pos, leafEnd) // here
                 next.start += activeLength
                 split.children[text[activeEdge]] = next // and here
                 // probably need to add 1 or active length to one of them
