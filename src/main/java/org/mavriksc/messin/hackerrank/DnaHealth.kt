@@ -1,10 +1,5 @@
 package org.mavriksc.messin.hackerrank
 
-import java.io.File
-import java.util.*
-import kotlin.math.max
-import kotlin.math.min
-
 //https://www.hackerrank.com/challenges/determining-dna-health
 
 // working but failing all but 2 tests. need to not recalc lps
@@ -22,8 +17,17 @@ import kotlin.math.min
 
 fun main(args: Array<String>) {
 
-    val tree = UKKSuffixTree("abcabxabcd\$")
+    val tree = UKKSuffixTree("THIS IS A TEST TEXTZ")
     tree.buildSufFixTree()
+    println(tree.checkForSubString("TEST"))
+    println(tree.checkForSubString("A"))
+    println(tree.checkForSubString(" "))
+    println(tree.checkForSubString("IS A"))
+    println(tree.checkForSubString(" IS A "))
+    println(tree.checkForSubString("TEST1"))
+    println(tree.checkForSubString("TESA"))
+    println(tree.checkForSubString("ISB"))
+
 //    val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
 //
 //    val n = scan.nextLine().trim().toInt()
@@ -127,6 +131,7 @@ data class IntPtr(var value: Int) {
 }
 
 class UKKSuffixTree(val text: String) {
+    //TODO initialize root
     var root: SuffixNode? = null
     var lastNewNode: SuffixNode? = null
     var activeNode: SuffixNode? = null
@@ -143,12 +148,17 @@ class UKKSuffixTree(val text: String) {
     }
 
     fun nodeString(node: SuffixNode): String {
-        return if (node.start<0)  "" else text.substring(node.start, node.end.value + 1)
+        return if (node.start < 0) "" else text.substring(node.start, node.end.value + 1)
     }
 
-    fun edgeLength(node: SuffixNode): Int = node.end.value - node.start + 1
+    private fun edgeLength(node: SuffixNode): Int {
+        // i think updating this threw off "END" calc for some things.
+        if (node == root)
+            return 0
+        return node.end.value - node.start + 1
+    }
 
-    fun walkDown(currNode: SuffixNode): Boolean {
+    private fun walkDown(currNode: SuffixNode): Boolean {
         val el = edgeLength(currNode)
         if (activeLength >= el) {
             activeEdge += el
@@ -190,7 +200,7 @@ class UKKSuffixTree(val text: String) {
                 activeNode!!.children[text[activeEdge]] = split
                 split.children[text[activeEdge]] = newNode(pos, leafEnd)
                 next.start += activeLength
-                split.children[text[next.start]] = next 
+                split.children[text[next.start]] = next
 
                 lastNewNode?.suffixLink = split
                 lastNewNode = split
@@ -230,6 +240,38 @@ class UKKSuffixTree(val text: String) {
         }
         val labelHeight = 0
         setSuffixIndexByDFS(root!!, labelHeight)
+    }
+
+    private fun traverseEdge(str: String, idx: Int, start: Int, end: Int): Int {
+        var k = start
+        var index = idx
+        do {
+            if (text[k] != str[index])
+                return -1
+            k++
+            index++
+        } while (k <= end && index < str.length)
+        if (index == str.length)
+            return 1
+        return 0
+    }
+
+    private fun doTraversal(n: SuffixNode, str: String, idx: Int): Int {
+        var index = idx
+        if (n.start != -1) {
+            val result = traverseEdge(str, index, n.start, n.end.value)
+            if (result != 0)
+                return result
+        }
+        index += edgeLength(n)
+        return if (n.children.containsKey(str[index]))
+            doTraversal(n.children[str[index]]!!, str, index)
+        else -1
+    }
+
+    fun checkForSubString(str: String): Boolean {
+        print(str)
+        return doTraversal(root!!, str, 0) == 1
     }
 
 }
