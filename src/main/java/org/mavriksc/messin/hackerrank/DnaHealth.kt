@@ -153,7 +153,6 @@ class UKKSuffixTree(val text: String) {
     }
 
     private fun edgeLength(node: SuffixNode): Int {
-        // i think updating this threw off "END" calc for some things.
         if (node == root)
             return 0
         return node.end.value - node.start + 1
