@@ -121,28 +121,26 @@ fun String.computeLPS(): Array<Int> {
 }
 
 
-class SuffixNode(var start: Int, val end: IntPtr) {
-    val children = mutableMapOf<Char, SuffixNode>()
-    var suffixLink: SuffixNode? = null
-    var suffixIndex = -1
-}
 
-data class IntPtr(var value: Int)
 
 class UKKSuffixTree(val text: String) {
-    //TODO initialize root
-
-    private var rootEnd = IntPtr(-1)
-    private val root = newNode(-1, rootEnd)
+    private val root = newNode(-1,  IntPtr(-1))
     private var activeNode = root
     private var lastNewNode: SuffixNode? = null
-
     private var activeEdge = -1
     private var activeLength = 0
     private var remainingSuffixCount = 0
     private var leafEnd = IntPtr(-1)
     private var splitEnd: IntPtr? = null
     var size = text.length
+    
+    class SuffixNode(var start: Int, val end: IntPtr) {
+        val children = mutableMapOf<Char, SuffixNode>()
+        var suffixLink: SuffixNode? = null
+        var suffixIndex = -1
+    }
+
+    data class IntPtr(var value: Int)
 
     private fun newNode(start: Int, end: IntPtr): SuffixNode {
         return SuffixNode(start, end).apply { suffixLink = root }
