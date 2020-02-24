@@ -15,7 +15,7 @@ package org.mavriksc.messin.hackerrank
 //make map of genes to index list
 
 
-fun main(args: Array<String>) {
+fun main() {
 
     val tree = UKKSuffixTree("THIS IS A TEST TEXT\$")
     tree.buildSufFixTree()
@@ -99,7 +99,7 @@ fun String.kmpMatchScore(pattern: String): Long {
 fun String.computeLPS(): Array<Int> {
     return lpss.getOrPut(this) {
         val m = this.length
-        val lps = Array<Int>(m) { 0 }
+        val lps = Array(m) { 0 }
         var i = 1
         var len = 0
         while (i < m) {
@@ -127,20 +127,21 @@ class SuffixNode(var start: Int, val end: IntPtr) {
     var suffixIndex = -1
 }
 
-data class IntPtr(var value: Int) {
-}
+data class IntPtr(var value: Int)
 
 class UKKSuffixTree(val text: String) {
     //TODO initialize root
-    var root: SuffixNode? = null
-    var lastNewNode: SuffixNode? = null
-    var activeNode: SuffixNode? = null
-    var activeEdge = -1
-    var activeLength = 0
-    var remainingSuffixCount = 0
-    var leafEnd = IntPtr(-1)
-    var rootEnd: IntPtr? = null
-    var splitEnd: IntPtr? = null
+
+    private var rootEnd = IntPtr(-1)
+    private val root = newNode(-1, rootEnd)
+    private var activeNode = root
+    private var lastNewNode: SuffixNode? = null
+
+    private var activeEdge = -1
+    private var activeLength = 0
+    private var remainingSuffixCount = 0
+    private var leafEnd = IntPtr(-1)
+    private var splitEnd: IntPtr? = null
     var size = text.length
 
     private fun newNode(start: Int, end: IntPtr): SuffixNode {
@@ -177,12 +178,12 @@ class UKKSuffixTree(val text: String) {
         while (remainingSuffixCount > 0) {
             if (activeLength == 0)
                 activeEdge = pos
-            if (activeNode!!.children[text[activeEdge]] == null) {
-                activeNode!!.children[text[activeEdge]] = newNode(pos, leafEnd)
+            if (activeNode.children[text[activeEdge]] == null) {
+                activeNode.children[text[activeEdge]] = newNode(pos, leafEnd)
                 lastNewNode?.suffixLink = activeNode
                 lastNewNode = null
             } else {
-                val next = activeNode!!.children[text[activeEdge]]!!
+                val next = activeNode.children[text[activeEdge]]!!
                 if (walkDown(next))
                     continue
                 if (text[next.start + activeLength] == text[pos]) {
@@ -197,7 +198,7 @@ class UKKSuffixTree(val text: String) {
                 val split = newNode(next.start, splitEnd!!)
 
 
-                activeNode!!.children[text[activeEdge]] = split
+                activeNode.children[text[activeEdge]] = split
                 split.children[text[pos]] = newNode(pos, leafEnd)
                 next.start += activeLength
                 split.children[text[next.start]] = next
@@ -210,7 +211,7 @@ class UKKSuffixTree(val text: String) {
                 activeLength--
                 activeEdge = pos - remainingSuffixCount + 1
             } else if (activeNode != root) {
-                activeNode = activeNode!!.suffixLink
+                activeNode = activeNode.suffixLink!!
             }
         }
     }
@@ -232,14 +233,11 @@ class UKKSuffixTree(val text: String) {
     }
 
     fun buildSufFixTree() {
-        rootEnd = IntPtr(-1)
-        root = newNode(-1, rootEnd!!)
-        activeNode = root
         for (i in 0 until size) {
             extendSuffixTree(i)
         }
         val labelHeight = 0
-        setSuffixIndexByDFS(root!!, labelHeight)
+        setSuffixIndexByDFS(root, labelHeight)
     }
 
     private fun traverseEdge(str: String, idx: Int, start: Int, end: Int): Int {
@@ -272,7 +270,7 @@ class UKKSuffixTree(val text: String) {
 
     fun checkForSubString(str: String): Boolean {
         print(str)
-        return doTraversal(root!!, str, 0) == 1
+        return doTraversal(root, str, 0) == 1
     }
 
 }
