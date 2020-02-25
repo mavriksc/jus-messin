@@ -10,7 +10,8 @@ import kotlin.math.min
 // working but failing all but 2 tests. need to not recalc lps
 // not recalc lps but still failing same tests timeout
 // https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/
-
+//https://www.sciencedirect.com/science/article/pii/S1570866703000650
+//https://www.cs.cmu.edu/~ckingsf/bioinfo-lectures/suffixarrays.pdf
 // IDEAS:
 //https://www.geeksforgeeks.org/suffix-tree-application-2-searching-all-patterns/
 
@@ -132,7 +133,7 @@ class UKKSuffixTree(val text: String) {
     var size = text.length
 
     class SuffixNode(var start: Int, val end: IntPtr) {
-        val children = mutableMapOf<Char, SuffixNode>()
+        val children = sortedMapOf<Char, SuffixNode>()
         var suffixLink: SuffixNode? = null
         var suffixIndex = -1
     }
