@@ -2,7 +2,6 @@ package org.mavriksc.messin.hackerrank
 
 import java.io.File
 import java.util.*
-import java.util.stream.Collectors
 import kotlin.math.max
 import kotlin.math.min
 
@@ -20,11 +19,12 @@ import kotlin.math.min
 
 //make map of genes to index list: 103974
 // time without maping: 59656
+// with memo but on laptop:71245
 
 
 fun main() {
 
-    val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
+    val scan = Scanner(File("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
 
     val n = scan.nextLine().trim().toInt()
 
@@ -46,7 +46,7 @@ fun main() {
         val last = firstLastd[1].trim().toInt()
 
         val d = firstLastd[2]
-        val score = scoreStrandUKK(d, first, last, genes , health)
+        val score = scoreStrandUKK(d, first, last, genes, health)
         low = min(low, score)
         high = max(high, score)
         counts.clear()
@@ -59,22 +59,14 @@ fun main() {
 var lpss: MutableMap<String, Array<Int>> = mutableMapOf()
 var counts: MutableMap<String, Long> = mutableMapOf()
 
-fun scoreStrandKMP(d: String, first: Int, last: Int, genes: Array<String>, health: Array<Int>): Long {
-    var score = 0L
-    for (i in first..last) {
-        score += d.kmpMatchScore(genes[i]) * health[i]
-    }
-    return score
-}
+fun scoreStrandKMP(d: String, first: Int, last: Int, genes: Array<String>, health: Array<Int>): Long =
+        (first..last).map {d.kmpMatchScore(genes[it]) * health[it]}.sum()
 
-fun scoreStrandUKK(d:String,first: Int, last: Int, genes: Array<String>, health: Array<Int>): Long {
+fun scoreStrandUKK(d: String, first: Int, last: Int, genes: Array<String>, health: Array<Int>): Long {
     val tree = UKKSuffixTree(d)
+    val cache = mutableMapOf<String, Long>()
     tree.buildSufFixTree()
-    var score = 0L
-    for (i in first..last) {
-        score += tree.patternCount(genes[i]) * health[i]
-    }
-    return score
+    return (first..last).map { cache.getOrPut(genes[it]) { tree.patternCount(genes[it]).toLong() } * health[it] }.sum()
 }
 
 fun String.kmpMatchScore(pattern: String): Long {
@@ -127,7 +119,6 @@ fun String.computeLPS(): Array<Int> {
         return lps
     }
 }
-
 
 class UKKSuffixTree(val text: String) {
     private val root = newNode(-1, IntPtr(-1))
@@ -224,7 +215,7 @@ class UKKSuffixTree(val text: String) {
 //            print(text.substring(n.start, n.end.value + 1))
         var leaf = 1
         n.children.forEach {
-//            if (leaf == 1 && n.start != -1)
+            //            if (leaf == 1 && n.start != -1)
 //                println("[${n.suffixIndex}]")
             leaf = 0
             setSuffixIndexByDFS(it.value, labelHeight + edgeLength(it.value))
@@ -285,7 +276,7 @@ class UKKSuffixTree(val text: String) {
 
     fun patternCount(str: String): Int {
         val result = doTraversal(root, str, 0, true)
-        return if (result<0)
+        return if (result < 0)
             0
         else
             result
