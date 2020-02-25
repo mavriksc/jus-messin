@@ -1,5 +1,11 @@
 package org.mavriksc.messin.hackerrank
 
+import java.io.File
+import java.util.*
+import java.util.stream.Collectors
+import kotlin.math.max
+import kotlin.math.min
+
 //https://www.hackerrank.com/challenges/determining-dna-health
 
 // working but failing all but 2 tests. need to not recalc lps
@@ -12,60 +18,61 @@ package org.mavriksc.messin.hackerrank
 
 // genes
 
-//make map of genes to index list
+//make map of genes to index list: 103974
+// time without maping: 59656
 
 
 fun main() {
 
-    val tree = UKKSuffixTree("THIS IS A TEST TEXT\$")
-    tree.buildSufFixTree()
-    println(tree.checkForSubString("TEST"))
-    println(tree.checkForSubString("A"))
-    println(tree.checkForSubString(" "))
-    println(tree.checkForSubString("IS A"))
-    println(tree.checkForSubString(" IS A "))
-    println(tree.checkForSubString("TEST1"))
-    println(tree.checkForSubString("TESA"))
-    println(tree.checkForSubString("ISB"))
-    println(tree.patternCount("T"))
+    val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
 
-//    val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
-//
-//    val n = scan.nextLine().trim().toInt()
-//
-//    val genes = scan.nextLine().split(" ").toTypedArray()
-//
-//    val health = scan.nextLine().split(" ").map { it.trim().toInt() }.toTypedArray()
-//
-//    val s = scan.nextLine().trim().toInt()
-//    var low = Long.MAX_VALUE
-//    var high = 0L
-//    val start = Date()
-//    for (sItr in 1..s) {
-//        val firstLastd = scan.nextLine().split(" ")
-//
-//        val first = firstLastd[0].trim().toInt()
-//
-//        val last = firstLastd[1].trim().toInt()
-//
-//        val d = firstLastd[2]
-//        val score = scoreStrand(d, first, last, genes, health)
-//        low = min(low, score)
-//        high = max(high, score)
-//        counts.clear()
-//    }
-//    val end = Date()
-//    println(end.time - start.time)
-//    print("$low $high")
+    val n = scan.nextLine().trim().toInt()
+
+    val genes = scan.nextLine().split(" ").toTypedArray()
+
+    //val geneMap = genes.mapIndexed { index, s -> index to s}.groupBy({it.second},{it.first})
+
+    val health = scan.nextLine().split(" ").map { it.trim().toInt() }.toTypedArray()
+
+    val s = scan.nextLine().trim().toInt()
+    var low = Long.MAX_VALUE
+    var high = 0L
+    val start = Date()
+    for (sItr in 1..s) {
+        val firstLastd = scan.nextLine().split(" ")
+
+        val first = firstLastd[0].trim().toInt()
+
+        val last = firstLastd[1].trim().toInt()
+
+        val d = firstLastd[2]
+        val score = scoreStrandUKK(d, first, last, genes , health)
+        low = min(low, score)
+        high = max(high, score)
+        counts.clear()
+    }
+    val end = Date()
+    println(end.time - start.time)
+    print("$low $high")
 }
 
 var lpss: MutableMap<String, Array<Int>> = mutableMapOf()
 var counts: MutableMap<String, Long> = mutableMapOf()
 
-fun scoreStrand(d: String, first: Int, last: Int, genes: Array<String>, health: Array<Int>): Long {
+fun scoreStrandKMP(d: String, first: Int, last: Int, genes: Array<String>, health: Array<Int>): Long {
     var score = 0L
     for (i in first..last) {
         score += d.kmpMatchScore(genes[i]) * health[i]
+    }
+    return score
+}
+
+fun scoreStrandUKK(d:String,first: Int, last: Int, genes: Array<String>, health: Array<Int>): Long {
+    val tree = UKKSuffixTree(d)
+    tree.buildSufFixTree()
+    var score = 0L
+    for (i in first..last) {
+        score += tree.patternCount(genes[i]) * health[i]
     }
     return score
 }
@@ -213,18 +220,18 @@ class UKKSuffixTree(val text: String) {
     }
 
     private fun setSuffixIndexByDFS(n: SuffixNode, labelHeight: Int) {
-        if (n.start != -1)
-            print(text.substring(n.start, n.end.value + 1))
+//        if (n.start != -1)
+//            print(text.substring(n.start, n.end.value + 1))
         var leaf = 1
         n.children.forEach {
-            if (leaf == 1 && n.start != -1)
-                println("[${n.suffixIndex}]")
+//            if (leaf == 1 && n.start != -1)
+//                println("[${n.suffixIndex}]")
             leaf = 0
             setSuffixIndexByDFS(it.value, labelHeight + edgeLength(it.value))
         }
         if (leaf == 1) {
             n.suffixIndex = size - labelHeight
-            println("[${n.suffixIndex}]")
+//            println("[${n.suffixIndex}]")
         }
     }
 
