@@ -27,6 +27,7 @@ fun main() {
     println(tree.checkForSubString("TEST1"))
     println(tree.checkForSubString("TESA"))
     println(tree.checkForSubString("ISB"))
+    println(tree.patternCount("T"))
 
 //    val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
 //
@@ -235,8 +236,14 @@ class UKKSuffixTree(val text: String) {
         setSuffixIndexByDFS(root, labelHeight)
     }
 
+    private fun doTraversalToCountLeaf(n: SuffixNode): Int {
+        if (n.suffixIndex > -1)
+            return 1
+        return n.children.values.map { doTraversalToCountLeaf(it) }.sum()
+    }
+
     private fun traverseEdge(str: String, idx: Int, start: Int, end: Int): Int {
-        println("NODE: ${text.substring(start, end + 1)} \t PATTERN: ${str.substring(idx)}")
+        //println("NODE: ${text.substring(start, end + 1)} \t PATTERN: ${str.substring(idx)}")
         var k = start
         var index = idx
         do {
@@ -250,22 +257,35 @@ class UKKSuffixTree(val text: String) {
         return 0
     }
 
-    private fun doTraversal(n: SuffixNode, str: String, idx: Int): Int {
+    private fun doTraversal(n: SuffixNode, str: String, idx: Int, falseForFindTrueForCount: Boolean): Int {
         var index = idx
         if (n.start != -1) {
             val result = traverseEdge(str, index, n.start, n.end.value)
-            if (result != 0)
-                return result
+            if (result == -1)//no match
+                return -1
+            if (result == 1) {//match
+                return if (n.suffixIndex > -1)
+                    1
+                else
+                    doTraversalToCountLeaf(n)
+            }
         }
         index += edgeLength(n)
         return if (n.children.containsKey(str[index]))
-            doTraversal(n.children[str[index]]!!, str, index)
+            doTraversal(n.children[str[index]]!!, str, index, falseForFindTrueForCount)
         else -1
     }
 
+    fun patternCount(str: String): Int {
+        val result = doTraversal(root, str, 0, true)
+        return if (result<0)
+            0
+        else
+            result
+    }
+
     fun checkForSubString(str: String): Boolean {
-        print(str)
-        return doTraversal(root, str, 0) == 1
+        return doTraversal(root, str, 0, false) > 0
     }
 
 }
