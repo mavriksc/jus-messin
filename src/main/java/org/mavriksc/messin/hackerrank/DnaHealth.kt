@@ -16,22 +16,29 @@ import kotlin.math.min
 //https://www.geeksforgeeks.org/suffix-tree-application-2-searching-all-patterns/
 
 
+//cat all the different trials together with a special character not in genes
+// keeping len+1 and the index pairs in a list
+// . build suffix tree/ array ( create search that returns indices in text)
+// search all genes keeping running totals in a list  then max and min value of that list
+
+
+
 // genes
 
 //make map of genes to index list: 103974
 // time without maping: 59656
-// with memo but on laptop:71245
+// with memo but on laptop:71245 home: 45587
 
 
 fun main() {
-
-    val scan = Scanner(File("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
+	// TODO get recources working right
+    val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
 
     val n = scan.nextLine().trim().toInt()
 
     val genes = scan.nextLine().split(" ").toTypedArray()
 
-    //val geneMap = genes.mapIndexed { index, s -> index to s}.groupBy({it.second},{it.first})
+    //val geneMap = scan.nextLine().split(" ").mapIndexed { index, s -> index to s}.groupBy({it.second},{it.first})
 
     val health = scan.nextLine().split(" ").map { it.trim().toInt() }.toTypedArray()
 
