@@ -2,8 +2,6 @@ package org.mavriksc.messin.hackerrank
 
 import java.io.File
 import java.util.*
-import kotlin.math.max
-import kotlin.math.min
 
 //https://www.hackerrank.com/challenges/determining-dna-health
 
@@ -22,17 +20,20 @@ import kotlin.math.min
 // search all genes keeping running totals in a list  then max and min value of that list
 
 
-
 // genes
 
 //make map of genes to index list: 103974
 // time without maping: 59656
 // with memo but on laptop:71245 home: 45587
 
+//caches for old method probably not needed anymore
+var lpss: MutableMap<String, Array<Int>> = mutableMapOf()
+var counts: MutableMap<String, Long> = mutableMapOf()
 
 fun main() {
-	// TODO get recources working right
+    // TODO get recources working right
     val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
+    val start = Date()
 
     val n = scan.nextLine().trim().toInt()
 
@@ -43,32 +44,36 @@ fun main() {
     val health = scan.nextLine().split(" ").map { it.trim().toInt() }.toTypedArray()
 
     val s = scan.nextLine().trim().toInt()
-    var low = Long.MAX_VALUE
-    var high = 0L
-    val start = Date()
-    for (sItr in 1..s) {
-        val firstLastd = scan.nextLine().split(" ")
-
-        val first = firstLastd[0].trim().toInt()
-
-        val last = firstLastd[1].trim().toInt()
-
-        val d = firstLastd[2]
-        val score = scoreStrandUKK(d, first, last, genes, health)
-        low = min(low, score)
-        high = max(high, score)
-        counts.clear()
+    val inputs = Array<StrandInfo?>(s) { null }
+    val geneCat = StringBuilder()
+    for (inputRow in 0 until s) {
+        val firstLastD = scan.nextLine().split(" ")
+        val first = firstLastD[0].trim().toInt()
+        val last = firstLastD[1].trim().toInt()
+        val d = firstLastD[2]
+        geneCat.append(d).append("^")
+        inputs[inputRow] = StrandInfo(first, last, geneCat.length)
     }
+    val tree = UKKSuffixTree(geneCat.toString())
+    scoreAllStrands(tree, inputs, genes, health)
+
     val end = Date()
     println(end.time - start.time)
-    print("$low $high")
 }
 
-var lpss: MutableMap<String, Array<Int>> = mutableMapOf()
-var counts: MutableMap<String, Long> = mutableMapOf()
+fun scoreAllStrands(tree: UKKSuffixTree, inputs: Array<StrandInfo?>, genes: Array<String>, health: Array<Int>) {
+    val cache = mutableMapOf<String, List<Int>>()
+
+}
+
+class StrandInfo(val first: Int, val last: Int, val size: Int) {
+    // since things are a different length instead of keeping the length of each keep the length of all previous strands.
+    var score = 0L
+}
+
 
 fun scoreStrandKMP(d: String, first: Int, last: Int, genes: Array<String>, health: Array<Int>): Long =
-        (first..last).map {d.kmpMatchScore(genes[it]) * health[it]}.sum()
+        (first..last).map { d.kmpMatchScore(genes[it]) * health[it] }.sum()
 
 fun scoreStrandUKK(d: String, first: Int, last: Int, genes: Array<String>, health: Array<Int>): Long {
     val tree = UKKSuffixTree(d)
@@ -219,18 +224,13 @@ class UKKSuffixTree(val text: String) {
     }
 
     private fun setSuffixIndexByDFS(n: SuffixNode, labelHeight: Int) {
-//        if (n.start != -1)
-//            print(text.substring(n.start, n.end.value + 1))
         var leaf = 1
         n.children.forEach {
-            //            if (leaf == 1 && n.start != -1)
-//                println("[${n.suffixIndex}]")
             leaf = 0
             setSuffixIndexByDFS(it.value, labelHeight + edgeLength(it.value))
         }
         if (leaf == 1) {
             n.suffixIndex = size - labelHeight
-//            println("[${n.suffixIndex}]")
         }
     }
 
@@ -242,14 +242,15 @@ class UKKSuffixTree(val text: String) {
         setSuffixIndexByDFS(root, labelHeight)
     }
 
-    private fun doTraversalToCountLeaf(n: SuffixNode): Int {
+    // in here and in doTraversal on ' if(n->suffixIndex > -1) ' return empty list instead of 0 or -1
+    // call other counting methods but just push n-> suffixIndex into result list.
+    private fun doTraversalToCountLeafList(n: SuffixNode): MutableList<Int> {
         if (n.suffixIndex > -1)
-            return 1
-        return n.children.values.map { doTraversalToCountLeaf(it) }.sum()
+            return mutableListOf(n.suffixIndex)
+        return n.children.values.map { doTraversalToCountLeafList(it) }.flatten().toMutableList()
     }
 
     private fun traverseEdge(str: String, idx: Int, start: Int, end: Int): Int {
-        //println("NODE: ${text.substring(start, end + 1)} \t PATTERN: ${str.substring(idx)}")
         var k = start
         var index = idx
         do {
@@ -263,35 +264,36 @@ class UKKSuffixTree(val text: String) {
         return 0
     }
 
-    private fun doTraversal(n: SuffixNode, str: String, idx: Int, falseForFindTrueForCount: Boolean): Int {
+    private fun doTraversalList(n: SuffixNode, str: String, idx: Int, falseForFindTrueForCount: Boolean): List<Int> {
         var index = idx
         if (n.start != -1) {
             val result = traverseEdge(str, index, n.start, n.end.value)
             if (result == -1)//no match
-                return -1
+                return emptyList()
             if (result == 1) {//match
-                return if (n.suffixIndex > -1)
-                    1
-                else
-                    doTraversalToCountLeaf(n)
+                return if (n.suffixIndex > -1 && falseForFindTrueForCount)
+                    listOf(n.suffixIndex)
+                else {
+                    return doTraversalToCountLeafList(n)
+                }
             }
         }
         index += edgeLength(n)
         return if (n.children.containsKey(str[index]))
-            doTraversal(n.children[str[index]]!!, str, index, falseForFindTrueForCount)
-        else -1
+            doTraversalList(n.children[str[index]]!!, str, index, falseForFindTrueForCount)
+        else emptyList()
+    }
+
+    fun patternIndices(str: String): List<Int> {
+        return doTraversalList(root, str, 0, true)
     }
 
     fun patternCount(str: String): Int {
-        val result = doTraversal(root, str, 0, true)
-        return if (result < 0)
-            0
-        else
-            result
+        return doTraversalList(root, str, 0, true).size
     }
 
     fun checkForSubString(str: String): Boolean {
-        return doTraversal(root, str, 0, false) > 0
+        return doTraversalList(root, str, 0, false).isNotEmpty()
     }
 
 }
