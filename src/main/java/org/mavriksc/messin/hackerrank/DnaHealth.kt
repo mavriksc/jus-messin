@@ -2,6 +2,8 @@ package org.mavriksc.messin.hackerrank
 
 import java.io.File
 import java.util.*
+import kotlin.math.max
+import kotlin.math.min
 
 //https://www.hackerrank.com/challenges/determining-dna-health
 
@@ -28,12 +30,7 @@ import java.util.*
 //make map of genes to index list: 103974
 // time without maping: 59656
 // with memo but on laptop:71245 home: 45587
-
-// faster but wrong answer
-
-//caches for old method probably not needed anymore
-var lpss: MutableMap<String, Array<Int>> = mutableMapOf()
-var counts: MutableMap<String, Long> = mutableMapOf()
+// cat strat with look uptable : 38891 and getting right answers again and passing 3 more tests
 
 fun main() {
     // TODO get recources working right
@@ -43,8 +40,6 @@ fun main() {
     val n = scan.nextLine().trim().toInt()
 
     val genes = scan.nextLine().split(" ").toTypedArray()
-
-    //val geneMap = scan.nextLine().split(" ").mapIndexed { index, s -> index to s}.groupBy({it.second},{it.first})
 
     val health = scan.nextLine().split(" ").map { it.trim().toInt() }.toTypedArray()
 
@@ -59,120 +54,42 @@ fun main() {
         val d = firstLastD[2]
         textToStrand.addAll((0..d.length).map { inputRow })
         geneCat.append(d).append("^")
-        inputs[inputRow] = StrandInfo(first, last, geneCat.length)
+        inputs[inputRow] = StrandInfo(first, last)
     }
     val tree = UKKSuffixTree(geneCat.toString())
-    scoreAllStrands(tree, inputs, genes, health)
+    scoreAllStrands(tree, inputs, genes, health, textToStrand)
 
     val end = Date()
     println(end.time - start.time)
 }
 
-
-// TODO update this to not use indices to strand count and just update the score directly
-// TODO also run a slow one to get correct numbers. 
-fun scoreAllStrands(tree: UKKSuffixTree, inputs: Array<StrandInfo?>, genes: Array<String>, health: Array<Int>) {
-    val cache = mutableMapOf<String, Array<Int>>()
+fun scoreAllStrands(tree: UKKSuffixTree, inputs: Array<StrandInfo?>, genes: Array<String>, health: Array<Int>, textToStrand: List<Int>) {
+    val cache = mutableMapOf<String, List<Int>>()
     val scores = Array(inputs.size) { 0L }
 
-    //think about storing the strand hit count
-    genes.mapIndexed() { i, g -> i to cache.getOrPut(g) { indicesToStrandCount(tree.patternIndices(g), inputs) } }
-            .forEach { geneIndexAndStrandCounts ->
-                geneIndexAndStrandCounts.second
-                        .forEachIndexed { index, count ->
-                            if (geneIndexAndStrandCounts.first >= inputs[index]!!.first && geneIndexAndStrandCounts.first <= inputs[index]!!.last) {
-                                scores[index] += count.toLong() * health[geneIndexAndStrandCounts.first]
-                            }
-                        }
-            }
-
-    println("${scores.min()} ${scores.max()}")
-}
-
-fun indicesToStrandCount(indices: List<Int>, inputs: Array<StrandInfo?>): Array<Int> {
-    //may need to reverse or sort indices
-    var strandIndex = 0
-    var count = 0
-    val counts = Array(inputs.size) { 0 }
-    indices.forEach() {
-        if (it < inputs[strandIndex]!!.size)
-            count++
-        else {
-            counts[strandIndex] = count
-            count = 1
-            do {
-                strandIndex++
-            } while (it > inputs[strandIndex]!!.size)
-        }
-    }
-    return counts
-}
-
-class StrandInfo(val first: Int, val last: Int, val size: Int) {
-    // since things are a different length instead of keeping the length of each keep the length of all previous strands.
-    var score = 0L
-}
-
-
-fun scoreStrandKMP(d: String, first: Int, last: Int, genes: Array<String>, health: Array<Int>): Long =
-        (first..last).map { d.kmpMatchScore(genes[it]) * health[it] }.sum()
-
-fun scoreStrandUKK(d: String, first: Int, last: Int, genes: Array<String>, health: Array<Int>): Long {
-    val tree = UKKSuffixTree(d)
-    val cache = mutableMapOf<String, Long>()
-    return (first..last).map { cache.getOrPut(genes[it]) { tree.patternCount(genes[it]).toLong() } * health[it] }.sum()
-}
-
-fun String.kmpMatchScore(pattern: String): Long {
-    return counts.getOrPut(pattern) {
-        var count = 0L
-        val m = pattern.length
-        val n = this.length
-        val lps = pattern.computeLPS()
-        var j = 0
-        var i = 0
-        while (i < n) {
-            if (pattern[j] == this[i]) {
-                j++
-                i++
-            }
-            if (j == m) {
-                count++
-                j = lps[j - 1]
-            } else if (i < n && pattern[j] != this[i]) {
-                if (j != 0)
-                    j = lps[j - 1]
-                else
-                    i++
-            }
-        }
-        return count
-    }
-}
-
-fun String.computeLPS(): Array<Int> {
-    return lpss.getOrPut(this) {
-        val m = this.length
-        val lps = Array(m) { 0 }
-        var i = 1
-        var len = 0
-        while (i < m) {
-            if (this[i] == this[len]) {
-                len++
-                lps[i] = len
-                i++
-            } else {
-                if (len != 0) {
-                    len = lps[len - 1]
-                } else {
-                    lps[i] = len
-                    i++
+    genes.mapIndexed() { i, g -> i to cache.getOrPut(g) { tree.patternIndices(g) } }
+            .forEach { (geneIndex, locations) ->
+                locations.forEach {
+                    val inputRow = textToStrand[it]
+                    if (geneIndex >= inputs[inputRow]?.first!! && geneIndex <= inputs[inputRow]?.last!!)
+                        scores[inputRow] += health[geneIndex].toLong()
                 }
             }
-        }
-        return lps
-    }
+    minMaxScores(scores)
 }
+
+fun minMaxScores(scores: Array<Long>) {
+    var lil = Long.MAX_VALUE
+    var big = 0L
+    scores.forEach {
+        lil = min(lil,it)
+        big = max(big,it)
+    }
+    println("${lil} ${big}")
+}
+
+
+class StrandInfo(val first: Int, val last: Int)
 
 class UKKSuffixTree(val text: String) {
     private val root = newNode(-1, IntPtr(-1))
@@ -287,8 +204,6 @@ class UKKSuffixTree(val text: String) {
         setSuffixIndexByDFS(root, labelHeight)
     }
 
-    // in here and in doTraversal on ' if(n->suffixIndex > -1) ' return empty list instead of 0 or -1
-    // call other counting methods but just push n-> suffixIndex into result list.
     private fun doTraversalToCountLeafList(n: SuffixNode): MutableList<Int> {
         if (n.suffixIndex > -1)
             return mutableListOf(n.suffixIndex)
