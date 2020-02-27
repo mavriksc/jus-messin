@@ -19,6 +19,9 @@ import java.util.*
 // . build suffix tree/ array ( create search that returns indices in text)
 // search all genes keeping running totals in a list  then max and min value of that list
 
+//create an Int array the size of the final string this maps an index in the total text
+// use this to check for gene expression and updating  the score
+
 
 // genes
 
@@ -26,13 +29,15 @@ import java.util.*
 // time without maping: 59656
 // with memo but on laptop:71245 home: 45587
 
+// faster but wrong answer
+
 //caches for old method probably not needed anymore
 var lpss: MutableMap<String, Array<Int>> = mutableMapOf()
 var counts: MutableMap<String, Long> = mutableMapOf()
 
 fun main() {
     // TODO get recources working right
-    val scan = Scanner(File("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
+    val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
     val start = Date()
 
     val n = scan.nextLine().trim().toInt()
@@ -46,11 +51,13 @@ fun main() {
     val s = scan.nextLine().trim().toInt()
     val inputs = Array<StrandInfo?>(s) { null }
     val geneCat = StringBuilder()
+    val textToStrand = mutableListOf<Int>()
     for (inputRow in 0 until s) {
         val firstLastD = scan.nextLine().split(" ")
         val first = firstLastD[0].trim().toInt()
         val last = firstLastD[1].trim().toInt()
         val d = firstLastD[2]
+        textToStrand.addAll((0..d.length).map { inputRow })
         geneCat.append(d).append("^")
         inputs[inputRow] = StrandInfo(first, last, geneCat.length)
     }
@@ -61,6 +68,9 @@ fun main() {
     println(end.time - start.time)
 }
 
+
+// TODO update this to not use indices to strand count and just update the score directly
+// TODO also run a slow one to get correct numbers. 
 fun scoreAllStrands(tree: UKKSuffixTree, inputs: Array<StrandInfo?>, genes: Array<String>, health: Array<Int>) {
     val cache = mutableMapOf<String, Array<Int>>()
     val scores = Array(inputs.size) { 0L }
@@ -70,8 +80,8 @@ fun scoreAllStrands(tree: UKKSuffixTree, inputs: Array<StrandInfo?>, genes: Arra
             .forEach { geneIndexAndStrandCounts ->
                 geneIndexAndStrandCounts.second
                         .forEachIndexed { index, count ->
-                            if (geneIndexAndStrandCounts.first >= inputs[index]!!.first &&geneIndexAndStrandCounts.first <= inputs[index]!!.last) {
-                                scores[index] += count.toLong()*health[geneIndexAndStrandCounts.first]
+                            if (geneIndexAndStrandCounts.first >= inputs[index]!!.first && geneIndexAndStrandCounts.first <= inputs[index]!!.last) {
+                                scores[index] += count.toLong() * health[geneIndexAndStrandCounts.first]
                             }
                         }
             }
@@ -84,7 +94,7 @@ fun indicesToStrandCount(indices: List<Int>, inputs: Array<StrandInfo?>): Array<
     var strandIndex = 0
     var count = 0
     val counts = Array(inputs.size) { 0 }
-    indices.reversed().forEach() {
+    indices.forEach() {
         if (it < inputs[strandIndex]!!.size)
             count++
         else {
