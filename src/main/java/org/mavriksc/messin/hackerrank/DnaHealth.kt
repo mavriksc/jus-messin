@@ -31,6 +31,7 @@ import kotlin.math.min
 // time without maping: 59656
 // with memo but on laptop:71245 home: 45587
 // cat strat with look uptable : 38891 and getting right answers again and passing 3 more tests
+//passing 0.1,7,8,9 time out on rest 15,23 for example
 
 fun main() {
     // TODO get recources working right
