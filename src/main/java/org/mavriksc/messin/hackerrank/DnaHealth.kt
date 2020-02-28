@@ -2,6 +2,8 @@ package org.mavriksc.messin.hackerrank
 
 import java.io.File
 import java.util.*
+import kotlin.math.ceil
+import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.min
 
@@ -15,12 +17,9 @@ import kotlin.math.min
 // IDEAS:
 //https://www.geeksforgeeks.org/suffix-tree-application-2-searching-all-patterns/
 
+//https://web.stanford.edu/class/cs97si/suffix-array.pdf
 
-//cat all the different trials together with a special character not in genes
-// keeping len+1 and the index pairs in a list
-// . build suffix tree/ array ( create search that returns indices in text)
-// search all genes keeping running totals in a list  then max and min value of that list
-
+//*******DONE but still not fast enough
 //create an Int array the size of the final string this maps an index in the total text
 // use this to check for gene expression and updating  the score
 
@@ -34,7 +33,8 @@ import kotlin.math.min
 //passing 0.1,7,8,9 time out on rest 15,23 for example
 
 fun main() {
-    // TODO get recources working right
+    //TODO get recources working right
+
     val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
     val start = Date()
 
@@ -83,14 +83,73 @@ fun minMaxScores(scores: Array<Long>) {
     var lil = Long.MAX_VALUE
     var big = 0L
     scores.forEach {
-        lil = min(lil,it)
-        big = max(big,it)
+        lil = min(lil, it)
+        big = max(big, it)
     }
-    println("${lil} ${big}")
+    println("$lil $big")
 }
 
 
 class StrandInfo(val first: Int, val last: Int)
+
+class SuffixArray(val text: String) {
+    val n = text.length
+    val l = Array<EntRY>(n) { EntRY(0, 0, 0) }
+    val p = Array<Array<Int>>(ceil(log2(n.toDouble())).toInt()) { Array<Int>(n) { 0 } }
+    var cnt = 1
+
+    class EntRY(var nr0: Int, var nr1: Int, var p: Int) : Comparable<EntRY> {
+        override fun compareTo(other: EntRY): Int {
+            return if (this.nr0 == other.nr0)
+                this.nr1 - other.nr1
+            else this.nr0 - other.nr0
+        }
+    }
+
+    init {
+        createArray()
+    }
+
+    private fun createArray() {
+        for (i in 0 until n) p[0][i] = text[i] - 'a'
+        for (k in 1 until p.size) {
+            for (i in 0 until n) {
+                l[i].nr0 = p[k - 1][i]
+                if (i + cnt < n)
+                    l[i].nr1 = p[k - 1][i + cnt]
+                else
+                    l[i].nr1 = -1
+                l[i].p = i
+            }
+            l.sort()
+            for (j in 0 until n)
+                if (j > 0 && l[j].nr0 == l[j - 1].nr0 && l[j].nr1 == l[j - 1].nr1)
+                    p[k][l[j].p] = p[k][l[j - 1].p]
+                else
+                    p[k][l[j].p] = j
+            cnt = cnt.shl(1)
+        }
+    }
+
+    private fun lcp(x: Int, y: Int): Int {
+        val one = 1
+        var xn = x
+        var yn = y
+        var k = text.length - 1
+        var ret = 0
+        if (x == y) return n - x
+        do {
+            if (p[k][xn] == p[k][yn]) {
+                val oneShLK = one.shl(k)
+                xn += oneShLK
+                yn += oneShLK
+                ret += oneShLK
+            }
+            k--
+        } while (k >= 0)
+        return ret
+    }
+}
 
 class UKKSuffixTree(val text: String) {
     private val root = newNode(-1, IntPtr(-1))
@@ -197,7 +256,7 @@ class UKKSuffixTree(val text: String) {
         }
     }
 
-    fun buildSufFixTree() {
+    private fun buildSufFixTree() {
         for (i in 0 until size) {
             extendSuffixTree(i)
         }
