@@ -47,24 +47,32 @@ fun main() {
     val s = scan.nextLine().trim().toInt()
     val inputs = Array<StrandInfo?>(s) { null }
     val geneCat = StringBuilder()
-    val textToStrand = mutableListOf<Int>()
     for (inputRow in 0 until s) {
         val firstLastD = scan.nextLine().split(" ")
         val first = firstLastD[0].trim().toInt()
         val last = firstLastD[1].trim().toInt()
         val d = firstLastD[2]
-        textToStrand.addAll((0..d.length).map { inputRow })
         geneCat.append(d).append("^")
         inputs[inputRow] = StrandInfo(first, last)
     }
-    val tree = UKKSuffixTree(geneCat.toString())
+    val geneString = geneCat.toString()
+    var count = 0
+    val textToStrand = Array(geneString.length) { i ->
+        if (geneString[i] == '^') {
+            count++
+            count - 1
+        } else
+            count
+    }
+    val tree = UKKSuffixTree(geneString)
     scoreAllStrands(tree, inputs, genes, health, textToStrand)
 
     val end = Date()
     println(end.time - start.time)
 }
 
-fun scoreAllStrands(tree: UKKSuffixTree, inputs: Array<StrandInfo?>, genes: Array<String>, health: Array<Int>, textToStrand: List<Int>) {
+
+fun scoreAllStrands(tree: UKKSuffixTree, inputs: Array<StrandInfo?>, genes: Array<String>, health: Array<Int>, textToStrand: Array<Int>) {
     val cache = mutableMapOf<String, List<Int>>()
     val scores = Array(inputs.size) { 0L }
 
