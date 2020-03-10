@@ -29,6 +29,12 @@ import kotlin.math.*
 // cat strat with look uptable : 38891 and getting right answers again and passing 3 more tests
 //passing 0.1,7,8,9 time out on rest 15,23 for example
 
+//DNA-2.txt cat strat with cache
+//15806635 20688978289
+//36293
+
+
+
 fun main() {
     //TODO get recources working right
 
