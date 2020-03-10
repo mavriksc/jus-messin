@@ -42,15 +42,16 @@ fun main() {
 //    val dict = arrayOf("he", "she", "hers", "his")
 //    val acFSM = AhoCorasickFSM(dict)
 //    acFSM.findDictWordsInText("ahishers")
-
+    val r = System.`in`.bufferedReader()
     val reader = BufferedReader(FileReader("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
     val start = Date()
 
     val n = reader.readLine().trim().toInt()
+    val genesRow = reader.readLine()
 
-    val genes = reader.readLine().split(" ").toTypedArray()
+    val genes = genesRow.split(" ").toTypedArray()
 
-    val acFSM = AhoCorasickFSM(genes)
+    val acFSM = AhoCorasickFSM(genes,genesRow.length)
 
     val health = reader.readLine().split(" ").map { it.trim().toInt() }.toTypedArray()
 
@@ -351,9 +352,8 @@ class UKKSuffixTree(val text: String) {
 
 }
 
-class AhoCorasickFSM(val dict: Array<String>) {
+class AhoCorasickFSM(private val dict: Array<String>,private val maxS:Int) {
     val k = dict.size
-    private val maxS = 2_000_000
     private val maxC = 26
     val out = Array<Int>(maxS) { 0 }
     private val f = Array<Int>(maxS) { -1 }
