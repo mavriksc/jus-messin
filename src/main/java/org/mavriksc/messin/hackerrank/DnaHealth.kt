@@ -2,10 +2,7 @@ package org.mavriksc.messin.hackerrank
 
 import java.io.File
 import java.util.*
-import kotlin.math.ceil
-import kotlin.math.log2
-import kotlin.math.max
-import kotlin.math.min
+import kotlin.math.*
 
 //https://www.hackerrank.com/challenges/determining-dna-health
 
@@ -104,6 +101,7 @@ class SuffixArray(val text: String) {
     val n = text.length
     val l = Array<EntRY>(n) { EntRY(0, 0, 0) }
     val p = Array<Array<Int>>(ceil(log2(n.toDouble())).toInt()) { Array<Int>(n) { 0 } }
+    val lcp = Array<Int>(n) { 0 }
     var cnt = 1
 
     class EntRY(var nr0: Int, var nr1: Int, var p: Int) : Comparable<EntRY> {
@@ -137,6 +135,7 @@ class SuffixArray(val text: String) {
                     p[k][l[j].p] = j
             cnt = cnt.shl(1)
         }
+        for (i in 1..n) lcp[i] = lcp(i - 1, i)
     }
 
     private fun lcp(x: Int, y: Int): Int {
@@ -157,6 +156,29 @@ class SuffixArray(val text: String) {
         } while (k >= 0)
         return ret
     }
+}
+
+fun countingSort(a: Array<Int>, place: Int, base: Int): Array<Int> {
+    val b = Array<Int>(a.size) { 0 }
+    val c = Array<Int>(base) { 0 }
+    for (i in a.indices) {
+        val digitOfAi = ((a[i] / base.toDouble().pow(place)) % base).toInt()
+        c[digitOfAi.toInt()] += 1
+    }
+    for (j in 1 until base) c[j]+=c[j-1]
+    for (m in a.indices.reversed()){
+        val digitOfAi =((a[m] / base.toDouble().pow(place)) % base).toInt()
+        c[digitOfAi] -= 1
+        b[c[digitOfAi]]= a[m]
+    }
+    return b
+}
+
+fun radixSort(a: Array<Int>, base: Int, maxVal:Int): Array<Int> {
+    var output = a
+    val digits = floor(log(maxVal.toDouble(), base.toDouble()) + 1).toInt()
+    for (i in 0 until digits) output = countingSort(output, i, base)
+    return output
 }
 
 class UKKSuffixTree(val text: String) {
