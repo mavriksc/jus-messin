@@ -42,7 +42,10 @@ fun main() {
 //    val dict = arrayOf("he", "she", "hers", "his")
 //    val acFSM = AhoCorasickFSM(dict)
 //    acFSM.findDictWordsInText("ahishers")
-    val r = System.`in`.bufferedReader()
+
+    // how to create a reader in Hackerank
+    //val r = System.`in`.bufferedReader()
+
     val reader = BufferedReader(FileReader("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
     val start = Date()
 
