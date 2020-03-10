@@ -6,6 +6,8 @@ import kotlin.math.*
 
 //https://www.hackerrank.com/challenges/determining-dna-health
 
+//https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm
+
 // working but failing all but 2 tests. need to not recalc lps
 // not recalc lps but still failing same tests timeout
 // https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/
@@ -29,40 +31,41 @@ import kotlin.math.*
 // cat strat with look uptable : 38891 and getting right answers again and passing 3 more tests
 //passing 0.1,7,8,9 time out on rest 15,23 for example
 
+///FSM strat:
+
 fun main() {
     //TODO get recources working right
 
-    val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
+// FSM works need to update it to score things
+//    val dict = arrayOf("he", "she", "hers", "his")
+//    val acFSM = AhoCorasickFSM(dict)
+//    acFSM.findDictWordsInText("ahishers")
+
+
+    val scan = Scanner(File("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
     val start = Date()
 
     val n = scan.nextLine().trim().toInt()
 
     val genes = scan.nextLine().split(" ").toTypedArray()
 
+    val acFSM = AhoCorasickFSM(genes)
+
     val health = scan.nextLine().split(" ").map { it.trim().toInt() }.toTypedArray()
 
     val s = scan.nextLine().trim().toInt()
-    val inputs = Array<StrandInfo?>(s) { null }
-    val geneCat = StringBuilder()
+    var min = Long.MAX_VALUE
+    var max = 0L
     for (inputRow in 0 until s) {
         val firstLastD = scan.nextLine().split(" ")
         val first = firstLastD[0].trim().toInt()
         val last = firstLastD[1].trim().toInt()
         val d = firstLastD[2]
-        geneCat.append(d).append("^")
-        inputs[inputRow] = StrandInfo(first, last)
+        val score = acFSM.scoreStrand(d, StrandInfo(first, last), health)
+        min = min(min,score)
+        max = max(max,score)
     }
-    val geneString = geneCat.toString()
-    var count = 0
-    val textToStrand = Array(geneString.length) { i ->
-        if (geneString[i] == '^') {
-            count++
-            count - 1
-        } else
-            count
-    }
-    val tree = UKKSuffixTree(geneString)
-    scoreAllStrands(tree, inputs, genes, health, textToStrand)
+
 
     val end = Date()
     println(end.time - start.time)
@@ -94,6 +97,28 @@ fun minMaxScores(scores: Array<Long>) {
     println("$lil $big")
 }
 
+fun countingSort(a: Array<Int>, place: Int, base: Int): Array<Int> {
+    val b = Array<Int>(a.size) { 0 }
+    val c = Array(base) { 0 }
+    for (i in a.indices) {
+        val digitOfAi = ((a[i] / base.toDouble().pow(place)) % base).toInt()
+        c[digitOfAi] += 1
+    }
+    for (j in 1 until base) c[j] += c[j - 1]
+    for (m in a.indices.reversed()) {
+        val digitOfAi = ((a[m] / base.toDouble().pow(place)) % base).toInt()
+        c[digitOfAi] -= 1
+        b[c[digitOfAi]] = a[m]
+    }
+    return b
+}
+
+fun radixSort(a: Array<Int>, base: Int, maxVal: Int): Array<Int> {
+    var output = a
+    val digits = floor(log(maxVal.toDouble(), base.toDouble()) + 1).toInt()
+    for (i in 0 until digits) output = countingSort(output, i, base)
+    return output
+}
 
 class StrandInfo(val first: Int, val last: Int)
 
@@ -102,7 +127,7 @@ class SuffixArray(val text: String) {
     val l = Array<EntRY>(n) { EntRY(0, 0, 0) }
     val p = Array<Array<Int>>(ceil(log2(n.toDouble())).toInt()) { Array<Int>(n) { 0 } }
     val lcp = Array<Int>(n) { 0 }
-    var cnt = 1
+    private var cnt = 1
 
     class EntRY(var nr0: Int, var nr1: Int, var p: Int) : Comparable<EntRY> {
         override fun compareTo(other: EntRY): Int {
@@ -156,29 +181,6 @@ class SuffixArray(val text: String) {
         } while (k >= 0)
         return ret
     }
-}
-
-fun countingSort(a: Array<Int>, place: Int, base: Int): Array<Int> {
-    val b = Array<Int>(a.size) { 0 }
-    val c = Array<Int>(base) { 0 }
-    for (i in a.indices) {
-        val digitOfAi = ((a[i] / base.toDouble().pow(place)) % base).toInt()
-        c[digitOfAi.toInt()] += 1
-    }
-    for (j in 1 until base) c[j]+=c[j-1]
-    for (m in a.indices.reversed()){
-        val digitOfAi =((a[m] / base.toDouble().pow(place)) % base).toInt()
-        c[digitOfAi] -= 1
-        b[c[digitOfAi]]= a[m]
-    }
-    return b
-}
-
-fun radixSort(a: Array<Int>, base: Int, maxVal:Int): Array<Int> {
-    var output = a
-    val digits = floor(log(maxVal.toDouble(), base.toDouble()) + 1).toInt()
-    for (i in 0 until digits) output = countingSort(output, i, base)
-    return output
 }
 
 class UKKSuffixTree(val text: String) {
@@ -314,14 +316,14 @@ class UKKSuffixTree(val text: String) {
         return 0
     }
 
-    private fun doTraversalList(n: SuffixNode, str: String, idx: Int, falseForFindTrueForCount: Boolean): List<Int> {
+    private fun doTraversalList(n: SuffixNode, str: String, idx: Int, falseForExistenceTrueForIncidents: Boolean): List<Int> {
         var index = idx
         if (n.start != -1) {
             val result = traverseEdge(str, index, n.start, n.end.value)
             if (result == -1)//no match
                 return emptyList()
             if (result == 1) {//match
-                return if (n.suffixIndex > -1 && falseForFindTrueForCount)
+                return if (n.suffixIndex > -1 && falseForExistenceTrueForIncidents)
                     listOf(n.suffixIndex)
                 else {
                     return doTraversalToCountLeafList(n)
@@ -330,7 +332,7 @@ class UKKSuffixTree(val text: String) {
         }
         index += edgeLength(n)
         return if (n.children.containsKey(str[index]))
-            doTraversalList(n.children[str[index]]!!, str, index, falseForFindTrueForCount)
+            doTraversalList(n.children[str[index]]!!, str, index, falseForExistenceTrueForIncidents)
         else emptyList()
     }
 
@@ -348,4 +350,96 @@ class UKKSuffixTree(val text: String) {
 
 }
 
+class AhoCorasickFSM(val dict: Array<String>) {
+    val k = dict.size
+    private val maxS = 2_000_000
+    private val maxC = 26
+    val out = Array<Int>(maxS) { 0 }
+    private val f = Array<Int>(maxS) { -1 }
+    val g = Array<Array<Int>>(maxS) { Array<Int>(maxC) { -1 } }
+
+    init {
+        buildFSM(dict, k)
+    }
+
+    private fun buildFSM(arr: Array<String>, k: Int): Int {
+        var states = 1
+        for (i in 0 until k) {
+            val word = arr[i]
+            var currentState = 0
+            for (element in word) {
+                val ch = element - 'a'
+                if (g[currentState][ch] == -1)
+                    g[currentState][ch] = states++
+                currentState = g[currentState][ch]
+            }
+            out[currentState] = out[currentState] or (1.shl(i))
+        }
+        for (ch in 0 until maxC)
+            if (g[0][ch] == -1)
+                g[0][ch] = 0
+        val q: Queue<Int> = LinkedList<Int>()
+        for (ch in 0 until maxC) {
+            if (g[0][ch] != 0) {
+                f[g[0][ch]] = 0
+                q.offer(g[0][ch])
+            }
+        }
+        while (q.size != 0) {
+            val state = q.remove()
+            for (ch in 0 until maxC) {
+                if (g[state][ch] != -1) {
+                    var failure = f[state]
+                    while (g[failure][ch] == -1)
+                        failure = f[failure]
+                    failure = g[failure][ch]
+                    f[g[state][ch]] = failure
+                    out[g[state][ch]] = out[g[state][ch]] or out[failure]
+                    q.offer(g[state][ch])
+                }
+            }
+        }
+        return states
+    }
+
+    private fun findNextState(currentState: Int, nextInput: Char): Int {
+        var answer = currentState
+        val ch = nextInput - 'a'
+        while (g[answer][ch] == -1)
+            answer = f[answer]
+        return g[answer][ch]
+    }
+
+    fun findDictWordsInText(text: String) {
+        var currentState = 0
+        for (i in text.indices) {
+            currentState = findNextState(currentState, text[i])
+            if (out[currentState] == 0)
+                continue
+
+            for (j in 0 until k) {
+                if (out[currentState] and 1.shl(j) != 0) {
+                    println("Word ${dict[j]} appears from ${i - dict[j].length + 1} to $i")
+                }
+            }
+        }
+    }
+
+    fun scoreStrand(strand: String, strandInfo: StrandInfo, scores: Array<Int>): Long {
+        var score = 0L
+        var currentState = 0
+        for (i in strand.indices) {
+            currentState = findNextState(currentState, strand[i])
+            if (out[currentState] == 0)
+                continue
+
+            for (j in 0 until k) {
+                if (out[currentState] and 1.shl(j) != 0 && (j >= strandInfo.first && j <= strandInfo.last))
+                    score += scores[j]
+            }
+        }
+        return score
+    }
+
+}
 
