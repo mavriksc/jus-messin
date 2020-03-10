@@ -43,10 +43,10 @@ fun main() {
 //    val acFSM = AhoCorasickFSM(dict)
 //    acFSM.findDictWordsInText("ahishers")
     val r = System.`in`.bufferedReader()
-    val reader = BufferedReader(FileReader("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
+    val reader = BufferedReader(FileReader("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
     val start = Date()
 
-    val n = reader.readLine().trim().toInt()
+    reader.readLine()// clear the number of genes
     val genesRow = reader.readLine()
 
     val genes = genesRow.split(" ").toTypedArray()
@@ -435,7 +435,7 @@ class AhoCorasickFSM(private val dict: Array<String>,private val maxS:Int) {
                 continue
 
             for (j in 0 until k) {
-                if (out[currentState] and 1.shl(j) != 0 && (j >= strandInfo.first && j <= strandInfo.last))
+                if (out[currentState] and 1.shl(j) > 0 && (j >= strandInfo.first && j <= strandInfo.last))
                     score += scores[j]
             }
         }
