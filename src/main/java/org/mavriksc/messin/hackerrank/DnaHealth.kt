@@ -139,12 +139,12 @@ class SuffixArray(val text: String) {
     }
 
     private fun lcp(x: Int, y: Int): Int {
+        if (x == y) return n - x
         val one = 1
         var xn = x
         var yn = y
         var k = text.length - 1
         var ret = 0
-        if (x == y) return n - x
         do {
             if (p[k][xn] == p[k][yn]) {
                 val oneShLK = one.shl(k)
