@@ -1,6 +1,8 @@
 package org.mavriksc.messin.hackerrank
 
+import java.io.BufferedReader
 import java.io.File
+import java.io.FileReader
 import java.util.*
 import kotlin.math.*
 
@@ -34,30 +36,29 @@ import kotlin.math.*
 ///FSM strat:
 
 fun main() {
-    //TODO get recources working right
+    //TODO get resources working right
 
 // FSM works need to update it to score things
 //    val dict = arrayOf("he", "she", "hers", "his")
 //    val acFSM = AhoCorasickFSM(dict)
 //    acFSM.findDictWordsInText("ahishers")
 
-
-    val scan = Scanner(File("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
+    val reader = BufferedReader(FileReader("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
     val start = Date()
 
-    val n = scan.nextLine().trim().toInt()
+    val n = reader.readLine().trim().toInt()
 
-    val genes = scan.nextLine().split(" ").toTypedArray()
+    val genes = reader.readLine().split(" ").toTypedArray()
 
     val acFSM = AhoCorasickFSM(genes)
 
-    val health = scan.nextLine().split(" ").map { it.trim().toInt() }.toTypedArray()
+    val health = reader.readLine().split(" ").map { it.trim().toInt() }.toTypedArray()
 
-    val s = scan.nextLine().trim().toInt()
+    val s = reader.readLine().trim().toInt()
     var min = Long.MAX_VALUE
     var max = 0L
     for (inputRow in 0 until s) {
-        val firstLastD = scan.nextLine().split(" ")
+        val firstLastD = reader.readLine().split(" ")
         val first = firstLastD[0].trim().toInt()
         val last = firstLastD[1].trim().toInt()
         val d = firstLastD[2]
@@ -66,7 +67,7 @@ fun main() {
         max = max(max,score)
     }
 
-
+    println("$min $max")
     val end = Date()
     println(end.time - start.time)
 }
