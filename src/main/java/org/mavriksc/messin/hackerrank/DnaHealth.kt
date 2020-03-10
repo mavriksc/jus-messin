@@ -38,7 +38,7 @@ import kotlin.math.*
 fun main() {
     //TODO get resources working right
 
-// FSM works need to update it to score things
+// FSM kinda works getting issues on some tests though
 //    val dict = arrayOf("he", "she", "hers", "his")
 //    val acFSM = AhoCorasickFSM(dict)
 //    acFSM.findDictWordsInText("ahishers")
@@ -78,7 +78,7 @@ fun scoreAllStrands(tree: UKKSuffixTree, inputs: Array<StrandInfo?>, genes: Arra
     val cache = mutableMapOf<String, List<Int>>()
     val scores = Array(inputs.size) { 0L }
 
-    genes.mapIndexed() { i, g -> i to cache.getOrPut(g) { tree.patternIndices(g) } }
+    genes.mapIndexed { i, g -> i to cache.getOrPut(g) { tree.patternIndices(g) } }
             .forEach { (geneIndex, locations) ->
                 locations.forEach {
                     val inputRow = textToStrand[it]
@@ -100,7 +100,7 @@ fun minMaxScores(scores: Array<Long>) {
 }
 
 fun countingSort(a: Array<Int>, place: Int, base: Int): Array<Int> {
-    val b = Array<Int>(a.size) { 0 }
+    val b = Array(a.size) { 0 }
     val c = Array(base) { 0 }
     for (i in a.indices) {
         val digitOfAi = ((a[i] / base.toDouble().pow(place)) % base).toInt()
@@ -126,9 +126,9 @@ class StrandInfo(val first: Int, val last: Int)
 
 class SuffixArray(val text: String) {
     val n = text.length
-    val l = Array<EntRY>(n) { EntRY(0, 0, 0) }
-    val p = Array<Array<Int>>(ceil(log2(n.toDouble())).toInt()) { Array<Int>(n) { 0 } }
-    val lcp = Array<Int>(n) { 0 }
+    val l = Array(n) { EntRY(0, 0, 0) }
+    val p = Array(ceil(log2(n.toDouble())).toInt()) { Array(n) { 0 } }
+    val lcp = Array(n) { 0 }
     private var cnt = 1
 
     class EntRY(var nr0: Int, var nr1: Int, var p: Int) : Comparable<EntRY> {
@@ -352,12 +352,12 @@ class UKKSuffixTree(val text: String) {
 
 }
 
-class AhoCorasickFSM(private val dict: Array<String>,private val maxS:Int) {
+class AhoCorasickFSM(private val dict: Array<String>, maxS:Int) {
     val k = dict.size
     private val maxC = 26
-    val out = Array<Int>(maxS) { 0 }
-    private val f = Array<Int>(maxS) { -1 }
-    val g = Array<Array<Int>>(maxS) { Array<Int>(maxC) { -1 } }
+    val out = Array(maxS) { 0 }
+    private val f = Array(maxS) { -1 }
+    private val g = Array(maxS) { Array(maxC) { -1 } }
 
     init {
         buildFSM(dict, k)
