@@ -13,29 +13,22 @@ import java.io.FileReader
 //1 1 1
 //2 0 0
 fun main() {
+    val reader = BufferedReader(FileReader("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\cob\\input01.txt"))
+    val q = reader.readLine().trim().toInt()
 
-    permuteList(List(3) { it }).forEach { row ->
-        row.forEach {
-            print("$it ")
+    for (qItr in 1..q) {
+        val n = reader.readLine().trim().toInt()
+
+        val container = Array(n) { Array(n) { 0 } }
+
+        for (i in 0 until n) {
+            container[i] = reader.readLine().split(" ").map{ it.trim().toInt() }.toTypedArray()
         }
-        println()
+
+        val result = organizingContainers(container)
+
+        println(result)
     }
-//    val reader = BufferedReader(FileReader("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\cob\\input01.txt"))
-//    val q = reader.readLine().trim().toInt()
-//
-//    for (qItr in 1..q) {
-//        val n = reader.readLine().trim().toInt()
-//
-//        val container = Array(n) { Array(n) { 0 } }
-//
-//        for (i in 0 until n) {
-//            container[i] = reader.readLine().split(" ").map{ it.trim().toInt() }.toTypedArray()
-//        }
-//
-//        val result = organizingContainers(container)
-//
-//        println(result)
-//    }
 }
 
 fun organizingContainers(container: Array<Array<Int>>): String {
