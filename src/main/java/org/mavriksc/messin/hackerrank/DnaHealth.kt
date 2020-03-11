@@ -33,7 +33,8 @@ import kotlin.math.*
 //passing 0.1,7,8,9 time out on rest 15,23 for example
 
 ///FSM strat: not working and somehow takes longer
-// problem is trie loses duplicate entries. of dict words 
+// problem is trie loses duplicate entries. of dict words
+// and it may be slower maybe try graph instead of arrays 
 
 fun main() {
     //TODO get resources working right
