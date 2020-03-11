@@ -1,7 +1,6 @@
 package org.mavriksc.messin.hackerrank
 
 import java.io.BufferedReader
-import java.io.File
 import java.io.FileReader
 import java.util.*
 import kotlin.math.*
@@ -33,7 +32,8 @@ import kotlin.math.*
 // cat strat with look uptable : 38891 and getting right answers again and passing 3 more tests
 //passing 0.1,7,8,9 time out on rest 15,23 for example
 
-///FSM strat:
+///FSM strat: not working and somehow takes longer
+// problem is trie loses duplicate entries. of dict words 
 
 fun main() {
     //TODO get resources working right
@@ -439,7 +439,7 @@ class AhoCorasickFSM(private val dict: Array<String>, maxS:Int) {
 
             for (j in 0 until k) {
                 if (out[currentState] and 1.shl(j) > 0 && (j >= strandInfo.first && j <= strandInfo.last))
-                    score += scores[j]
+                    score += scores[j].toLong()
             }
         }
         return score
