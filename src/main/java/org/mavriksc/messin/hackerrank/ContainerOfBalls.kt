@@ -13,7 +13,13 @@ import java.io.FileReader
 //1 1 1
 //2 0 0
 fun main() {
-    permutationsOfSize(10)[0].forEach { println(it) }
+
+    permuteList(List(3) { it }).forEach { row ->
+        row.forEach {
+            print("$it ")
+        }
+        println()
+    }
 //    val reader = BufferedReader(FileReader("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\cob\\input01.txt"))
 //    val q = reader.readLine().trim().toInt()
 //
@@ -48,20 +54,14 @@ fun organizingContainers(container: Array<Array<Int>>): String {
     return "Possible"
 }
 
-
-fun permutationsOfSize(n:Int):Array<Array<Int>>{
-    val first = List(n){it}
-    return arrayOf(first.toTypedArray())
+fun <R>permuteList(list: List<R>): List<List<R>> {
+    if (list.size == 1)
+        return listOf(list)
+    return list.flatMap {
+        val tail = list.toMutableList()
+        tail.remove(it)
+        permuteList(tail).map { tp ->
+            mutableListOf(it).apply { addAll(tp) }
+        }
+    }
 }
-
-//fun permuteList(list:List<Int>):List<MutableList<Int>> {
-//    if (list.size==1)
-//        return listOf(list.toMutableList())
-//    return list.map {
-//        val tail = list.toMutableList()
-//        tail.remove(it)
-//        val tailPerms = permuteList(tail)
-//        tailPerms.map { tp-> mutableListOf(it).apply { addAll(tp) }}
-//    }
-//
-//}
