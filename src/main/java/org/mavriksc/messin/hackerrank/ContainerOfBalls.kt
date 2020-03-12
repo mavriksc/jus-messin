@@ -3,19 +3,7 @@ package org.mavriksc.messin.hackerrank
 import java.io.BufferedReader
 import java.io.FileReader
 
-//2
-//3
-//1 3 1
-//2 1 2
-//3 3 3
-//3
-//0 2 1
-//1 1 1
-//2 0 0
-
-
-/// issue is can go in any bucket not just balls numbers bucket
-
+// https://www.hackerrank.com/challenges/organizing-containers-of-balls/problem
 fun main() {
     val reader = BufferedReader(FileReader("D:\\code\\jus-messin\\src\\main\\resources\\cob\\input01.txt"))
     val q = reader.readLine().trim().toInt()
