@@ -28,15 +28,19 @@ fun organizingContainers(container: Array<Array<Int>>): String {
     val lookup = Array(container.size) { Array(container.size) { -1 } }
     val homelessBalls = List(container.size) { it }
     val bucketsToFill = List(container.size) { it }
-    return if (recSolution(container, bucketsToFill, homelessBalls, lookup)) "Possible" else "Impossible"
+    return if (recSolution(container, bucketsToFill, homelessBalls, lookup))
+        "Possible"
+    else
+        "Impossible"
 }
 
 
-fun recSolution(buckets: Array<Array<Int>>, bucketsToFill: List<Int>, homelessBalls: List<Int>, lookup: Array<Array<Int>>): Boolean {
+fun recSolution(buckets: Array<Array<Int>>, bucketsToFill: List<Int>, homelessBalls: List<Int>, lookup: Array<Array<Int>>)
+        : Boolean {
     if (bucketsToFill.isEmpty() && homelessBalls.isEmpty()) return true
     bucketsToFill.forEach { bucket ->
         homelessBalls.forEach { ball ->
-            var possible = false
+            val possible: Boolean
             if (lookup[bucket][ball] == -1) {
                 possible = ballInBucketPossible(ball, bucket, buckets)
                 lookup[bucket][ball] = if (possible) 1 else 0
@@ -44,13 +48,15 @@ fun recSolution(buckets: Array<Array<Int>>, bucketsToFill: List<Int>, homelessBa
                 possible = lookup[bucket][ball] > 0
             }
             if (possible) {
-                return recSolution(buckets, bucketsToFill.toMutableList().apply { remove(bucket) }, homelessBalls.toMutableList().apply { remove(ball) }, lookup)
+                return recSolution(buckets, bucketsToFill.toMutableList().apply { remove(bucket) },
+                        homelessBalls.toMutableList().apply { remove(ball) }, lookup)
             }
         }
         return false
     }
     return false
 }
+
 fun ballInBucketPossible(ball: Int, bucket: Int, buckets: Array<Array<Int>>): Boolean {
     var ins = 0L
     var outs = 0L
@@ -68,9 +74,6 @@ fun ballInBucketPossible(ball: Int, bucket: Int, buckets: Array<Array<Int>>): Bo
 }
 
 fun permuteListOfLists(list: Array<Array<Int>>, permuteFun: List<Int>) = Array(list.size) { list[permuteFun[it]] }
-
-
-
 
 
 fun <R> permuteList(list: List<R>): List<List<R>> {
