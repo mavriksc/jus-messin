@@ -12,8 +12,12 @@ import java.io.FileReader
 //0 2 1
 //1 1 1
 //2 0 0
+
+
+/// issue is can go in any bucket not just balls numbers bucket
+
 fun main() {
-    val reader = BufferedReader(FileReader("C:\\git\\mystuff\\jus-messin\\src\\main\\resources\\cob\\input01.txt"))
+    val reader = BufferedReader(FileReader("D:\\code\\jus-messin\\src\\main\\resources\\cob\\input01.txt"))
     val q = reader.readLine().trim().toInt()
 
     for (qItr in 1..q) {
@@ -22,32 +26,66 @@ fun main() {
         val container = Array(n) { Array(n) { 0 } }
 
         for (i in 0 until n) {
-            container[i] = reader.readLine().split(" ").map{ it.trim().toInt() }.toTypedArray()
+            container[i] = reader.readLine().split(" ").map { it.trim().toInt() }.toTypedArray()
         }
 
         val result = organizingContainers(container)
 
         println(result)
+
     }
 }
 
 fun organizingContainers(container: Array<Array<Int>>): String {
-    for (i in container.indices) {
-        var ins = 0L
-        var outs = 0L
-        for (j in container.indices) {
-            if (j != i) {
-                ins += container[j][i]
-                outs += container[i][j]
-            }
-        }
-        if (ins != outs)
-            return "Impossible"
-    }
-    return "Possible"
+    val lookup = Array(container.size) { Array(container.size) { -1 } }
+    val homelessBalls = List(container.size) { it }
+    val bucketsToFill = List(container.size) { it }
+    return if (recSolution(container, bucketsToFill, homelessBalls, lookup)) "Possible" else "Impossible"
 }
 
-fun <R>permuteList(list: List<R>): List<List<R>> {
+
+fun recSolution(buckets: Array<Array<Int>>, bucketsToFill: List<Int>, homelessBalls: List<Int>, lookup: Array<Array<Int>>): Boolean {
+    if (bucketsToFill.isEmpty() && homelessBalls.isEmpty()) return true
+    bucketsToFill.forEach { bucket ->
+        homelessBalls.forEach { ball ->
+            var possible = false
+            if (lookup[bucket][ball] == -1) {
+                possible = ballInBucketPossible(ball, bucket, buckets)
+                lookup[bucket][ball] = if (possible) 1 else 0
+            } else {
+                possible = lookup[bucket][ball] > 0
+            }
+            if (possible) {
+                return recSolution(buckets, bucketsToFill.toMutableList().apply { remove(bucket) }, homelessBalls.toMutableList().apply { remove(ball) }, lookup)
+            }
+        }
+        return false
+    }
+    return false
+}
+fun ballInBucketPossible(ball: Int, bucket: Int, buckets: Array<Array<Int>>): Boolean {
+    var ins = 0L
+    var outs = 0L
+    for (j in buckets.indices) {
+        if (j != bucket) {
+            ins += buckets[j][ball]
+        }
+        if (j != ball) {
+            outs += buckets[bucket][j]
+        }
+    }
+    if (ins != outs)
+        return false
+    return true
+}
+
+fun permuteListOfLists(list: Array<Array<Int>>, permuteFun: List<Int>) = Array(list.size) { list[permuteFun[it]] }
+
+
+
+
+
+fun <R> permuteList(list: List<R>): List<List<R>> {
     if (list.size == 1)
         return listOf(list)
     return list.flatMap {
