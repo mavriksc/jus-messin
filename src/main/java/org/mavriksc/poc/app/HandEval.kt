@@ -160,7 +160,6 @@ fun check4OfAKind(cards: List<Card>): List<Card> {
 }
 
 fun checkStraightFlush(cards: List<Card>): List<Card> {
-    // TODO doesn't work for misses need to update
     val flushCards = cards.groupBy { it.suit() }.filter { it.value.size >= 5 }
     return if (flushCards.isNotEmpty())
         flushCards[flushCards.keys.first()]?.let { checkStraight(it) }!!
