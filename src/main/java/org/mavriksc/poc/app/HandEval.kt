@@ -19,8 +19,7 @@ fun compareHands(hand1: List<Card>, hand2: List<Card>): Int {
     return if (h1Ranked.second == h2Ranked.second)
         compareSameHandRank(h1Ranked.first,h2Ranked.first)
     else
-        h1Ranked.second.compareTo(h2Ranked.second)
-
+        h2Ranked.second.compareTo(h1Ranked.second)
 }
 
 fun compareSameHandRank(hand1: List<Card>, hand2: List<Card>): Int {
@@ -130,7 +129,7 @@ fun checkFlush(cards: List<Card>): List<Card> {
 fun checkFullHouse(cards: List<Card>): List<Card> {
     val rankMap = cards.groupBy { it.rank() }
     val keys = rankMap.keys.sortedWith(compareBy({ rankMap[it]!!.size }, { it })).reversed()
-    return if (rankMap[keys[0]]!!.size == 3 && rankMap[keys[1]]?.size!! > 2)
+    return if (rankMap[keys[0]]!!.size == 3 && rankMap[keys[1]]?.size!! >= 2)
         rankMap[keys[0]]!!.union(rankMap[keys[1]]!!.take(2)).toList()
     else emptyList()
 }
