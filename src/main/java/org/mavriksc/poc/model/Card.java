@@ -1,15 +1,16 @@
 package org.mavriksc.poc.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-public final class Card {
+public final class Card implements Serializable {
 
-    public static enum Rank {
-        ACE('A'), TWO('2'), THREE('3'), FOUR('4'), FIVE('5'), SIX('6'), SEVEN('7'),
-        EIGHT('8'), NINE('9'), TEN('T'), JACK('J'), QUEEN('Q'), KING('K');
+    private static final long serialVersionUID = -4932669252225715145L;
+
+    public enum Rank {
+        TWO('2'), THREE('3'), FOUR('4'), FIVE('5'), SIX('6'), SEVEN('7'),
+        EIGHT('8'), NINE('9'), TEN('T'), JACK('J'), QUEEN('Q'), KING('K'), ACE('A');
 
         private final char val;
 
@@ -20,9 +21,10 @@ public final class Card {
         public String getVal() {
             return "" + val;
         }
+
     }
 
-    public static enum Suit {
+    public enum Suit {
         DIAMONDS('♦'), CLUBS('♣'), HEARTS('♥'), SPADES('♠');
 
         private final char val;

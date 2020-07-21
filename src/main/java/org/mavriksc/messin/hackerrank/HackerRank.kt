@@ -265,3 +265,19 @@ fun nonDivisibleSubset(k: Int, s: Array<Int>): Int {
     }
     return size
 }
+
+
+fun timeInWords(h: Int, m: Int): String {
+    val words = arrayOf("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty","twenty one","twenty two","twenty three","twenty four","twenty five","twenty six","twenty seven","twenty eight","twenty nine")
+    val mins = if(m==1||m==59) "minute" else "minutes"
+    return when(m){
+        0->  "${words[h-1]} o' clock"
+        15->  "quarter past ${words[h-1]}"
+        30->  "half past ${words[h-1]}"
+        45->  "quarter to ${words[h]}"
+        in 1..29-> "${words[m-1]} $mins past ${words[h-1]}"
+        in 31..59-> "${words[(60-m)-1]} $mins to ${words[h]}"
+        else -> ""
+    }
+
+}
