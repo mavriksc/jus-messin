@@ -1,9 +1,12 @@
 package org.mavriksc.poc.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Card {
+public final class Card implements Serializable {
+
+    private static final long serialVersionUID = -4932669252225715145L;
 
     public enum Rank {
         TWO('2'), THREE('3'), FOUR('4'), FIVE('5'), SIX('6'), SEVEN('7'),

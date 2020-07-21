@@ -2,7 +2,7 @@ package org.mavriksc.poc.app
 
 import org.mavriksc.poc.model.Card
 
-//5-7 hand eval
+//5+ hand eval
 
 //  general evaluator take game config... game config
 //   map hand type -> Pair<Function<List<Card>->List<Card>, Function<List<Card>->Int>>
