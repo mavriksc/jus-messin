@@ -8,8 +8,9 @@ import kotlin.collections.LinkedHashSet
 fun main() {
 
     //testHandSorting()
-    genAllHands()
-
+    //genAllHands()
+    genHandsAsLongs()
+    //genStartingHands()
 }
 
 fun genAllHands() {
@@ -26,14 +27,14 @@ fun genAllHands() {
                         (fif + 1..allCards.size - 2).forEach { sixth ->
                             (sixth until allCards.size).forEach { seventh ->
                                 allHands.add(listOf(allCards[first], allCards[second], allCards[third], allCards[fourth], allCards[fif], allCards[sixth], allCards[seventh]))
-                                if ((first + 1) % 13 == 0)
-                                    println("1/4 way done generating")
                             }
                         }
                     }
                 }
             }
         }
+        if ((first + 1) % 13 == 0)
+            println("1/4 way done generating")
     }
 
     println("Done Generated ${allHands.size} hands")
@@ -47,6 +48,47 @@ fun genAllHands() {
     println("Found Hand: ${allHands.first().realToString()}, Rank: ${highHand.second} , Cards : Rank: ${highHand.first.realToString()}")
     println("Found Hand: ${allHands.last().realToString()}, Rank: ${lowHand.second} , Cards : Rank: ${lowHand.first.realToString()}")
 
+}
+
+fun genStartingHands(){
+
+    val deckSize = 52
+    val hands = mutableListOf<Long>()
+    (0..deckSize - 2).forEach { first ->
+        (first + 1 until deckSize).forEach { second ->
+            val n = 1L.shl(first) + 1L.shl(second)
+            hands.add(n)
+        }
+        if ((first + 1) % 13 == 0)
+            println("1/4 way done generating")
+    }
+    println("Done Generated ${hands.size} hands")
+    println(Date())
+}
+
+fun genHandsAsLongs() {
+    val deckSize = 52
+    val hands = mutableListOf<Long>()
+    (0..deckSize - 7).forEach { first ->
+        (first + 1..deckSize - 6).forEach { second ->
+            (second + 1..deckSize - 5).forEach { third ->
+                (third + 1..deckSize - 4).forEach { fourth ->
+                    (fourth + 1..deckSize - 3).forEach { fif ->
+                        (fif + 1..deckSize - 2).forEach { sixth ->
+                            (sixth + 1 until deckSize).forEach { seventh ->
+                                val n = 1L.shl(first) + 1L.shl(second) + 1L.shl(third) + 1L.shl(fourth) + 1L.shl(fif) + 1L.shl(sixth) + 1L.shl(seventh)
+                                hands.add(n)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if ((first + 1) % 13 == 0)
+            println("1/4 way done generating")
+    }
+    println("Done Generated ${hands.size} hands")
+    println(Date())
 }
 
 
