@@ -13,7 +13,7 @@ import kotlin.collections.LinkedHashSet
 fun main() {
     //testHandSorting()
     //genAllHands()
-    //runAllHands()
+    runAllHands()
     //testTreeStuff()
 
 }
