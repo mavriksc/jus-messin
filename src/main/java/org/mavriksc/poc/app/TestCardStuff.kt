@@ -1,74 +1,45 @@
 package org.mavriksc.poc.app
 
 import org.mavriksc.poc.model.Card
+import java.io.FileOutputStream
+import java.io.ObjectOutputStream
 import java.util.*
 import kotlin.Comparator
 import kotlin.collections.LinkedHashSet
 
-fun main() {
+// maybe create comparator that increments value so we can see how many times it's called on the insert versus the sort
 
+
+fun main() {
     //testHandSorting()
     //genAllHands()
-    genHandsAsLongs()
-    //genStartingHands()
+    //runAllHands()
+    //testTreeStuff()
+
 }
 
-fun genAllHands() {
-    // runs out of memory lols
-    val allCards = Card.getAllCards()
+fun testTreeStuff() {
+    //possibly slower than generating the list and then sorting it.
+    // lower proc load but may pick up as list gets big.
+    val hands = TreeSet<Long>(handComparatorLong.then(Comparator.naturalOrder()))
     println("Generate all 7 card hands")
     println(Date())
-    val allHands: MutableList<List<Card>> = mutableListOf()
-    (0..allCards.size - 7).forEach { first ->
-        (first + 1..allCards.size - 6).forEach { second ->
-            (second + 1..allCards.size - 5).forEach { third ->
-                (third + 1..allCards.size - 4).forEach { fourth ->
-                    (fourth + 1..allCards.size - 3).forEach { fif ->
-                        (fif + 1..allCards.size - 2).forEach { sixth ->
-                            (sixth until allCards.size).forEach { seventh ->
-                                allHands.add(listOf(allCards[first], allCards[second], allCards[third], allCards[fourth], allCards[fif], allCards[sixth], allCards[seventh]))
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if ((first + 1) % 13 == 0)
-            println("1/4 way done generating")
-    }
-
-    println("Done Generated ${allHands.size} hands")
-    println(Date())
-    println("Sorting")
-    allHands.sortWith(handComparator)
-    println("Done sorting")
-    println(Date())
-    val highHand = getHandAndHandRank(allHands.first())
-    val lowHand = getHandAndHandRank(allHands.last())
-    println("Found Hand: ${allHands.first().realToString()}, Rank: ${highHand.second} , Cards : Rank: ${highHand.first.realToString()}")
-    println("Found Hand: ${allHands.last().realToString()}, Rank: ${lowHand.second} , Cards : Rank: ${lowHand.first.realToString()}")
-
-}
-
-fun genStartingHands(){
-
-    val deckSize = 52
-    val hands = mutableListOf<Long>()
-    (0..deckSize - 2).forEach { first ->
-        (first + 1 until deckSize).forEach { second ->
-            val n = 1L.shl(first) + 1L.shl(second)
-            hands.add(n)
-        }
-        if ((first + 1) % 13 == 0)
-            println("1/4 way done generating")
-    }
+    genSevenCardLongs(hands)
     println("Done Generated ${hands.size} hands")
     println(Date())
+    //return hands
+    outputFirstAndLastHands(hands)
 }
 
-fun genHandsAsLongs() {
+private fun outputFirstAndLastHands(hands: Collection<Long>) {
+    val highHand = getHandAndHandRank(hands.first().toCardList())
+    val lowHand = getHandAndHandRank(hands.last().toCardList())
+    println("Found Hand: ${hands.first().toCardList().realToString()}, Rank: ${highHand.second} , Cards : Rank: ${highHand.first.realToString()}")
+    println("Found Hand: ${hands.last().toCardList().realToString()}, Rank: ${lowHand.second} , Cards : Rank: ${lowHand.first.realToString()}")
+}
+
+private fun genSevenCardLongs(hands: MutableCollection<Long>) {
     val deckSize = 52
-    val hands = mutableListOf<Long>()
     (0..deckSize - 7).forEach { first ->
         (first + 1..deckSize - 6).forEach { second ->
             (second + 1..deckSize - 5).forEach { third ->
@@ -84,13 +55,70 @@ fun genHandsAsLongs() {
                 }
             }
         }
-        if ((first + 1) % 13 == 0)
-            println("1/4 way done generating")
+        println("1/${deckSize - 7} way done generating")
+    }
+}
+
+fun runAllHands() {
+    val hands = genHandsAsLongs()
+    println("Sorting")
+    hands.sortedWith(handComparatorLong)
+    println("Done sorting")
+    println(Date())
+    outputFirstAndLastHands(hands)
+    save(hands)
+}
+
+fun save(hands: List<Long>) {
+    val file = "allHandsSorted.dat"
+    ObjectOutputStream(FileOutputStream(file)).use{ it -> it.writeObject(hands)}
+}
+
+fun genStartingHands(): List<Long> {
+
+    val deckSize = 52
+    val hands = mutableListOf<Long>()
+    (0..deckSize - 2).forEach { first ->
+        (first + 1 until deckSize).forEach { second ->
+            val n = 1L.shl(first) + 1L.shl(second)
+            hands.add(n)
+        }
+        println("1/${deckSize - 2} way done generating")
     }
     println("Done Generated ${hands.size} hands")
     println(Date())
+    return hands
 }
 
+fun genHandsAsLongs(): MutableList<Long> {
+
+    println("Generate all 7 card hands")
+    println(Date())
+    val hands = mutableListOf<Long>()
+    genSevenCardLongs(hands)
+
+    println("Done Generated ${hands.size} hands")
+    println(Date())
+    return hands
+}
+
+fun Long.toCardList(): List<Card> {
+    var startValue = this
+    val cards = mutableListOf<Card>()
+    (0..52).forEach {
+        if (startValue == 0L)
+            return cards
+        else
+            if (startValue.and(1L) == 1L)
+                cards.add(it.toCard())
+        startValue = startValue.shr(1)
+    }
+    return cards
+}
+
+fun Int.toCard(): Card {
+    return Card(Card.Rank.values()[this % 13], Card.Suit.values()[this / 13])
+}
 
 private fun testHandSorting() {
     val sfHigh = listOf(Card(Card.Rank.ACE, Card.Suit.DIAMONDS),
@@ -136,5 +164,5 @@ fun List<Card>.realToString() = this.joinToString(" ")
 
 private operator fun <E> LinkedHashSet<E>.get(i: Int): E = this.filterIndexed { index, _ -> index == i }.first()
 
-
+val handComparatorLong: Comparator<Long> = Comparator { h1, h2 -> compareHands(h1.toCardList(), h2.toCardList()) }
 val handComparator: Comparator<List<Card>> = Comparator { h1, h2 -> compareHands(h1, h2) }
