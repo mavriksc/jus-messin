@@ -11,18 +11,30 @@ import kotlin.collections.LinkedHashSet
 
 // maybe create comparator that increments value so we can see how many times it's called on the insert versus the sort
 
+const val allHandsFileName = "allHandsSorted.dat"
 
 fun main() {
     //testHandSorting()
     //genAllHands()
-    //runAllHands()
+    runAllHands()
     //testTreeStuff()
-    loadAndPrint()
+    //loadAndPrint()
+    //makeASmallListAndSave()
+
+
+}
+
+fun makeASmallListAndSave() {
+    val allhands = load(allHandsFileName)
+    val sublist = allhands.filterIndexed { index, _ -> index % 100_000 == 0 }
+    save(sublist, "sublist.dat")
+    val shuffled = sublist.shuffled()
+    save(shuffled,"shuffled.dat")
 
 }
 
 fun loadAndPrint() {
-    val hands = load()
+    val hands = load(allHandsFileName)
     outputFirstAndLastHands(hands)
 }
 
@@ -37,14 +49,18 @@ fun testTreeStuff() {
     println(Date())
     //return hands
     outputFirstAndLastHands(hands)
-    save(hands)
+    save(hands, allHandsFileName)
 }
 
+fun outputHand(hand:Long){
+    val ranked = getHandAndHandRank(hand.toCardList())
+    println("${hand.toCardList().realToString()}, Rank: ${ranked.second} , Cards : ${ranked.first.realToString()}")
+}
 private fun outputFirstAndLastHands(hands: Collection<Long>) {
     val highHand = getHandAndHandRank(hands.first().toCardList())
     val lowHand = getHandAndHandRank(hands.last().toCardList())
-    println("Found Hand: ${hands.first().toCardList().realToString()}, Rank: ${highHand.second} , Cards : Rank: ${highHand.first.realToString()}")
-    println("Found Hand: ${hands.last().toCardList().realToString()}, Rank: ${lowHand.second} , Cards : Rank: ${lowHand.first.realToString()}")
+    println("First Hand: ${hands.first().toCardList().realToString()}, Rank: ${highHand.second} , Cards : ${highHand.first.realToString()}")
+    println("Last Hand: ${hands.last().toCardList().realToString()}, Rank: ${lowHand.second} , Cards : ${lowHand.first.realToString()}")
 }
 
 private fun genSevenCardLongs(hands: MutableCollection<Long>) {
@@ -71,20 +87,18 @@ private fun genSevenCardLongs(hands: MutableCollection<Long>) {
 fun runAllHands() {
     val hands = genHandsAsLongs()
     println("Sorting")
-    hands.sortedWith(handComparatorLong)
+    hands.sortWith(handComparatorLong)
     println("Done sorting")
     println(Date())
     outputFirstAndLastHands(hands)
-    save(hands)
+    save(hands, allHandsFileName)
 }
 
-fun save(hands: Collection<Long>) {
-    val file = "allHandsSorted.dat"
+fun save(hands: Collection<Long>, file: String) {
     ObjectOutputStream(FileOutputStream(file)).use { it -> it.writeObject(hands) }
 }
 
-fun load(): List<Long> {
-    val file = "allHandsSorted.dat"
+fun load(file: String): List<Long> {
     println("reading File")
     println(Date())
     ObjectInputStream(FileInputStream(file)).use { it ->

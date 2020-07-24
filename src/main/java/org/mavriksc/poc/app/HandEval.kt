@@ -7,6 +7,12 @@ import org.mavriksc.poc.model.Card
 //  general evaluator take game config... game config
 //   map hand type -> Pair<Function<List<Card>->List<Card>, Function<List<Card>->Int>>
 
+// TAKES FN 20 min to load list from file
+// sort is wrong
+// need to take 1000 from front of list and back of list and then random stuff in the middle another 2k maybe and
+// convert that list and print it. or sort by natural order then back again and watch it
+// Think i found the issue . used sorted instead of sort returned and ignored copy. 
+
 
 fun main() {
     print(compareHands(emptyList(), emptyList()))
