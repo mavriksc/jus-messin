@@ -95,7 +95,11 @@ fun runAllHands() {
 }
 
 fun save(hands: Collection<Long>, file: String) {
+    println("saving")
     ObjectOutputStream(FileOutputStream(file)).use { it -> it.writeObject(hands) }
+
+    println("Done saving")
+    println(Date())
 }
 
 fun load(file: String): List<Long> {
