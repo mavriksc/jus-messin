@@ -1,7 +1,9 @@
 package org.mavriksc.poc.app
 
 import org.mavriksc.poc.model.Card
+import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.util.*
 import kotlin.Comparator
@@ -13,9 +15,15 @@ import kotlin.collections.LinkedHashSet
 fun main() {
     //testHandSorting()
     //genAllHands()
-    runAllHands()
+    //runAllHands()
     //testTreeStuff()
+    loadAndPrint()
 
+}
+
+fun loadAndPrint() {
+    val hands = load()
+    outputFirstAndLastHands(hands)
 }
 
 fun testTreeStuff() {
@@ -29,6 +37,7 @@ fun testTreeStuff() {
     println(Date())
     //return hands
     outputFirstAndLastHands(hands)
+    save(hands)
 }
 
 private fun outputFirstAndLastHands(hands: Collection<Long>) {
@@ -69,9 +78,21 @@ fun runAllHands() {
     save(hands)
 }
 
-fun save(hands: List<Long>) {
+fun save(hands: Collection<Long>) {
     val file = "allHandsSorted.dat"
-    ObjectOutputStream(FileOutputStream(file)).use{ it -> it.writeObject(hands)}
+    ObjectOutputStream(FileOutputStream(file)).use { it -> it.writeObject(hands) }
+}
+
+fun load(): List<Long> {
+    val file = "allHandsSorted.dat"
+    println("reading File")
+    println(Date())
+    ObjectInputStream(FileInputStream(file)).use { it ->
+        val hands = it.readObject()
+        println("Done reading")
+        println(Date())
+        return hands as List<Long>
+    }
 }
 
 fun genStartingHands(): List<Long> {

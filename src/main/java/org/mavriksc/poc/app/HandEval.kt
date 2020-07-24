@@ -111,7 +111,6 @@ fun checkStraight(cards: List<Card>): List<Card> {
     (Card.Rank.ACE.ordinal downTo Card.Rank.FIVE.ordinal).forEach {
         val itHighStraight = (it downTo it - 4).map { r -> r.toRank() }
         if (handRanks.containsAll(itHighStraight)) {
-            val rank = Card.Rank.values()[it]
             return itHighStraight.map { cards.find { c -> c.rank() == it }!! }
         }
     }
