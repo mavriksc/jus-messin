@@ -12,7 +12,7 @@ import kotlin.math.*
 import kotlin.random.Random
 
 fun main() {
-
+    cavityMap(arrayOf("989", "191", "111")).map { println(it) }
 
 }
 
@@ -268,16 +268,76 @@ fun nonDivisibleSubset(k: Int, s: Array<Int>): Int {
 
 
 fun timeInWords(h: Int, m: Int): String {
-    val words = arrayOf("one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty","twenty one","twenty two","twenty three","twenty four","twenty five","twenty six","twenty seven","twenty eight","twenty nine")
-    val mins = if(m==1||m==59) "minute" else "minutes"
-    return when(m){
-        0->  "${words[h-1]} o' clock"
-        15->  "quarter past ${words[h-1]}"
-        30->  "half past ${words[h-1]}"
-        45->  "quarter to ${words[h]}"
-        in 1..29-> "${words[m-1]} $mins past ${words[h-1]}"
-        in 31..59-> "${words[(60-m)-1]} $mins to ${words[h]}"
+    val words = arrayOf("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twenty one", "twenty two", "twenty three", "twenty four", "twenty five", "twenty six", "twenty seven", "twenty eight", "twenty nine")
+    val mins = if (m == 1 || m == 59) "minute" else "minutes"
+    return when (m) {
+        0 -> "${words[h - 1]} o' clock"
+        15 -> "quarter past ${words[h - 1]}"
+        30 -> "half past ${words[h - 1]}"
+        45 -> "quarter to ${words[h]}"
+        in 1..29 -> "${words[m - 1]} $mins past ${words[h - 1]}"
+        in 31..59 -> "${words[(60 - m) - 1]} $mins to ${words[h]}"
         else -> ""
     }
 
 }
+
+//https://www.hackerrank.com/challenges/happy-ladybugs/problem
+fun happyLadybugs(b: String): String {
+    val map = b.mapIndexed { index, c -> index to c }.groupBy({ it.second }, { it.first })
+    if (b.length == 1 && b[0] != '_') return "NO"
+    if (map.containsKey('_'))
+    //can swap
+        return if (map.all { it.key == '_' || it.value.count() > 1 })
+            "YES"
+        else "NO"
+    else {
+        //needs to be in culsters already
+        var lastChar = b[0]
+        var count = 1
+        b.forEach {
+            when {
+                it == lastChar -> count++
+                count < 2 -> return "NO"
+                else -> {
+                    count = 1
+                    lastChar = it
+                }
+            }
+        }
+        return if (count > 1) "YES"
+        else "NO"
+    }
+}
+
+fun workbook(n: Int, k: Int, arr: Array<Int>): Int {
+    var pageCount = 0
+    return arr.map { i ->
+        val pagesInChapter = (i - 1) / k + 1
+        val specialPagesInChap = (1..pagesInChapter).map {
+            val page = pageCount + it
+            val lastPossibleProblemOnPage = it * k
+            val firstProblemOnPage = lastPossibleProblemOnPage - (k - 1)
+            val actualLastProblemOnPage = min(i, lastPossibleProblemOnPage)
+            if (page in firstProblemOnPage..actualLastProblemOnPage) 1 else 0
+        }.sum()
+        pageCount += pagesInChapter
+        specialPagesInChap
+    }.sum()
+}
+
+//https://www.hackerrank.com/challenges/cavity-map/problem
+fun cavityMap(grid: Array<String>): Array<String> {
+    (1..grid.size - 2).forEach { x ->
+        (1..grid.size - 2).forEach { y ->
+            val thing = grid[x][y]
+            val around = listOf(grid[x - 1][y], grid[x][y - 1], grid[x + 1][y], grid[x][y + 1])
+            if (around.all { it < thing })
+                grid[x] = grid[x].replaceRange(y, y + 1, "X")
+        }
+    }
+    return grid
+}
+
+
+
