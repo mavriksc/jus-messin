@@ -40,7 +40,7 @@ class CombinationGenerator<T>(private val items: List<T>, choose: Int = 1) : Ite
             } else
                 true
             place--
-        } while (carry && place > -1)
+        } while (carry)
     }
 
 
