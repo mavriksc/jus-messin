@@ -12,7 +12,7 @@ import kotlin.math.*
 import kotlin.random.Random
 
 fun main() {
-    cavityMap(arrayOf("989", "191", "111")).map { println(it) }
+    println(libraryFine(2, 7, 1014,1, 1, 1015))
 
 }
 
@@ -340,4 +340,13 @@ fun cavityMap(grid: Array<String>): Array<String> {
 }
 
 
+//https://www.hackerrank.com/challenges/library-fine/problem
+fun libraryFine(d1: Int, m1: Int, y1: Int, d2: Int, m2: Int, y2: Int): Int {
+    return when {
+        y1 > y2 -> (y1 - y2) * 10000
+        m1 > m2 && y1 == y2 -> (m1 - m2) * 500
+        d1 > d2 && m1 == m2 && y1 == y2 -> (d1 - d2) * 15
+        else -> 0
+    }
 
+}
