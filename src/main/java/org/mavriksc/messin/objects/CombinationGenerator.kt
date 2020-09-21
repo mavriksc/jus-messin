@@ -1,4 +1,4 @@
-package org.mavriksc.the_sim_p_s_son.engine
+package org.mavriksc.messin.objects
 
 class CombinationGenerator<T>(private val items: List<T>, choose: Int = 1) : Iterator<List<T>>, Iterable<List<T>> {
     private val indices = Array(choose) { it }
