@@ -47,7 +47,7 @@ class CombinationGenerator<T>(private val items: List<T>, choose: Int = 1) : Ite
 }
 
 fun main() {
-    val combGen = CombinationGenerator(listOf(1, 2, 3, 4, 5, 6, 7), 7)
+    val combGen = CombinationGenerator(listOf(1, 2, 3, 4, 5, 6, 7), 5)
     combGen.map { println(it.joinToString()) }
 
 }
