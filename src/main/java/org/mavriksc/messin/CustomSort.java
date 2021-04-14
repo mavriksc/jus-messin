@@ -12,26 +12,34 @@ public class CustomSort {
                 "2T2BURHE1JCO24154C",
                 "JTDKARFP1H3056246C",
                 "JTDKARFP1H3056246"};
-        String order = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
         Comparator<String> c = (s1, s2) -> {
-            int minLen = Math.min(s1.length(), s2.length());
-            for (int i = 0; i < minLen; i++) {
-                char s1Char = s1.charAt(i);
-                char s2Char = s2.charAt(i);
-                if (s1Char == s2Char) {
-                    //if characters are the same skip
-                    continue;
-                } else {
-                    //if the characters are diff get precedence
-                    return order.indexOf(s1Char) - order.indexOf(s2Char);
+            int len1 = s1.length();
+            int len2 = s2.length();
+            int lim = Math.min(len1, len2);
+            char[] v1 = s1.toCharArray();
+            char[] v2 = s2.toCharArray();
+
+            int k = 0;
+            while (k < lim) {
+                char c1 = v1[k];
+                char c2 = v2[k];
+                if (c1 != c2) {
+                    if ((c1 >= 'A' && c2 >= 'A') ^ (c1 <= '9' && c2 <= '9')) {
+                        return c1 - c2;
+                    } else {
+                        System.out.println(c2 - c1);
+                        return c2 - c1;
+                   
+                    }
                 }
+                k++;
             }
-            // if all chars are the same the longer one is last
-            return s1.length() - s2.length();
+            return len1 - len2;
         };
-        Arrays.sort(arr,c);
-        for (String s : arr) {
+        Arrays.sort(arr, c);
+        for (
+                String s : arr) {
             System.out.println(s);
         }
     }
