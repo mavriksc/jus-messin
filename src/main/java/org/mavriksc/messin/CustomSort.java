@@ -10,6 +10,7 @@ public class CustomSort {
     public static void main(String[] args) {
 
         List<String> l1 = makeRandomList();
+        System.out.println(l1.get(0));
         List<String> l2 = new ArrayList<>(l1);
 
         String order = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -60,12 +61,16 @@ public class CustomSort {
         t2 = end.getTime() - start.getTime();
         System.out.println("NEW METHOD:" + t1);
         System.out.println("OLD METHOD:" + t2);
+        System.out.println(l1.get(0));
+        long mismatches = IntStream.range(0,l1.size()).filter(i-> !l1.get(i).equals(l2.get(i))).count();
+        if (mismatches>0)
+            System.out.println("sort was not the same");
     }
 
     private static List<String> makeRandomList() {
         int min = 15;
         int max = 20;
-        return IntStream.range(0, 1_000_000).mapToObj(i ->
+        return IntStream.range(0, 1000000).mapToObj(i ->
                 IntStream.range(0, ThreadLocalRandom.current().nextInt(min, max))
                         .map(x -> ThreadLocalRandom.current().nextInt(36))
                         .map(x -> x < 10 ? '0' + x : 'A' + x - 10)
