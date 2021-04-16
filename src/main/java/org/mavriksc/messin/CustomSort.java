@@ -68,7 +68,7 @@ public class CustomSort {
         return IntStream.range(0, 1_000_000).mapToObj(i ->
                 IntStream.range(0, ThreadLocalRandom.current().nextInt(min, max))
                         .map(x -> ThreadLocalRandom.current().nextInt(36))
-                        .map(x -> x < 10 ? (char) ('0' + x) : (char) ('A' + x - 10))
+                        .map(x -> x < 10 ? '0' + x : 'A' + x - 10)
                         .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString()
         ).collect(Collectors.toList());
     }
