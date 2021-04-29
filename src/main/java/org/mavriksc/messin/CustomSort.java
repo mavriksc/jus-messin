@@ -49,8 +49,10 @@ public class CustomSort {
             return s1.length() - s2.length();
         };
 
-        Date start, end = null;
-        long t1, t2 = 0;
+        Date start;
+        Date end;
+        long t1;
+        long t2;
         start = new Date();
         l1.sort(comparatorNew);
         end = new Date();
