@@ -1,9 +1,9 @@
 
 package org.mavriksc.messin;
 
-import javax.validation.constraints.Pattern;
-
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Pattern;
 
 public class ValidateMe {
         @NotEmpty

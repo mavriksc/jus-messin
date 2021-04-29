@@ -1,10 +1,8 @@
 package org.mavriksc.messin.hackerrank;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.regex.*;
-import java.security.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.security.Permission;
 
 
 public class CanUAccess {

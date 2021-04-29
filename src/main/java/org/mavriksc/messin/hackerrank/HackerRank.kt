@@ -1,12 +1,8 @@
 package org.mavriksc.messin.hackerrank
 
-import com.google.common.io.Resources
 import java.io.File
-import java.lang.management.ManagementFactory
 import java.math.BigInteger
 import java.util.*
-import java.util.function.IntConsumer
-import java.util.stream.IntStream
 import java.util.stream.Stream
 import kotlin.math.*
 import kotlin.random.Random

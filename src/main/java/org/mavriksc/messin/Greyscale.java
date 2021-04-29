@@ -1,7 +1,6 @@
 package org.mavriksc.messin;
 
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 public class Greyscale {
     public static void main(String[] args) {

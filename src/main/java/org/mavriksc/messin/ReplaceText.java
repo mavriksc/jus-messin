@@ -11,7 +11,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;

@@ -2,22 +2,12 @@ package org.mavriksc.messin;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.io.ComponentNameProvider;
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GraphExporter;
 import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.traverse.DepthFirstIterator;
 
-import java.io.StringWriter;
-import java.io.Writer;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;

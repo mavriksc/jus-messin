@@ -4,12 +4,7 @@ import org.mavriksc.poc.error.EmptyDeckException;
 import org.mavriksc.poc.model.Card;
 import org.mavriksc.poc.model.Deck;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PocTest {
     private static int TEST_SIZE = 52 * 2000;

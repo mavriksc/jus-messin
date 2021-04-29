@@ -1,10 +1,6 @@
 package org.mavriksc.messin.hackerrank;
 
-import org.mavriksc.messin.ArraysAsList;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 public class MigratoryBirds {

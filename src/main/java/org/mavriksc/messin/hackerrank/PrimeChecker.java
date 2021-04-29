@@ -1,7 +1,5 @@
 package org.mavriksc.messin.hackerrank;
 
-import java.util.Arrays;
-
 class Prime{
     void  checkPrime(Integer... integers){
         StringBuilder sb = new StringBuilder();

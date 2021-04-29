@@ -1,7 +1,6 @@
 package org.mavriksc.messin
 
 import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 fun main() {

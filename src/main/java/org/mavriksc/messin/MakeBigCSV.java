@@ -3,7 +3,6 @@ package org.mavriksc.messin;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.Comparator;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.LongStream;
 

@@ -1,7 +1,6 @@
 package org.mavriksc.messin.hackerrank;
 
-import java.util.*;
-import java.io.*;
+import java.util.Scanner;
 
 class Loopy{
 

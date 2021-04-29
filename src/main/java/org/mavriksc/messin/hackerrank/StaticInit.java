@@ -1,10 +1,6 @@
 package org.mavriksc.messin.hackerrank;
 
-import java.io.*;
-import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
+import java.util.Scanner;
 
 public class StaticInit {
     private static Scanner scanner = new Scanner(System.in);

@@ -1,14 +1,7 @@
 package org.mavriksc.messin.hackerrank;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class ShortPalidrome {
 

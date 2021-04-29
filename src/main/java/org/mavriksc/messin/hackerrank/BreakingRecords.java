@@ -1,8 +1,5 @@
 package org.mavriksc.messin.hackerrank;
 
-import java.util.Arrays;
-import java.util.stream.IntStream;
-
 public class BreakingRecords {
 
     static int[] breakingRecords(int[] scores) {
@@ -22,10 +19,6 @@ public class BreakingRecords {
             }
         }
         return new int[] { maxCount, minCount };
-    }
-
-    public static void main(String[] args) {
-
     }
 
 }

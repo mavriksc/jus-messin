@@ -1,6 +1,5 @@
 package org.mavriksc.messin;
 
-import org.mavriksc.messin.objects.ThingObject;
 import org.mavriksc.messin.objects.ThingObjectInt;
 
 import java.util.ArrayList;

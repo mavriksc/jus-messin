@@ -1,8 +1,5 @@
 package org.mavriksc.messin;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 public class DromeCheck {
 
     public static void main(String[] args){

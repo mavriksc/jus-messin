@@ -1,60 +1,60 @@
 package org.mavriksc.messin.hackerrank;
 
-import java.io.*;
-import java.math.*;
-import java.security.*;
-import java.text.*;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
-import java.util.regex.*;
-import java.util.stream.*;
-import static java.util.stream.Collectors.joining;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 import static java.util.stream.Collectors.toList;
 
 public class CountSort {
 
 
+    // Complete the countSort function below.
+    static void countSort(List<List<String>> arr) {
+        final String hy = "-";
+        StringBuilder sb = new StringBuilder();
 
-        // Complete the countSort function below.
-        static void countSort(List<List<String>> arr) {
-            final String hy ="-";
-            StringBuilder sb = new StringBuilder();
+        IntStream.range(0, arr.size())
+                .mapToObj(i -> {
+                    if (i < arr.size() / 2) {
+                        arr.get(i).set(1, hy);
+                    }
+                    return arr.get(i);
+                }).collect(Collectors.groupingBy(strings -> strings.get(0),
+                Collectors.mapping(i -> i.get(1), Collectors.toList())))
+                .entrySet().stream()
+                .sorted(Comparator.comparingInt(kv -> Integer.parseInt(kv.getKey())))
+                .forEach(kv -> kv.getValue().forEach(s -> sb.append(s).append(" ")));
+        System.out.println(sb);
 
-            IntStream.range(0,arr.size())
-                    .mapToObj(i-> {if (i<arr.size()/2) {
-                        arr.get(i).set(1,hy);
-                    } return arr.get(i);
-                    }).collect(Collectors.groupingBy(strings -> strings.get(0),
-                    Collectors.mapping(i ->i.get(1), Collectors.toList())))
-                    .entrySet().stream()
-                    .sorted((kv1,kv2)->Integer.parseInt(kv1.getKey())-Integer.parseInt(kv2.getKey()))
-                    .forEach(kv->kv.getValue().forEach(s -> sb.append(s).append(" ")));
-            System.out.println(sb.toString());
+    }
 
-        }
+    static void countSortONE(List<List<String>> arr) {
+        final String hy = "-";
+        StringBuilder sb = new StringBuilder();
+        arr.subList(0, arr.size() / 2).parallelStream().forEach(l -> l.set(1, hy));
 
-        static void countSortONE(List<List<String>> arr) {
-            final String hy ="-";
-            StringBuilder sb = new StringBuilder();
-            arr.subList(0,arr.size()/2).parallelStream().forEach(l->l.set(1,hy));
-
-            int count = 0;
-            arr.stream()
-                    .collect(Collectors.groupingBy(strings -> strings.get(0),
-                            Collectors.mapping(i ->i.get(1), Collectors.toList())))
-                    .entrySet().stream()
-                    .sorted((kv1,kv2)->Integer.parseInt(kv1.getKey())-Integer.parseInt(kv2.getKey()))
-                    .forEach(kv->kv.getValue().forEach(s ->sb.append(s).append(" ")));
+        arr.stream()
+                .collect(Collectors.groupingBy(strings -> strings.get(0),
+                        Collectors.mapping(i -> i.get(1), Collectors.toList())))
+                .entrySet().stream()
+                .sorted(Comparator.comparingInt(kv -> Integer.parseInt(kv.getKey())))
+                .forEach(kv -> kv.getValue().forEach(s -> sb.append(s).append(" ")));
 
 
-            System.out.println(sb.toString());
-        }
+        System.out.println(sb);
+    }
 
-        public static void main(String[] args) throws IOException {
-            long startread,end,startAlg;
-            //startread = new Date().getTime();
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(ClassLoader.getSystemResource("input05.txt").getFile()));
+    public static void main(String[] args) throws IOException {
+        long end, startAlg;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(ClassLoader.getSystemResource("input05.txt").getFile()))) {
 
             int n = Integer.parseInt(bufferedReader.readLine().trim());
 
@@ -67,18 +67,15 @@ public class CountSort {
                                     .collect(toList())
                     );
                 } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    throw new IllegalArgumentException(ex);
                 }
             });
             startAlg = new Date().getTime();
             countSort(arr);
-//            countSortONE(arr);
             end = new Date().getTime();
 
-            // System.out.println("READ:"+(startAlg-startread));
-            System.out.println("ALG:"+(end-startAlg));
-            // System.out.println("TOT:"+(end-startread));
-            bufferedReader.close();
+            System.out.println("ALG:" + (end - startAlg));
         }
+    }
 
 }

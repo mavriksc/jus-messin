@@ -5,12 +5,12 @@
 */
 package org.mavriksc.messin;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.mavriksc.messin.objects.InnerThing;
 import org.mavriksc.messin.objects.MiddleThing;
 import org.mavriksc.messin.objects.OuterThing;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author SCarlisle
