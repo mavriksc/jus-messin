@@ -31,7 +31,7 @@ public class CustomSort {
                         return c2 - c1;
                     }
                 }
-                k++;
+                k++;     
             }
             return len1 - len2;
         };
