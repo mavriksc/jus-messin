@@ -31,13 +31,13 @@ fun main() {
 }
 
 //https://www.hackerrank.com/challenges/sherlock-and-squares/problem
-fun squares(a: Int, b: Int): Int = (floor(sqrt(b.toFloat())) - ceil(sqrt(a.toFloat())) + 1).toInt()
+fun squares(a: Int, b: Int): Int = (floor(sqrt(b.toDouble())) - ceil(sqrt(a.toDouble())) + 1).toInt()
 
 fun squaresTest(a: Int, b: Int){
-    println("sqrt(b):${sqrt(b.toFloat())}")
-    println("floor(sqrt(b)):${floor(sqrt(b.toFloat()))}")
+    println("sqrt(b):${sqrt(b.toDouble())}")
+    println("floor(sqrt(b)):${floor(sqrt(b.toDouble()))}")
 
-    println("sqrt(a):${sqrt(a.toFloat())}")
-    println("ceil(sqrt(a):${ceil(sqrt(a.toFloat()))}")
+    println("sqrt(a):${sqrt(a.toDouble())}")
+    println("ceil(sqrt(a):${ceil(sqrt(a.toDouble()))}")
 
 }
