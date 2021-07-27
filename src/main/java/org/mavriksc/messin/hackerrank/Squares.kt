@@ -23,11 +23,21 @@ fun main() {
 //                )
 //            }
 //        }
-    squares(303390079,497423761)
+    println(squares(303390079,497423761))
+    squaresTest(303390079,497423761)
 
 
 
 }
 
 //https://www.hackerrank.com/challenges/sherlock-and-squares/problem
-fun squares(a: Int, b: Int): Int = (floor(sqrt(b.toFloat())) - ceil(sqrt(a.toFloat()))).toInt() + 1
+fun squares(a: Int, b: Int): Int = (floor(sqrt(b.toFloat())) - ceil(sqrt(a.toFloat())) + 1).toInt()
+
+fun squaresTest(a: Int, b: Int){
+    println("sqrt(b):${sqrt(b.toFloat())}")
+    println("floor(sqrt(b)):${floor(sqrt(b.toFloat()))}")
+
+    println("sqrt(a):${sqrt(a.toFloat())}")
+    println("ceil(sqrt(a):${ceil(sqrt(a.toFloat()))}")
+
+}
