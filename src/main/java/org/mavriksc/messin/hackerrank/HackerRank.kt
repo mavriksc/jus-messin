@@ -23,6 +23,7 @@ fun appendAndDelete(s: String, t: String, k: Int): String {
         "No"
     else {
         // ERROR: issue is that it needs to be from s->t only not just either string
+            // actually the problem is symmetric they just have problems with tier tests rip
 
         // from the start of both strings compare until the first difference found.
         // this will have to be eliminated to match the strings
