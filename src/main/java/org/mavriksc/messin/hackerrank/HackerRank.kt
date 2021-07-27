@@ -8,7 +8,7 @@ import kotlin.math.*
 import kotlin.random.Random
 
 fun main() {
-    println(libraryFine(2, 7, 1014,1, 1, 1015))
+    println(appendAndDelete("ashle","ash",2))
 
 }
 
@@ -16,7 +16,32 @@ fun readFile(path: String): List<String> {
     return File(path).readLines()
 }
 
-fun designerPdfViewer(h: Array<Int>, word: String) = word.length * word.toLowerCase().chars().map { h[it - 'a'.toInt()] }.max().asInt
+//https://www.hackerrank.com/challenges/append-and-delete/problem
+fun appendAndDelete(s: String, t: String, k: Int): String {
+    // Write your code here
+    return if (abs(s.length - t.length) > k)
+        "No"
+    else {
+        // ERROR: issue is that it needs to be from s->t only not just either string
+
+        // from the start of both strings compare until the first difference found.
+        // this will have to be eliminated to match the strings
+        // if the # of chars in both strings to the right of this position is > k no otherwise yes.
+        val shortStringLen = min(s.length, t.length)
+        var index = 0
+        while (index < shortStringLen && s[index] == t[index]) {
+           index++
+        }
+        if (s.length-index + t.length-index > k)
+            "No"
+        else
+            "Yes"
+    }
+
+}
+
+fun designerPdfViewer(h: Array<Int>, word: String) =
+    word.length * word.toLowerCase().chars().map { h[it - 'a'.toInt()] }.max().asInt
 
 fun bonAppetit(bill: Array<Int>, k: Int, b: Int) {
     val fair = (bill.sum() - bill[k]) / 2 - b
@@ -42,7 +67,7 @@ fun countingValleys(n: Int, s: String): Int {
 }
 
 fun getMoneySpent(keyboards: Array<Int>, drives: Array<Int>, b: Int) =
-        keyboards.flatMap { k -> drives.map { it + k } }.filter { it <= b }.maxWithLimit(b) ?: -1
+    keyboards.flatMap { k -> drives.map { it + k } }.filter { it <= b }.maxWithLimit(b) ?: -1
 
 fun catAndMouse(x: Int, y: Int, z: Int): String {
     val distComp = abs(x - z) - abs(y - z)
@@ -174,7 +199,7 @@ fun angryProfessor(k: Int, a: Array<Int>): String {
 }
 
 fun beautifulDays(i: Int, j: Int, k: Int): Int =
-        (i..j).filter { abs(it - it.toString().reversed().toInt()) % k == 0 }.count()
+    (i..j).filter { abs(it - it.toString().reversed().toInt()) % k == 0 }.count()
 
 fun viralAdvertising(n: Int): Int {
     val days = Array<Int>(n) { 0 }
@@ -222,13 +247,14 @@ fun findDigits(n: Int): Int {
     val divMap = mutableMapOf<Int, Boolean>(1 to true, 0 to false);
 
     return n.digitStream()
-            .filter { divMap.computeIfAbsent(it) { key -> n % key == 0 } }
-            .count().toInt()
+        .filter { divMap.computeIfAbsent(it) { key -> n % key == 0 } }
+        .count().toInt()
 }
 
 
 fun sortLists() {
-    val lists = listOf<MutableList<Long>>(mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
+    val lists =
+        listOf<MutableList<Long>>(mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
     Random.nextInt(lists.size)
     (1..144000).forEach { _ -> lists[Random.nextInt(lists.size)].add(Random.nextLong()) }
     val start = Date()
@@ -264,7 +290,37 @@ fun nonDivisibleSubset(k: Int, s: Array<Int>): Int {
 
 
 fun timeInWords(h: Int, m: Int): String {
-    val words = arrayOf("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twenty one", "twenty two", "twenty three", "twenty four", "twenty five", "twenty six", "twenty seven", "twenty eight", "twenty nine")
+    val words = arrayOf(
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+        "ten",
+        "eleven",
+        "twelve",
+        "thirteen",
+        "fourteen",
+        "fifteen",
+        "sixteen",
+        "seventeen",
+        "eighteen",
+        "nineteen",
+        "twenty",
+        "twenty one",
+        "twenty two",
+        "twenty three",
+        "twenty four",
+        "twenty five",
+        "twenty six",
+        "twenty seven",
+        "twenty eight",
+        "twenty nine"
+    )
     val mins = if (m == 1 || m == 59) "minute" else "minutes"
     return when (m) {
         0 -> "${words[h - 1]} o' clock"
