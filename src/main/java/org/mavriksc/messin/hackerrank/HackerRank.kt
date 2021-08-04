@@ -1,5 +1,6 @@
 package org.mavriksc.messin.hackerrank
 
+import org.mavriksc.messin.objects.CombinationGenerator
 import java.io.File
 import java.math.BigInteger
 import java.util.*
@@ -8,7 +9,7 @@ import kotlin.math.*
 import kotlin.random.Random
 
 fun main() {
-    println(appendAndDelete("ashle","ash",2))
+    println(sherlockGCD(arrayOf(15015,10010,6006,4290,2730,2310,20020,40040,80080,12012,24024,48048,96096,8580,17160,34320,68640,5460,10920,21840,43680,87360,4620,9240,18480,36960,73920)))
 
 }
 
@@ -16,24 +17,50 @@ fun readFile(path: String): List<String> {
     return File(path).readLines()
 }
 
+fun sherlockGCD(a: Array<Int>): String {
+    // Write your code here
+    if (a.size > 1) {
+        val cg = CombinationGenerator(a.asList(), 2)
+        while (cg.hasNext()) {
+            val list = cg.next()
+            if (isCoprime(list[0], list[1]))
+                return "Yes"
+        }
+    }
+    return "No"
+}
+
+fun isCoprime(a: Int, b: Int) = euclidGCD(a, b) == 1
+
+fun euclidGCD(a: Int, b: Int): Int {
+    return if (a >= b) euclidGCDNoTest(a, b)
+    else euclidGCDNoTest(b, a)
+}
+
+fun euclidGCDNoTest(a: Int, b: Int): Int {
+    return if (b == 0) a
+    else euclidGCDNoTest(b, a % b)
+}
+
+
 //https://www.hackerrank.com/challenges/append-and-delete/problem
 fun appendAndDelete(s: String, t: String, k: Int): String {
-    // Write your code here
+    // if the length diff is more than the char change no
     return if (abs(s.length - t.length) > k)
         "No"
     else {
-        // ERROR: issue is that it needs to be from s->t only not just either string
-            // actually the problem is symmetric they just have problems with tier tests rip
-
         // from the start of both strings compare until the first difference found.
-        // this will have to be eliminated to match the strings
-        // if the # of chars in both strings to the right of this position is > k no otherwise yes.
+        // if the # of chars in both strings including and to the right of this position is > k no otherwise yes.
+
+        // ERROR: issue is that it needs to be from s->t only not just either string
+        // actually the problem is symmetric they just have problems with tier tests rip
+
         val shortStringLen = min(s.length, t.length)
         var index = 0
         while (index < shortStringLen && s[index] == t[index]) {
-           index++
+            index++
         }
-        if (s.length-index + t.length-index > k)
+        if (s.length - index + t.length - index > k)
             "No"
         else
             "Yes"

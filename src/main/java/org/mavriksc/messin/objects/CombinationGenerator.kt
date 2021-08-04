@@ -9,7 +9,6 @@ class CombinationGenerator<T>(private val items: List<T>, choose: Int = 1) : Ite
     init {
         if (items.isEmpty() || choose > items.size || choose < 1)
             error("list must have at least 'choose' items and 'choose' min is 1")
-        println(count)
     }
 
     override fun hasNext() = count > 0
