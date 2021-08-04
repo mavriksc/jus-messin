@@ -9,7 +9,39 @@ import kotlin.math.*
 import kotlin.random.Random
 
 fun main() {
-    println(sherlockGCD(arrayOf(15015,10010,6006,4290,2730,2310,20020,40040,80080,12012,24024,48048,96096,8580,17160,34320,68640,5460,10920,21840,43680,87360,4620,9240,18480,36960,73920)))
+    println(
+        sherlockGCD(
+            arrayOf(
+                15015,
+                10010,
+                6006,
+                4290,
+                2730,
+                2310,
+                20020,
+                40040,
+                80080,
+                12012,
+                24024,
+                48048,
+                96096,
+                8580,
+                17160,
+                34320,
+                68640,
+                5460,
+                10920,
+                21840,
+                43680,
+                87360,
+                4620,
+                9240,
+                18480,
+                36960,
+                73920
+            )
+        )
+    )
 
 }
 
@@ -18,16 +50,8 @@ fun readFile(path: String): List<String> {
 }
 
 fun sherlockGCD(a: Array<Int>): String {
-    // Write your code here
-    if (a.size > 1) {
-        val cg = CombinationGenerator(a.asList(), 2)
-        while (cg.hasNext()) {
-            val list = cg.next()
-            if (isCoprime(list[0], list[1]))
-                return "Yes"
-        }
-    }
-    return "No"
+    return if (a.size > 1 && a.fold(a[0]) { acc, i -> euclidGCD(acc, i) } == 1) "YES"
+    else "NO"
 }
 
 fun isCoprime(a: Int, b: Int) = euclidGCD(a, b) == 1
