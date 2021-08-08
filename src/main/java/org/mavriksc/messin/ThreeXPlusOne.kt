@@ -21,17 +21,12 @@ fun sieveOfEratosthenes(n: Int) {
     // prime, else true.
     val prime = BooleanArray(n + 1) { true }
     val limit = floor(sqrt(n.toDouble())).toInt()
-    for (x in 2..limit){
-
-    }
-    var p = 2
-    while (p * p <= n) {
+    for (p in 2..limit){
         if (prime[p]) {
             for (i in p * p..n step p) {
                 prime[i] = false
             }
         }
-        p++
     }
 
     // Print all prime numbers
