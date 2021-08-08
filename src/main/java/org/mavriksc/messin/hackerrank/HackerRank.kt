@@ -49,6 +49,7 @@ fun readFile(path: String): List<String> {
     return File(path).readLines()
 }
 
+//https://www.hackerrank.com/challenges/sherlock-and-gcd/problem
 fun sherlockGCD(a: Array<Int>): String {
     return if (a.size > 1 && a.fold(a[0]) { acc, i -> euclidGCD(acc, i) } == 1) "YES"
     else "NO"
