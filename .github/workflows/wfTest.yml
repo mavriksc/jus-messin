@@ -33,9 +33,9 @@ jobs:
           
       - name: 🧙‍♂️Create database
         run: |
-          PGPASSWORD=postgres psql -U postgres -p 5432 -h localhost -tc "SELECT 'CREATE DATABASE mydb' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'mydb')"
+          PGPASSWORD=postgres psql -U postgres -p 5432 -h localhost -f scripts/init_test_dbs.sql
 
 
       - name: ✅ Verify database
         run: |
-          PGPASSWORD=postgres psql -U postgres -p 5432 -h localhost -d mydb -tc "CREATE TABLE accounts (user_id serial PRIMARY KEY, username VARCHAR ( 50 ) UNIQUE NOT NULL, password VARCHAR ( 50 ) NOT NULL, email VARCHAR ( 255 ) UNIQUE NOT NULL, created_on TIMESTAMP NOT NULL, last_login TIMESTAMP);"
+          PGPASSWORD=postgres psql -U postgres -p 5432 -h localhost -d a_test -tc "CREATE TABLE accounts (user_id serial PRIMARY KEY, username VARCHAR ( 50 ) UNIQUE NOT NULL, password VARCHAR ( 50 ) NOT NULL, email VARCHAR ( 255 ) UNIQUE NOT NULL, created_on TIMESTAMP NOT NULL, last_login TIMESTAMP);"
