@@ -7,7 +7,19 @@ fun main() {
     //dayOnePuzzleTwo()
     //dayTwoPuzzleOne()
     //dayTwoPuzzleTwo()
-    dayThreePuzzleOne()
+    //dayThreePuzzleOne()
+    dayThreePuzzleTwo()
+}
+
+fun dayThreePuzzleTwo() {
+    val lines = "advent/adventofcode.com_2022_day_3_input.txt".readFile()!!
+    println(lines.chunked(3).map {
+        val e1 = it[0].toSet()
+        val e2 = it[1].toSet()
+        val e3 = it[2].toSet()
+        val item = e1.intersect(e2).intersect(e3).first().toInt()
+        if (item > 90) item - 96 else item - 38
+    }.sum())
 }
 
 fun dayThreePuzzleOne() {
