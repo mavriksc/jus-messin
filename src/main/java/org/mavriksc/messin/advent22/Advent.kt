@@ -11,7 +11,26 @@ fun main() {
     //dayThreePuzzleTwo()
     //dayFourPuzzleOne()
     //dayFourPuzzleTwo()
-    dayFivePuzzleOne()
+    //dayFivePuzzleOne()
+    //daySixPuzzleOne()
+    daySevenPuzzleOne()
+}
+
+fun daySevenPuzzleOne() {
+    val lines = "advent/adventofcode.com_2022_day_7_input.txt".readFile()!!
+
+}
+class Directory(val name:String, val parent: Directory?){
+    val subDirectories = mutableListOf<Directory>()
+    val files = mutableListOf<String>()
+    var size = 0
+}
+
+fun daySixPuzzleOne() {
+    val signal = "advent/adventofcode.com_2022_day_6_input.txt".readFile()!![0]
+    var markerPosition = 14
+    while (signal.subSequence(markerPosition - 14, markerPosition).toSet().size < 14) markerPosition++
+    println(markerPosition)
 }
 
 fun dayFivePuzzleOne() {
