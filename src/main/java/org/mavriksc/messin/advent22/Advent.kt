@@ -18,12 +18,19 @@ fun main() {
 
 fun daySevenPuzzleOne() {
     val lines = "advent/adventofcode.com_2022_day_7_input.txt".readFile()!!
+    // create root node
+    // on cd move to subdir or parent
+    // on ls parse files and dirs into members
+    // run calc size on root.
+    // maybe also have a list of dirs so we can just run thru the list and check size without traversing tree
+
 
 }
 class Directory(val name:String, val parent: Directory?){
     val subDirectories = mutableListOf<Directory>()
     val files = mutableListOf<String>()
     var size = 0
+    // create calc size
 }
 
 fun daySixPuzzleOne() {

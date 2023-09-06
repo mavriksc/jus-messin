@@ -29,3 +29,4 @@ out
 /build
 /.idea
 /.settings
+/private_key.der
