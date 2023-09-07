@@ -9,11 +9,11 @@ val primes = primeFile.readText().split(",").map { it.toInt() }//sieveOfEratosth
 val map = mutableMapOf<Int, MNode>()
 
 
-// ok so we have primes and factor function that are effecient.
+// ok so we have primes and factor function that are efficient.
 
 // then just run it on numbers up to n and store all the factors for those numbers
 // build the 3x+1 tree and then look at the factors as you move down branches of the tree
-// do any branches or segments of branches have paterns in the progression of factors
+// do any branches or segments of branches have patterns in the progression of factors
 // conjecture is equivalent to set of factors will eventually only contain a power of 2
 
 
