@@ -15,17 +15,51 @@ val map = mutableMapOf<Int, MNode>()
 // build the 3x+1 tree and then look at the factors as you move down branches of the tree
 // do any branches or segments of branches have paterns in the progression of factors
 // conjecture is equivalent to set of factors will eventually only contain a power of 2
+
+
+//building of tree is done. need to point to parent  and then look at factors moving from the leaves to root
+
+
 fun main() {
+    buildTree(15)
 
-    //primeFile.writeText(primes.joinToString(","))
+}
 
+fun buildTree(depth: Int) {
+    val root = TNode(1, null)
+    val leaves = mutableListOf<TNode>()
+    leaves.add(root)
+    (0..depth).forEach { _ ->
+        val curLeaves = leaves.toList()
+        leaves.clear()
+        curLeaves.forEach { leaf ->
+            leaf.calcChildren()
+            leaves.addAll(leaf.getChildren())
+        }
+    }
+
+    leaves.clear()
+    leaves.add(root)
+    do {
+        val curLeaves = leaves.toList()
+        leaves.clear()
+        curLeaves.forEach {
+            println("${it.number}: ${it.factors.joinToString(" * ") { f -> "${f.base}^${f.power}" }}")
+            println("Children : ${it.getChildren().joinToString(",") { ch -> ch.number.toString() }}")
+            leaves.addAll(it.getChildren())
+        }
+
+    } while (leaves.isNotEmpty())
+
+}
+
+private fun factorNumbers() {
     (4..n).forEach {
         if (!primes.contains(it)) {
-            val factors = factor(it).map { f -> "${f.base}^${f.power}" }.joinToString(" * ")
+            val factors = factor(it).joinToString(" * ") { f -> "${f.base}^${f.power}" }
             println("$it : $factors")
         } else println("$it : PRIME")
     }
-
 }
 
 fun doThreeXPlusOne(start: Int) {
@@ -82,6 +116,21 @@ fun getPower(base: Int, number: Int): Int {
         pow++
     }
     return pow
+}
+
+class TNode(val number: Int, val parent: TNode?) {
+    val factors = factor(number)
+    var twoTimes: TNode? = null
+        private set
+    var minusOneDivThree: TNode? = null
+        private set
+
+    fun calcChildren() {
+        twoTimes = TNode(number * 2, this)
+        if ((number - 1) % 3 == 0 && (number - 1) / 3 > 1) minusOneDivThree = TNode((number - 1) / 3, this)
+    }
+
+    fun getChildren() = listOfNotNull(twoTimes, minusOneDivThree)
 }
 
 data class MNode(val number: Int, val factors: Set<Factor>, var previous: Int)
