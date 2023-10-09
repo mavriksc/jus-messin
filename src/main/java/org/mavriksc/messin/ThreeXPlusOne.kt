@@ -19,6 +19,9 @@ val map = mutableMapOf<Int, MNode>()
 
 //building of tree is done. need to point to parent  and then look at factors moving from the leaves to root
 
+// ULong wasn't very good
+// TODO Try BigInteger
+// TODO use segmented sieve to get more primes
 
 fun main() {
     buildTree(15)
@@ -82,27 +85,6 @@ fun doThreeXPlusOne(start: Int) {
 
 fun highestPowerOf2(n: Int): Int = n and (n - 1).inv()
 
-//https://www.geeksforgeeks.org/sieve-of-eratosthenes/
-fun sieveOfEratosthenes(n: Int): List<Int> {
-    // Create a boolean array
-    // "prime[0..n]" and
-    // initialize all entries
-    // it as true. A value in
-    // prime[i] will finally be
-    // false if i is Not a
-    // prime, else true.
-    val sieve = BooleanArray(n + 1) { true }
-    val primes = mutableListOf<Int>()
-    for (p in 2..n) {
-        if (sieve[p]) {
-            primes.add(p)
-            for (i in p * p..n step p) {
-                sieve[i] = false
-            }
-        }
-    }
-    return primes
-}
 
 fun factor(number: Int): Set<Factor> =
     primes.take(primes.indexOfFirst { it > number / 2 }).filter { number % it == 0 }
