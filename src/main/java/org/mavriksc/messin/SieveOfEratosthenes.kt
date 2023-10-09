@@ -22,12 +22,12 @@ fun main() {
 // but only after the first segments primes have been found
 fun segmentedSieve(firstValue: BigInteger, lastValue: BigInteger): List<BigInteger> {
     val sieve = BooleanArray((lastValue - firstValue).toInt() + 1) { true }
-    if (firstValue == BigInteger.ZERO) {
+    return if (firstValue == BigInteger.ZERO) {
         val primes = mutableListOf<BigInteger>()
         var current = BigInteger("2")
         while (current <= lastValue) {
             // number is in the interval it may be prime check and then do the sweep
-            if (firstValue < current && sieve[(current - firstValue).toInt()]) {
+            if (sieve[(current - firstValue).toInt()]) {
                 primes.add(current)
             }
             var multiplier = firstValue / current + BigInteger.ONE
@@ -37,7 +37,7 @@ fun segmentedSieve(firstValue: BigInteger, lastValue: BigInteger): List<BigInteg
             }
             current++
         }
-        return primes
+        primes
     } else {
         primez.forEach {
             var multiplier =
@@ -47,7 +47,7 @@ fun segmentedSieve(firstValue: BigInteger, lastValue: BigInteger): List<BigInteg
                 multiplier++
             }
         }
-        return sieve.mapIndexed { i, b -> if (b) firstValue + i.toBigInteger() else null }.filterNotNull()
+        sieve.mapIndexed { i, b -> if (b) firstValue + i.toBigInteger() else null }.filterNotNull()
     }
 
 }
