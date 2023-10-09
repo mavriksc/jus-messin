@@ -6,25 +6,23 @@ import java.math.BigInteger
 // This works. there was 1 off in the outer while of the segment
 
 val writeToPrimeFile = File("primes2.txt")
-val N = BigInteger("10000000")
+val N = BigInteger("1000000000")
 val chunkSize = N.sqrt()
-val primez = mutableListOf<BigInteger>()
 
 fun main() {
     println(chunkSize)
     var chunkNum = BigInteger("1")
     val firstChunkPrimes = firstChunkPrimes(chunkSize - BigInteger.ONE)
-    primez.addAll(firstChunkPrimes)
+    writeToPrimeFile.appendText(firstChunkPrimes.joinToString("\n"))
     while (chunkNum * chunkSize < N) {
-        primez.addAll(
+        writeToPrimeFile.appendText("\n"+(
             segmentedSieve(
                 chunkNum * chunkSize,
                 min(++chunkNum * chunkSize - BigInteger.ONE, N),
                 firstChunkPrimes
-            )
-        )
+            ).joinToString("\n")
+        ))
     }
-    writeToPrimeFile.appendText(primez.joinToString("\n"))
 }
 
 // can make this faster by only sweeping already found primes not every integer----DONE but can do better
