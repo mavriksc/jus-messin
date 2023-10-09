@@ -6,48 +6,72 @@ import java.math.BigInteger
 // This works. there was 1 off in the outer while of the segment
 
 val writeToPrimeFile = File("primes2.txt")
-val chunkSize = BigInteger("10000")
 val N = BigInteger("10000000")
+val chunkSize = N.sqrt()
 val primez = mutableListOf<BigInteger>()
 
 fun main() {
-    var chunkNum = BigInteger("0")
+    println(chunkSize)
+    var chunkNum = BigInteger("1")
+    val firstChunkPrimes = firstChunkPrimes(chunkSize - BigInteger.ONE)
+    primez.addAll(firstChunkPrimes)
     while (chunkNum * chunkSize < N) {
-        primez.addAll(segmentedSieve(chunkNum * chunkSize, ++chunkNum * chunkSize - BigInteger.ONE))
+        primez.addAll(
+            segmentedSieve(
+                chunkNum * chunkSize,
+                min(++chunkNum * chunkSize - BigInteger.ONE, N),
+                firstChunkPrimes
+            )
+        )
     }
     writeToPrimeFile.appendText(primez.joinToString("\n"))
 }
 
-// can make this faster by only sweeping already found primes not every integer
-// but only after the first segments primes have been found
-fun segmentedSieve(firstValue: BigInteger, lastValue: BigInteger): List<BigInteger> {
+// can make this faster by only sweeping already found primes not every integer----DONE but can do better
+// but only after the first segments primes have been found----DONE
+// actually can go even faster do first sqrt floor N and then only sweep those primes not all accumulated---DONE
+// refactored to make it easier to do this but----DONE
+// still need to get and keep first list separate and then sweep the rest--DONE
+fun segmentedSieve(firstValue: BigInteger, lastValue: BigInteger, fcp: List<BigInteger>): List<BigInteger> {
     val sieve = BooleanArray((lastValue - firstValue).toInt() + 1) { true }
-    return if (firstValue == BigInteger.ZERO) {
-        val primes = mutableListOf<BigInteger>()
-        var current = BigInteger("2")
-        while (current <= lastValue) {
-            // number is in the interval it may be prime check and then do the sweep
-            if (sieve[(current - firstValue).toInt()]) {
-                primes.add(current)
-            }
-            var multiplier = firstValue / current + BigInteger.ONE
-            while (multiplier <= lastValue / current) {
-                sieve[((current * multiplier) - firstValue).toInt()] = false
-                multiplier++
-            }
-            current++
+    fcp.forEach {
+        var multiplier =
+            if (firstValue % it == BigInteger.ZERO) firstValue / it else firstValue / it + BigInteger.ONE
+        while (multiplier <= lastValue / it) {
+            sieve[((it * multiplier) - firstValue).toInt()] = false
+            multiplier++
         }
-        primes
-    } else {
-        primez.forEach {
-            var multiplier =
-                if (firstValue % it == BigInteger.ZERO) firstValue / it else firstValue / it + BigInteger.ONE
-            while (multiplier <= lastValue / it) {
-                sieve[((it * multiplier) - firstValue).toInt()] = false
-                multiplier++
-            }
-        }
-        sieve.mapIndexed { i, b -> if (b) firstValue + i.toBigInteger() else null }.filterNotNull()
     }
+    return sieve.mapIndexed { i, b -> if (b) firstValue + i.toBigInteger() else null }.filterNotNull()
+}
 
+private fun firstChunkPrimes(lastValue: BigInteger): List<BigInteger> {
+    val sieve = BooleanArray(lastValue.toInt() + 1) { true }
+    val primes = mutableListOf<BigInteger>()
+    var current = BigInteger("2")
+    while (current <= lastValue) {
+        if (sieve[(current).toInt()]) {
+            primes.add(current)
+        }
+        var multiplier = BigInteger.ONE
+        while (multiplier <= lastValue / current) {
+            sieve[(current * multiplier).toInt()] = false
+            multiplier++
+        }
+        current++
+    }
+    return primes
+}
+
+fun min(a: BigInteger, b: BigInteger): BigInteger = if (a <= b) a else b
+
+fun BigInteger.sqrt(): BigInteger {
+    var div = BigInteger.ZERO.setBit(this.bitLength() / 2)
+    var div2 = div
+    while (true) {
+        val y = div.add(this.divide(div)).shiftRight(1)
+        if (y == div || y == div2) return y
+        div2 = div
+        div = y
+    }
 }
