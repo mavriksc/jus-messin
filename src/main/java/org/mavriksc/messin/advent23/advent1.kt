@@ -6,7 +6,7 @@ fun main() {
     //dayOneA()
     dayOneB()
 }
-
+//test
 fun dayOneB() {
     val lines = "advent23/input1-a.txt".readFile()!!
     var total = 0
