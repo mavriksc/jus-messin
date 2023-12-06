@@ -5,7 +5,7 @@ import java.io.File
 val primeFile = File("primes.txt")
 val factorsFile = File("factors.txt")
 const val n = 46_000
-val primes = primeFile.readText().split(",").map { it.toInt() }//sieveOfEratosthenes(n)
+val primes = primeFile.readText().split(",").map { it.toInt() }
 val map = mutableMapOf<Int, MNode>()
 
 
@@ -16,12 +16,13 @@ val map = mutableMapOf<Int, MNode>()
 // do any branches or segments of branches have patterns in the progression of factors
 // conjecture is equivalent to set of factors will eventually only contain a power of 2
 
-
 //building of tree is done. need to point to parent  and then look at factors moving from the leaves to root
 
+// ANY NODE THAT IS A MULTIPLE OF 3 WILL ONLY HAVE 2x children forever
+
 // ULong wasn't very good
+// use segmented sieve to get more primes--DONE
 // TODO Try BigInteger
-// TODO use segmented sieve to get more primes
 
 fun main() {
     buildTree(15)
@@ -54,15 +55,6 @@ fun buildTree(depth: Int) {
 
     } while (leaves.isNotEmpty())
 
-}
-
-private fun factorNumbers() {
-    (4..n).forEach {
-        if (!primes.contains(it)) {
-            val factors = factor(it).joinToString(" * ") { f -> "${f.base}^${f.power}" }
-            println("$it : $factors")
-        } else println("$it : PRIME")
-    }
 }
 
 fun doThreeXPlusOne(start: Int) {
