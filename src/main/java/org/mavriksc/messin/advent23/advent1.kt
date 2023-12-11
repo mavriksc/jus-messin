@@ -35,9 +35,9 @@ fun dayOneB() {
 //   then when (state) { 0-24 : when (input)-> 'somechar that makes progres' -> return pair (next state, parsed number or null)}
 
 /// Almost got this right. need to make sure i have any word start letters mapped from intermediate states.
-/// there was a bug in seven (eightsever) -> 8 . and also twothree
+/// there was a bug in seven (eightseven) -> 8 . and also twothree
 // fixed by pasting all the initial state edges from other states
-
+// issue was that it would eat the start of a new number while bailing out of the old instead of going right into new
 private fun transitionFunction(state: Int, input: Char): Pair<Int, Int?> {
     return if (input.toInt() in 48..57) {
         Pair(0, input.toInt() - 48)
