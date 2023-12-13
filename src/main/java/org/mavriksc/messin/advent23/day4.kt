@@ -5,7 +5,7 @@ import kotlin.math.pow
 
 fun main() {
     val lines = "advent23/4.txt".readFile()!!
-    //fourPart1(lines)
+    fourPart1(lines)
     fourPart2(lines)
 }
 
@@ -20,13 +20,13 @@ fun fourPart1(lines: List<String>) {
 
 fun fourPart2(lines: List<String>) {
     val bonusCards = IntArray(lines.size) { 1 }
-    lines.forEachIndexed { index, line ->
+    println(lines.mapIndexed { index, line ->
         val matchingNumbers = howManyMatch(line)
-        for (x in index+1..index+matchingNumbers){
-            bonusCards[x]+=bonusCards[index]
+        for (x in index + 1..index + matchingNumbers) {
+            bonusCards[x] += bonusCards[index]
         }
-    }
-    println(bonusCards.sum())
+        bonusCards[index]
+    }.sum())
 }
 
 private fun howManyMatch(line: String): Int {
