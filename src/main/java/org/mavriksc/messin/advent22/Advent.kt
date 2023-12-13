@@ -1,7 +1,8 @@
 package org.mavriksc.messin.advent22
 
+import org.mavriksc.messin.readFile
 
-fun String.readFile() = ClassLoader.getSystemResourceAsStream(this)?.bufferedReader()?.readLines()
+
 fun main() {
     //dayOnePuzzleOne()
     //dayOnePuzzleTwo()

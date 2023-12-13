@@ -1,6 +1,6 @@
 package org.mavriksc.messin.advent23
 
-import org.mavriksc.messin.advent22.readFile
+import org.mavriksc.messin.readFile
 
 fun main() {
     //dayOneA()
