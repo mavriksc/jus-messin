@@ -12,8 +12,7 @@ fun main() {
 fun fourPart1(lines: List<String>) {
     println(lines.map { line ->
         val matchingNumbers = howManyMatch(line)
-        val score = if (matchingNumbers == 0) 0 else
-            (2.0.pow(matchingNumbers - 1)).toInt()
+        val score = if (matchingNumbers == 0) 0 else (2.0.pow(matchingNumbers - 1)).toInt()
         score
     }.sum())
 }
