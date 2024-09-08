@@ -12,6 +12,8 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS }}
+          ref_name: ${{ github.ref_name}}
+          repository: ${{ github.repository}}
           bucket-name: scar-jjrb
           path-tests: reports
           publisher-setup: false
