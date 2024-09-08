@@ -9,8 +9,6 @@ jobs:
     steps:
       - name: do the thing
         uses: mavriksc/publish-tests@master
-        with:
-          path-tests: /home/runner/work/jus-messin/jus-messin/reports
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS }}
@@ -18,3 +16,4 @@ jobs:
           repository: ${{ github.repository}}
           bucket_name: scar-jjrb
           publisher_setup: false
+          path-tests: /home/runner/work/jus-messin/jus-messin/reports
