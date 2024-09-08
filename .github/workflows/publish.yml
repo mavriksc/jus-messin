@@ -7,7 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     name: publish tests
     steps:
-      - name: do the thing
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: ┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻
         uses: mavriksc/publish-tests@master
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
