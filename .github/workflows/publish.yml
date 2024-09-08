@@ -16,4 +16,4 @@ jobs:
           repository: ${{ github.repository}}
           bucket_name: scar-jjrb
           publisher_setup: false
-          path-tests: /home/runner/work/jus-messin/jus-messin/reports
+          path_tests: /home/runner/work/jus-messin/jus-messin/reports
