@@ -17,3 +17,4 @@ jobs:
           bucket_name: scar-jjrb
           path_tests: /home/runner/work/jus-messin/jus-messin/reports
           publisher_setup: false
+        with: 
