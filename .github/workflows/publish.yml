@@ -10,10 +10,10 @@ jobs:
       - name: do the thing
         uses: mavriksc/publish-tests@master
         env:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS }}
           ref_name: ${{ github.ref_name}}
           repository: ${{ github.repository}}
-          bucket-name: scar-jjrb
-          path-tests: /home/runner/work/jus-messin/jus-messin/reports
-          publisher-setup: false
+          bucket_name: scar-jjrb
+          path_tests: /home/runner/work/jus-messin/jus-messin/reports
+          publisher_setup: false
