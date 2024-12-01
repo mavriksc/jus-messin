@@ -9,13 +9,13 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - name: ┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻
-        uses: mavriksc/publish-tests@master
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS }}
-          ref_name: ${{ github.ref_name}}
-          repository: ${{ github.repository}}
-          bucket_name: scar-jjrb
-          publisher_setup: false
-          path_tests: /home/runner/work/jus-messin/jus-messin/bld/reports/tests
+#      - name: ┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻
+#        uses: mavriksc/publish-tests@master
+#        env:
+#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS }}
+#          ref_name: ${{ github.ref_name}}
+#          repository: ${{ github.repository}}
+#          bucket_name: scar-jjrb
+#          publisher_setup: false
+#          path_tests: /home/runner/work/jus-messin/jus-messin/bld/reports/tests

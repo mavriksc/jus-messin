@@ -1,10 +1,10 @@
-package org.mavriksc.messin.advent23
+package org.mavriksc.messin.advent.twentythree
 
 import org.mavriksc.messin.readFile
 import kotlin.math.pow
 
 fun main() {
-    val lines = "advent23/4.txt".readFile()!!
+    val lines = "advent/23/4.txt".readFile()!!
     fourPart1(lines)
     fourPart2(lines)
 }

@@ -9,7 +9,7 @@ public class MapListofStringArrays {
     public static void main(String[] args) throws JsonProcessingException {
         List<String[]> data = new ArrayList<>();
         String[] headers = {"Age","Name","Sex"};
-        String[] row1 = {"23","John","Male"};
+        String[] row1 = {"advent/23","John","Male"};
         String[] row2 = {"19","Sam","Female"};
         String[] row3 = {"18","Alex","Male"};
         data.add(headers);

@@ -1,9 +1,9 @@
-package org.mavriksc.messin.advent23
+package org.mavriksc.messin.advent.twentythree
 
 import org.mavriksc.messin.readFile
 
 fun main() {
-    val lines = "advent23/5i.txt".readFile()!!
+    val lines = "advent/23/5i.txt".readFile()!!
     //fivePart1(lines)
     fivePart2(lines)
 }

@@ -1,4 +1,4 @@
-package org.mavriksc.messin.advent22
+package org.mavriksc.messin.advent.twentytwo
 
 import org.mavriksc.messin.readFile
 
@@ -18,7 +18,7 @@ fun main() {
 }
 
 fun daySevenPuzzleOne() {
-    val lines = "advent/adventofcode.com_2022_day_7_input.txt".readFile()!!
+    val lines = "advent/22/adventofcode.com_2022_day_7_input.txt".readFile()!!
     // create root node
     // on cd move to subdir or parent
     // on ls parse files and dirs into members
@@ -35,14 +35,14 @@ class Directory(val name:String, val parent: Directory?){
 }
 
 fun daySixPuzzleOne() {
-    val signal = "advent/adventofcode.com_2022_day_6_input.txt".readFile()!![0]
+    val signal = "advent/22/adventofcode.com_2022_day_6_input.txt".readFile()!![0]
     var markerPosition = 14
     while (signal.subSequence(markerPosition - 14, markerPosition).toSet().size < 14) markerPosition++
     println(markerPosition)
 }
 
 fun dayFivePuzzleOne() {
-    val lines = "advent/adventofcode.com_2022_day_5_input.txt".readFile()!!
+    val lines = "advent/22/adventofcode.com_2022_day_5_input.txt".readFile()!!
     var i = 0
     while (!lines[i].contains('1')) {
         i++
@@ -71,7 +71,7 @@ fun dayFivePuzzleOne() {
 }
 
 fun dayFourPuzzleTwo() {
-    val lines = "advent/adventofcode.com_2022_day_4_input.txt".readFile()!!
+    val lines = "advent/22/adventofcode.com_2022_day_4_input.txt".readFile()!!
     println(lines.map {
         val ranges = it.split(',')
         val e1 = ranges[0].split('-')
@@ -83,7 +83,7 @@ fun dayFourPuzzleTwo() {
 }
 
 fun dayFourPuzzleOne() {
-    val lines = "advent/adventofcode.com_2022_day_4_input.txt".readFile()!!
+    val lines = "advent/22/adventofcode.com_2022_day_4_input.txt".readFile()!!
     println(lines.map {
         val ranges = it.split(',')
         val e1 = ranges[0].split('-')
@@ -95,7 +95,7 @@ fun dayFourPuzzleOne() {
 }
 
 fun dayThreePuzzleTwo() {
-    val lines = "advent/adventofcode.com_2022_day_3_input.txt".readFile()!!
+    val lines = "advent/22/adventofcode.com_2022_day_3_input.txt".readFile()!!
     println(lines.chunked(3).map {
         val e1 = it[0].toSet()
         val e2 = it[1].toSet()
@@ -106,7 +106,7 @@ fun dayThreePuzzleTwo() {
 }
 
 fun dayThreePuzzleOne() {
-    val lines = "advent/adventofcode.com_2022_day_3_input.txt".readFile()!!
+    val lines = "advent/22/adventofcode.com_2022_day_3_input.txt".readFile()!!
     println(lines.map {
         val comp1 = it.substring(0, it.length / 2).toSet()
         val comp2 = it.substring(it.length / 2).toSet()
@@ -117,7 +117,7 @@ fun dayThreePuzzleOne() {
 }
 
 fun dayTwoPuzzleTwo() {
-    val lines = "advent/adventofcode.com_2022_day_2_input.txt".readFile()
+    val lines = "advent/22/adventofcode.com_2022_day_2_input.txt".readFile()
     var points = 0
     lines?.forEach {
         points += when (it.first()) {
@@ -150,7 +150,7 @@ fun dayTwoPuzzleTwo() {
 }
 
 fun dayTwoPuzzleOne() {
-    val lines = "advent/adventofcode.com_2022_day_2_input.txt".readFile()
+    val lines = "advent/22/adventofcode.com_2022_day_2_input.txt".readFile()
     var points = 0
     lines?.forEach {
         points += pointsForLine(it)
@@ -184,7 +184,7 @@ fun pointsForLine(line: String): Int {
 }
 
 fun dayOnePuzzleOne() {
-    val lines = "advent/adventofcode.com_2022_day_1_input.txt".readFile()
+    val lines = "advent/22/adventofcode.com_2022_day_1_input.txt".readFile()
     val cals = mutableListOf<Int>(0)
 
     lines?.forEach {
@@ -199,7 +199,7 @@ fun dayOnePuzzleOne() {
 }
 
 fun dayOnePuzzleTwo() {
-    val lines = "advent/adventofcode.com_2022_day_1_input.txt".readFile()
+    val lines = "advent/22/adventofcode.com_2022_day_1_input.txt".readFile()
     val top = mutableListOf(0, 0, 0)
     var curSum = 0
     lines?.forEach {

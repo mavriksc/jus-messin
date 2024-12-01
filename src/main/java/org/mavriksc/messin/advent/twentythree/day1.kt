@@ -1,4 +1,4 @@
-package org.mavriksc.messin.advent23
+package org.mavriksc.messin.advent.twentythree
 
 import org.mavriksc.messin.readFile
 
@@ -8,7 +8,7 @@ fun main() {
 }
 //test
 fun dayOneB() {
-    val lines = "advent23/input1-a.txt".readFile()!!
+    val lines = "advent/23/input1-a.txt".readFile()!!
     var total = 0
     lines.forEach {
         var state = 0
@@ -367,7 +367,7 @@ private fun transitionFunction(state: Int, input: Char): Pair<Int, Int?> {
 }
 
 private fun dayOneA() {
-    val lines = "advent23/input1-a.txt".readFile()!!
+    val lines = "advent/23/input1-a.txt".readFile()!!
     var total = 0
     lines.forEach {
         var foundNumber = false

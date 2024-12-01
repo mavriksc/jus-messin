@@ -1,11 +1,11 @@
-package org.mavriksc.messin.advent23
+package org.mavriksc.messin.advent.twentythree
 
 import org.mavriksc.messin.readFile
 import kotlin.math.max
 import kotlin.math.min
 
 fun main() {
-    val lines = "advent23/3input.txt".readFile()!!
+    val lines = "advent/23/3input.txt".readFile()!!
     part1(lines)
     part2(lines)
 }
