@@ -5,7 +5,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 fun main() {
-    val lines = "advent/23/3input.txt".readFile()!!
+    val lines = "advent/23/3input.txt".readFile()
     part1(lines)
     part2(lines)
 }

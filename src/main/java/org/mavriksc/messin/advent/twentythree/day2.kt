@@ -4,7 +4,7 @@ import org.mavriksc.messin.readFile
 import kotlin.math.max
 
 fun main() {
-    val lines = "advent/23/2ainput.txt".readFile()!!
+    val lines = "advent/23/2ainput.txt".readFile()
     val r = 12
     val g = 13
     val b = 14

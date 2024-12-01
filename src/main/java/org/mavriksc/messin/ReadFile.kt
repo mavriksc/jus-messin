@@ -1,5 +1,12 @@
 package org.mavriksc.messin
 
-fun String.readFile() = ClassLoader.getSystemResourceAsStream(this)?.bufferedReader()?.readLines()
+fun String.readFile() = this.toReader()
+    .readLines()
 
-fun <T> String.useLines(block: (Sequence<String>) -> T): T = ClassLoader.getSystemResourceAsStream(this)?.bufferedReader()!!.useLines(block)
+fun <T> String.mapLines(transform: (String) -> T): Sequence<T> = this.toReader()
+    .useLines { lines -> lines.map(transform) }
+
+fun String.toReader() = ClassLoader
+    .getSystemResourceAsStream(this)
+    ?.bufferedReader()!!
+
