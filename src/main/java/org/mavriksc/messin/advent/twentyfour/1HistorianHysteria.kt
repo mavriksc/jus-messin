@@ -12,7 +12,7 @@ fun main() {
     var start = System.currentTimeMillis()
     partOne() //37ms
     println("${System.currentTimeMillis() - start} ms")
-    //partTwo()
+    partTwo()
     start = System.currentTimeMillis()
     tryUseLines()//2ms
     println("${System.currentTimeMillis() - start} ms")
