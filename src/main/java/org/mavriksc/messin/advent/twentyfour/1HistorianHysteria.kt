@@ -4,18 +4,36 @@ import org.mavriksc.messin.readFile
 import org.mavriksc.messin.toReader
 import kotlin.math.abs
 
-// create a read file function that allows you to pass in an operation maybe
 
 
 fun main() {
+    // do this to prevent some first time load delay
+    "advent/24/one/input.txt".toReader()
     var start = System.currentTimeMillis()
-    partOne()
+    partOne() //37ms
     println("${System.currentTimeMillis() - start} ms")
     //partTwo()
     start = System.currentTimeMillis()
-    tryUseLines()
+    tryUseLines()//2ms
     println("${System.currentTimeMillis() - start} ms")
+    start = System.currentTimeMillis()
+    tryUseLinesDirectly()//4ms
+    println("${System.currentTimeMillis() - start} ms")
+    // some small cost for unzipping versus constructing the lists
 
+}
+
+fun tryUseLinesDirectly() {
+    val (left, right) = "advent/24/one/input.txt".toReader().useLines { lines ->
+        lines.map {
+            val parts = it.split(" ")
+            Pair(parts[0].toInt(), parts[3].toInt())
+        }.unzip()
+        //^^^ must use terminal op inside useLines scope or buffer will be closed.
+    }
+    val rightSorted = right.sorted()
+    val answer = left.sorted().mapIndexed { index: Int, i: Int -> abs(rightSorted[index] - i) }.sum()
+    println(answer)
 }
 
 fun tryUseLines() {
