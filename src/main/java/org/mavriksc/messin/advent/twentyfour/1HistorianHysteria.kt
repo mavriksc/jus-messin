@@ -1,25 +1,42 @@
 package org.mavriksc.messin.advent.twentyfour
 
+import org.mavriksc.messin.forEachLine
 import org.mavriksc.messin.readFile
 import org.mavriksc.messin.toReader
 import kotlin.math.abs
 
 
-
 fun main() {
-    // do this to prevent some first time load delay
-    "advent/24/one/input.txt".toReader()
+    // only way to tell perf for sure  is to just run each one independently
+    // as vm seems to do some improvements even just reading once is very close to a dumb approach
     var start = System.currentTimeMillis()
-    partOne() //37ms
-    println("${System.currentTimeMillis() - start} ms")
+    partOne() //42 ms
+    println("Part one dirty: ${System.currentTimeMillis() - start} ms")
+    start = System.currentTimeMillis()
+    tryUseLines()//47 ms
+    println("tryUseLines: ${System.currentTimeMillis() - start} ms")
+    start = System.currentTimeMillis()
+    tryUseLinesDirectly()//47
+    println("tryUseLinesDirectly: ${System.currentTimeMillis() - start} ms")
+    println("Part Two:")
+    start = System.currentTimeMillis()
     partTwo()
+    println("partTwo: ${System.currentTimeMillis() - start} ms")
     start = System.currentTimeMillis()
-    tryUseLines()//2ms
-    println("${System.currentTimeMillis() - start} ms")
+    partTwoImproved()
+    println("partTwoImproved: ${System.currentTimeMillis() - start} ms")
     start = System.currentTimeMillis()
-    tryUseLinesDirectly()//4ms
-    println("${System.currentTimeMillis() - start} ms")
-    // some small cost for unzipping versus constructing the lists
+    bofum() // 47 ms
+    println("bofum: ${System.currentTimeMillis() - start} ms")
+
+}
+
+fun bofum() {
+    val (left, right) = pair()
+    val rightSorted = right.sorted()
+    println( left.sorted().mapIndexed { index: Int, i: Int -> abs(rightSorted[index] - i) }.sum())
+    val counts = right.groupingBy { it }.eachCount()
+    println(left.map { counts.getOrDefault(it, 0) * it }.sum())
 
 }
 
@@ -37,17 +54,28 @@ fun tryUseLinesDirectly() {
 }
 
 fun tryUseLines() {
-    val left = mutableListOf<Int>()
-    val right = mutableListOf<Int>()
-    "advent/24/one/input.txt".toReader().forEachLine {
-        val parts = it.split(" ")
-        left.add(parts[0].toInt())
-        right.add(parts[3].toInt())
-    }
+    val (left, right) = pair()
     right.sort()
     val answer = left.sorted().mapIndexed { index: Int, i: Int -> abs(right[index] - i) }.sum()
     println(answer)
 
+}
+
+private fun pair(): Pair<MutableList<Int>, MutableList<Int>> {
+    val left = mutableListOf<Int>()
+    val right = mutableListOf<Int>()
+    "advent/24/one/input.txt".forEachLine {
+        val parts = it.split(" ")
+        left.add(parts[0].toInt())
+        right.add(parts[3].toInt())
+    }
+    return Pair(left, right)
+}
+
+fun partTwoImproved() {
+    val (left, right) = pair()
+    val counts = right.groupingBy { it }.eachCount()
+    println(left.map { counts.getOrDefault(it, 0) * it }.sum())
 }
 
 fun partTwo() {
@@ -73,6 +101,9 @@ fun twoSortedLists(lines: List<String>, sorted: Boolean = true): Pair<List<Int>,
         left.add(parts[0].toInt())
         right.add(parts[3].toInt())
     }
-    return if (sorted) Pair(left.sorted(), right.sorted())
-    else Pair(left, right)
+    return if (sorted) {
+        left.sort()
+        right.sort()
+        Pair(left, right)
+    } else Pair(left, right)
 }
