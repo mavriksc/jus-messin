@@ -41,7 +41,7 @@ fun bofum() {
 }
 
 fun tryUseLinesDirectly() {
-    val (left, right) = "advent/24/one/input.txt".toReader().useLines { lines ->
+    val (left, right) = "advent/24/1/input.txt".toReader().useLines { lines ->
         lines.map {
             val parts = it.split(" ")
             Pair(parts[0].toInt(), parts[3].toInt())
@@ -64,7 +64,7 @@ fun tryUseLines() {
 private fun pair(): Pair<MutableList<Int>, MutableList<Int>> {
     val left = mutableListOf<Int>()
     val right = mutableListOf<Int>()
-    "advent/24/one/input.txt".forEachLine {
+    "advent/24/1/input.txt".forEachLine {
         val parts = it.split(" ")
         left.add(parts[0].toInt())
         right.add(parts[3].toInt())
@@ -79,7 +79,7 @@ fun partTwoImproved() {
 }
 
 fun partTwo() {
-    val lines = "advent/24/one/input.txt".readFile()
+    val lines = "advent/24/1/input.txt".readFile()
     val lists = twoSortedLists(lines, false)
     val counts = lists.second.groupingBy { it }.eachCount()
     val answer = lists.first.map { counts.getOrDefault(it, 0) * it }.sum()
@@ -87,7 +87,7 @@ fun partTwo() {
 }
 
 fun partOne() {
-    val lines = "advent/24/one/input.txt".readFile()
+    val lines = "advent/24/1/input.txt".readFile()
     val lists = twoSortedLists(lines)
     val answer = lists.first.mapIndexed { index: Int, i: Int -> abs(lists.second[index] - i) }.sum()
     println(answer)

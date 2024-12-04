@@ -17,7 +17,7 @@ fun main() {
 }
 
 fun dayTwoPartOne() {
-    "advent/24/two/input".toReader().useLines { lines ->
+    "advent/24/2/input".toReader().useLines { lines ->
         val t = lines.map { line ->
             line.split(" ")
                 .map { it.toInt() }
@@ -30,7 +30,7 @@ fun dayTwoPartOne() {
 }
 
 fun dayTwoParTwoSanity() {
-    "advent/24/two/input".toReader().useLines { lines ->
+    "advent/24/2/input".toReader().useLines { lines ->
         val t = lines.map { line ->
             line.split(" ")
                 .map { it.toInt() }
@@ -47,7 +47,7 @@ fun dayTwoParTwoSanity() {
 }
 
 fun dayTwoPartOneRecursive() {
-    "advent/24/two/input".toReader().useLines { lines ->
+    "advent/24/2/input".toReader().useLines { lines ->
         val t = lines.map { line ->
             line.split(" ")
                 .map { it.toInt() }
@@ -196,7 +196,7 @@ fun isSafeTailedHandleOneError(
 
 
 fun dayTwoPartTwo() {
-    "advent/24/two/input".toReader().useLines { lines ->
+    "advent/24/2/input".toReader().useLines { lines ->
         val t = lines.map { line ->
             line.split(" ")
                 .map { it.toInt() }
@@ -213,7 +213,7 @@ fun dayTwoPartTwo() {
 
 fun d2p2() {
     val failed = mutableListOf<List<Int>>()
-    val firstPass = "advent/24/two/input".toReader().useLines { lines ->
+    val firstPass = "advent/24/2/input".toReader().useLines { lines ->
         lines.map { line ->
             line.split(" ")
                 .map { it.toInt() }

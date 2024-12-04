@@ -11,7 +11,7 @@ fun main() {
 }
 
 fun day3p1() {
-    val lines = "advent/24/three/input.txt".readFile()
+    val lines = "advent/24/3/input.txt".readFile()
     println(lines.map { line ->
         pattern1.findAll(line)
             .map { it.groupValues[1].toInt() * it.groupValues[2].toInt() }.sum()
@@ -19,7 +19,7 @@ fun day3p1() {
 }
 
 fun day3p2() {
-    val lines = "advent/24/three/input.txt".readFile()
+    val lines = "advent/24/3/input.txt".readFile()
     var mulEnabled = true
     println(lines.map { line ->
         pattern2.findAll(line)
