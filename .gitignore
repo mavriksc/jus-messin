@@ -31,3 +31,4 @@ out
 /.settings
 /private_key.der
 /primes2.txt
+/src/main/resources/obrc/measurements3.txt
