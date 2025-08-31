@@ -24,32 +24,30 @@ data class MeasurementAggregator(
     var max: Double = Double.NEGATIVE_INFINITY,
     var sum: Double = 0.0,
     var count: Int = 0
-)
+) {
+    override fun toString() = "${min.roundTenths()}/${(sum / count).roundTenths()}/${max.roundTenths()}"
+}
 
 fun Double.roundTenths() = (this * 10.0).roundToInt() / 10.0
-data class ResultRow(val min: Double, val avg: Double, val max: Double) {
-    override fun toString() = "${min.roundTenths()}/${avg.roundTenths()}/${max.roundTenths()}"
-
-}
 
 fun naive() {
     val holding: TreeMap<String, MeasurementAggregator> = TreeMap()
 
-    val results = File("D:\\code\\jus-messin\\src\\main\\resources\\obrc\\measurements3.txt")
+    File("D:\\code\\jus-messin\\src\\main\\resources\\obrc\\measurements3.txt")
         .useLines { lines ->
-        lines.map { line -> Measurement(line) }
-            .fold(holding) { acc, measurement ->
-                acc[measurement.station] = acc.getOrDefault(measurement.station, MeasurementAggregator())
-                    .apply {
-                        count++
-                        sum += measurement.temp
-                        min = min(min, measurement.temp)
-                        max = max(max, measurement.temp)
-                    }
-                acc
-            }.map { Pair(it.key, ResultRow(it.value.min, it.value.sum.roundTenths() / it.value.count, it.value.max)) }
-    }
+            lines.map { line -> Measurement(line) }
+                .fold(holding) { acc, measurement ->
+                    acc[measurement.station] = acc.getOrDefault(measurement.station, MeasurementAggregator())
+                        .apply {
+                            count++
+                            sum += measurement.temp
+                            min = min(min, measurement.temp)
+                            max = max(max, measurement.temp)
+                        }
+                    acc
+                }
+        }
 
-    println(results)
+    println(holding)
 
 }
