@@ -34,7 +34,7 @@ private fun mmapCoruts() {
             println(emptyMap<String, MeasurementAggregator>())
             return
         }
-        val chunkSize = min(maxChunk, fileSize/cores)
+        val chunkSize = min(maxChunk, fileSize / cores)
 
         // Compute newline-aligned chunks by backtracking from tentative ends.
         val chunks = mutableListOf<Pair<Long, Long>>() // (position, size)
@@ -44,7 +44,7 @@ private fun mmapCoruts() {
             var end = tentativeEnd
             if (tentativeEnd < fileSize) {
                 // Backtrack to last '\n' within a small window
-                val windowSize = min(1L shl 20, tentativeEnd - position) // up to 1 MiB
+                val windowSize = min(1L shl 7, tentativeEnd - position)
                 val backStart = tentativeEnd - windowSize
                 val backBuf = channel.map(FileChannel.MapMode.READ_ONLY, backStart, windowSize)
                 var lastNL: Long = -1
@@ -56,7 +56,7 @@ private fun mmapCoruts() {
                 if (lastNL >= 0) {
                     end = backStart + lastNL + 1 // include newline
                 } else {
-                    // If no newline found in window, fall back to scanning the whole chunk
+                    println("Couldn't find newline in window, falling back to full scan")
                     val fullScanBuf = channel.map(
                         FileChannel.MapMode.READ_ONLY,
                         position,
@@ -152,6 +152,9 @@ private fun mmapCoruts() {
             }
         }
         println("calcs done converting keys and sorting")
-        println( global.mapKeys { it.key.toString(Charsets.UTF_8) })
+        println(global.mapKeys { it.key.toString(Charsets.UTF_8) })
+        val longestStationKey = global.keys.maxBy { it.size }
+        println("Longest station Name: ${longestStationKey?.toString(Charsets.UTF_8)}")
+        println("Size: ${longestStationKey?.size}")
     }
 }
