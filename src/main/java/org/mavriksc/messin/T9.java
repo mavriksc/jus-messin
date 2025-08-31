@@ -15,7 +15,7 @@ public class T9 {
     }
 
     private static String translate(String input) {
-        List<String> chars = Arrays.asList(input.toLowerCase().split(""));
+        String[] chars = input.toLowerCase().split("");
         StringBuilder sb = new StringBuilder();
         for (String c : chars) {
             String k = "";
