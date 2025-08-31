@@ -17,11 +17,10 @@ private const val maxChunk: Long = Int.MAX_VALUE.toLong()
 private const val newLine = '\n'.toByte()
 private const val semiColon = ';'.toByte()
 private const val slashArgh = '\r'.toByte()
-private val cores = Runtime.getRuntime().availableProcessors()
+private val targetCorutCount = Runtime.getRuntime().availableProcessors()*4
 
 fun main() {
     val start = System.currentTimeMillis()
-    println("Cores: $cores")
     mmapCoruts()
     val end = System.currentTimeMillis()
     println("Elapsed time: ${end - start}ms")
@@ -34,7 +33,7 @@ private fun mmapCoruts() {
             println(emptyMap<String, MeasurementAggregator>())
             return
         }
-        val chunkSize = min(maxChunk, fileSize / cores)
+        val chunkSize = min(maxChunk, fileSize / targetCorutCount)
 
         // Compute newline-aligned chunks by backtracking from tentative ends.
         val chunks = mutableListOf<Pair<Long, Long>>() // (position, size)
@@ -153,8 +152,8 @@ private fun mmapCoruts() {
         }
         println("calcs done converting keys and sorting")
         println(global.mapKeys { it.key.toString(Charsets.UTF_8) })
-        val longestStationKey = global.keys.maxBy { it.size }
-        println("Longest station Name: ${longestStationKey?.toString(Charsets.UTF_8)}")
-        println("Size: ${longestStationKey?.size}")
+//        val longestStationKey = global.keys.maxBy { it.size }
+//        println("Longest station Name: ${longestStationKey?.toString(Charsets.UTF_8)}")
+//        println("Size: ${longestStationKey?.size}")
     }
 }
