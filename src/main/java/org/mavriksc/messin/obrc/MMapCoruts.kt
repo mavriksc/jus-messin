@@ -19,6 +19,10 @@ private const val semiColon = ';'.toByte()
 private const val slashArgh = '\r'.toByte()
 private val targetCorutCount = Runtime.getRuntime().availableProcessors()*4
 
+//improvements left to make.
+// handle measurements as ints
+// parse ints by hand
+// remove branching
 fun main() {
     val start = System.currentTimeMillis()
     mmapCoruts()
