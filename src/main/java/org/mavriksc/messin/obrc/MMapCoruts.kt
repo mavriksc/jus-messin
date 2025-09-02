@@ -17,11 +17,11 @@ private const val maxChunk: Long = Int.MAX_VALUE.toLong()
 private const val newLine = '\n'.toByte()
 private const val semiColon = ';'.toByte()
 private const val slashArgh = '\r'.toByte()
-private val targetCorutCount = Runtime.getRuntime().availableProcessors()*4
+private const val minus = '-'.toByte()
+private val targetCorutCount = Runtime.getRuntime().availableProcessors() * 2
 
 //improvements left to make.
-// handle measurements as ints
-// parse ints by hand
+//3 cursors
 // remove branching
 fun main() {
     val start = System.currentTimeMillis()
@@ -94,7 +94,7 @@ private fun mmapCoruts() {
         val results = runBlocking(Dispatchers.Default) {
             chunks.map { (startPos, size) ->
                 async(Dispatchers.Default) {
-                    val localTree = TreeMap<ByteArray, MeasurementAggregator>(byteArrayComparator())
+                    val localTree = TreeMap<ByteArray, MeasurementAggregatorInt>(byteArrayComparator())
                     val buf = channel.map(FileChannel.MapMode.READ_ONLY, startPos, size)
                     val carry = ByteArrayOutputStream(256)
 
@@ -103,8 +103,8 @@ private fun mmapCoruts() {
                         val split = bytes.indexOfFirst { it == semiColon }
                         if (split <= 0 || split >= bytes.size - 1) return
                         val stationBytes = bytes.copyOfRange(0, split)
-                        val agg = localTree.getOrDefault(stationBytes, MeasurementAggregator())
-                        localTree[stationBytes] = agg.addMeasurementBytes(bytes.copyOfRange(split + 1, bytes.size))
+                        val agg = localTree.getOrDefault(stationBytes, MeasurementAggregatorInt())
+                        localTree[stationBytes] = agg.addMeasurementInt(bytes.copyOfRange(split + 1, bytes.size))
                     }
 
                     var i = 0
@@ -138,14 +138,14 @@ private fun mmapCoruts() {
         }
 
         // Merge local trees
-        val global = TreeMap<ByteArray, MeasurementAggregator>(byteArrayComparator())
+        val global = TreeMap<ByteArray, MeasurementAggregatorInt>(byteArrayComparator())
 
         for (tree in results) {
             for ((k, v) in tree) {
                 val g = global[k]
                 if (g == null) {
                     // Copy to avoid sharing mutable aggregators across maps
-                    global[k] = MeasurementAggregator(v.min, v.max, v.sum, v.count)
+                    global[k] = MeasurementAggregatorInt(v.min, v.max, v.sum, v.count)
                 } else {
                     g.min = min(g.min, v.min)
                     g.max = max(g.max, v.max)
@@ -161,3 +161,32 @@ private fun mmapCoruts() {
 //        println("Size: ${longestStationKey?.size}")
     }
 }
+
+data class MeasurementAggregatorInt(
+    var min: Int = Int.MAX_VALUE,
+    var max: Int = Int.MIN_VALUE,
+    var sum: Int = 0,
+    var count: Int = 0
+) {
+    override fun toString() = "${(min * 0.1).f1()}/${((sum / count) * 0.1).f1()}/${(max * 0.1).f1()}"
+}
+
+fun MeasurementAggregatorInt.addMeasurementInt(bytes: ByteArray): MeasurementAggregatorInt {
+    var index = 0
+    var negative = 1
+    var digits = bytes.size - 2
+    if (bytes[0] == minus) {
+        index = 1
+        negative = -1
+        digits--
+    }
+    val temp = if (digits == 2) negative * ((bytes[index] * 100 + bytes[index + 1] * 10 + bytes[index + 3]) - 5328) else
+        negative * ((bytes[index] * 10 + bytes[index + 2]) - 528)
+    max = max(temp, max)
+    min = min(temp, min)
+    sum += temp
+    count++
+    return this
+}
+
+fun Double.f1() = "%.1f".format(this)
