@@ -18,10 +18,9 @@ private const val newLine = '\n'.toByte()
 private const val semiColon = ';'.toByte()
 private const val slashArgh = '\r'.toByte()
 private const val minus = '-'.toByte()
-private val targetCorutCount = Runtime.getRuntime().availableProcessors() * 2
+private val targetCorutCount = (Runtime.getRuntime().availableProcessors() * 2) - 1
 
 //improvements left to make.
-//dispatch while slicing
 //3 cursors
 // remove branching
 fun main() {
@@ -40,69 +39,56 @@ private fun mmapCoruts() {
         }
         val chunkSize = min(maxChunk, fileSize / targetCorutCount)
 
-        // Compute newline-aligned chunks by backtracking from tentative ends.
-        val chunks = mutableListOf<Pair<Long, Long>>() // (position, size)
-        var position = 0L
-        while (position < fileSize) {
-            val tentativeEnd = min(position + chunkSize, fileSize)
-            var end = tentativeEnd
-            if (tentativeEnd < fileSize) {
-                // Backtrack to last '\n' within a small window
-                val windowSize = min(1L shl 7, tentativeEnd - position)
-                val backStart = tentativeEnd - windowSize
-                val backBuf = channel.map(FileChannel.MapMode.READ_ONLY, backStart, windowSize)
-                var lastNL: Long = -1
-                var idx = 0
-                while (idx < windowSize) {
-                    if (backBuf.get(idx.toInt()) == newLine) lastNL = idx.toLong()
-                    idx++
-                }
-                if (lastNL >= 0) {
-                    end = backStart + lastNL + 1 // include newline
-                } else {
-                    println("Couldn't find newline in window, falling back to full scan")
-                    val fullScanBuf = channel.map(
-                        FileChannel.MapMode.READ_ONLY,
-                        position,
-                        tentativeEnd - position
-                    )
-                    var foundAt: Long = -1
-                    var j = 0L
-                    while (j < fullScanBuf.limit()) {
-                        if (fullScanBuf.get(j.toInt()) == newLine) foundAt = j
-                        j++
-                    }
-                    end = if (foundAt >= 0) position + foundAt + 1 else tentativeEnd
-                }
-            }
-            chunks += position to (end - position)
-            position = end
-        }
-
-        // Build comparator for byte-array keys (lexicographic unsigned compare)
-        fun byteArrayComparator() = Comparator<ByteArray> { a, b ->
-            val len = min(a.size, b.size)
-            var i = 0
-            while (i < len) {
-                val diff = (a[i].toInt() and 0xFF) - (b[i].toInt() and 0xFF)
-                if (diff != 0) return@Comparator diff
-                i++
-            }
-            a.size - b.size
-        }
-
-        // Process each chunk in parallel coroutines
+        // Compute newline-aligned chunks by backtracking from tentative ends
+        // and dispatch processing immediately for each chunk.
         val results = runBlocking(Dispatchers.Default) {
-            chunks.map { (startPos, size) ->
-                async(Dispatchers.Default) {
+            val deferreds =
+                mutableListOf<kotlinx.coroutines.Deferred<Map<ByteArray, MeasurementAggregatorInt>>>()
+            var position = 0L
+            while (position < fileSize) {
+                val tentativeEnd = min(position + chunkSize, fileSize)
+                var end = tentativeEnd
+                if (tentativeEnd < fileSize) {
+                    // Backtrack to last '\n' within a small window
+                    val windowSize = min(1L shl 7, tentativeEnd - position)
+                    val backStart = tentativeEnd - windowSize
+                    val backBuf = channel.map(FileChannel.MapMode.READ_ONLY, backStart, windowSize)
+                    var lastNL: Long = -1
+                    var idx = 0
+                    while (idx < windowSize) {
+                        if (backBuf.get(idx.toInt()) == newLine) lastNL = idx.toLong()
+                        idx++
+                    }
+                    if (lastNL >= 0) {
+                        end = backStart + lastNL + 1 // include newline
+                    } else {
+                        println("Couldn't find newline in window, falling back to full scan")
+                        val fullScanBuf = channel.map(
+                            FileChannel.MapMode.READ_ONLY,
+                            position,
+                            tentativeEnd - position
+                        )
+                        var foundAt: Long = -1
+                        var j = 0L
+                        while (j < fullScanBuf.limit()) {
+                            if (fullScanBuf.get(j.toInt()) == newLine) foundAt = j
+                            j++
+                        }
+                        end = if (foundAt >= 0) position + foundAt + 1 else tentativeEnd
+                    }
+                }
+
+                val startPos = position
+                val size = end - position
+
+                // Dispatch processing for this chunk immediately
+                deferreds += async(Dispatchers.Default) {
                     val localTree = TreeMap<ByteArray, MeasurementAggregatorInt>(byteArrayComparator())
                     val buf = channel.map(FileChannel.MapMode.READ_ONLY, startPos, size)
                     val carry = ByteArrayOutputStream(256)
 
                     fun handleLine(bytes: ByteArray) {
-                        if (bytes.isEmpty()) return
                         val split = bytes.indexOfFirst { it == semiColon }
-                        if (split <= 0 || split >= bytes.size - 1) return
                         val stationBytes = bytes.copyOfRange(0, split)
                         val agg = localTree.getOrDefault(stationBytes, MeasurementAggregatorInt())
                         localTree[stationBytes] = agg.addMeasurementInt(bytes.copyOfRange(split + 1, bytes.size))
@@ -132,10 +118,11 @@ private fun mmapCoruts() {
                         } else lineBytes
                         handleLine(trimmed)
                     }
-
                     localTree
                 }
-            }.awaitAll()
+                position = end
+            }
+            deferreds.awaitAll()
         }
 
         // Merge local trees
@@ -161,6 +148,18 @@ private fun mmapCoruts() {
 //        println("Longest station Name: ${longestStationKey?.toString(Charsets.UTF_8)}")
 //        println("Size: ${longestStationKey?.size}")
     }
+}
+
+// Build comparator for byte-array keys (lexicographic unsigned compare)
+private fun byteArrayComparator() = Comparator<ByteArray> { a, b ->
+    val len = min(a.size, b.size)
+    var i = 0
+    while (i < len) {
+        val diff = (a[i].toInt() and 0xFF) - (b[i].toInt() and 0xFF)
+        if (diff != 0) return@Comparator diff
+        i++
+    }
+    a.size - b.size
 }
 
 data class MeasurementAggregatorInt(
