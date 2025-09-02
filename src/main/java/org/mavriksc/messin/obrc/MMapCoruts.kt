@@ -21,6 +21,7 @@ private const val minus = '-'.toByte()
 private val targetCorutCount = Runtime.getRuntime().availableProcessors() * 2
 
 //improvements left to make.
+//dispatch while slicing
 //3 cursors
 // remove branching
 fun main() {
