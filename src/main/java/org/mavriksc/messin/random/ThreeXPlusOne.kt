@@ -60,7 +60,7 @@ fun buildTree(depth: Int) {
 fun doThreeXPlusOne(start: Int) {
     var current = start
     var previous = 0
-    var next = 0
+    var next: Int
     do {
         map[current] = MNode(current, factor(current), previous)
         next = if (current % 2 == 0)

@@ -1,6 +1,5 @@
 package org.mavriksc.messin.hackerrank
 
-import org.mavriksc.messin.objects.CombinationGenerator
 import java.io.File
 import java.math.BigInteger
 import java.util.*
@@ -103,7 +102,7 @@ fun bonAppetit(bill: Array<Int>, k: Int, b: Int) {
 
 fun pageCount(n: Int, p: Int) = min(p / 2, if (n % 2 == 0) ((n - p) + 1) / 2 else (n - p) / 2)
 
-fun countingValleys(n: Int, s: String): Int {
+fun countingValleys(s: String): Int {
     var height = 0
     var valCount = 0
     var oldHeight = 0
@@ -415,7 +414,7 @@ fun happyLadybugs(b: String): String {
     }
 }
 
-fun workbook(n: Int, k: Int, arr: Array<Int>): Int {
+fun workbook(k: Int, arr: Array<Int>): Int {
     var pageCount = 0
     return arr.map { i ->
         val pagesInChapter = (i - 1) / k + 1

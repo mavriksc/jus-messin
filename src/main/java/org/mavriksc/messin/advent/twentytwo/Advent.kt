@@ -119,7 +119,7 @@ fun dayThreePuzzleOne() {
 fun dayTwoPuzzleTwo() {
     val lines = "advent/22/adventofcode.com_2022_day_2_input.txt".readFile()
     var points = 0
-    lines?.forEach {
+    lines.forEach {
         points += when (it.first()) {
             'A' -> when (it.last()) { // ROCK
                 'X' -> 3 + 0 // LOSS
@@ -152,7 +152,7 @@ fun dayTwoPuzzleTwo() {
 fun dayTwoPuzzleOne() {
     val lines = "advent/22/adventofcode.com_2022_day_2_input.txt".readFile()
     var points = 0
-    lines?.forEach {
+    lines.forEach {
         points += pointsForLine(it)
     }
     println(points)
@@ -187,7 +187,7 @@ fun dayOnePuzzleOne() {
     val lines = "advent/22/adventofcode.com_2022_day_1_input.txt".readFile()
     val cals = mutableListOf<Int>(0)
 
-    lines?.forEach {
+    lines.forEach {
         if (it.isEmpty())
             cals.add(0)
         else {
@@ -202,7 +202,7 @@ fun dayOnePuzzleTwo() {
     val lines = "advent/22/adventofcode.com_2022_day_1_input.txt".readFile()
     val top = mutableListOf(0, 0, 0)
     var curSum = 0
-    lines?.forEach {
+    lines.forEach {
         if (it.isEmpty()) {
             pushToList(curSum, top)
             curSum = 0
