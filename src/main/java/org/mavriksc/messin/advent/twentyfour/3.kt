@@ -1,6 +1,6 @@
 package org.mavriksc.messin.advent.twentyfour
 
-import org.mavriksc.messin.readFile
+import org.mavriksc.messin.random.readFile
 
 val pattern1 = "mul\\((\\d+),(\\d+)\\)".toRegex()
 val pattern2 = "mul\\((\\d+),(\\d+)\\)|do\\(\\)|don't\\(\\)".toRegex()

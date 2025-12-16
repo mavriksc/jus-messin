@@ -1,6 +1,6 @@
 package org.mavriksc.messin.advent.twentyfour
 
-import org.mavriksc.messin.toReader
+import org.mavriksc.messin.random.toReader
 import kotlin.math.abs
 
 

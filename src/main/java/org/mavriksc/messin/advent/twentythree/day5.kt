@@ -1,6 +1,6 @@
 package org.mavriksc.messin.advent.twentythree
 
-import org.mavriksc.messin.readFile
+import org.mavriksc.messin.random.readFile
 
 fun main() {
     val lines = "advent/23/5i.txt".readFile()

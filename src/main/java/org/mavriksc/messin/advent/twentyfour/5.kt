@@ -1,6 +1,6 @@
 package org.mavriksc.messin.advent.twentyfour
 
-import org.mavriksc.messin.readFile
+import org.mavriksc.messin.random.readFile
 import java.util.*
 
 fun main() {

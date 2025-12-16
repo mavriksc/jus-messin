@@ -1,8 +1,8 @@
 package org.mavriksc.messin.advent.twentyfour
 
-import org.mavriksc.messin.forEachLine
-import org.mavriksc.messin.readFile
-import org.mavriksc.messin.toReader
+import org.mavriksc.messin.random.forEachLine
+import org.mavriksc.messin.random.readFile
+import org.mavriksc.messin.random.toReader
 import kotlin.math.abs
 
 

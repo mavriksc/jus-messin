@@ -1,6 +1,6 @@
 package org.mavriksc.messin.advent.twentythree
 
-import org.mavriksc.messin.readFile
+import org.mavriksc.messin.random.readFile
 import kotlin.math.pow
 
 fun main() {
