@@ -77,9 +77,9 @@ fun doThreeXPlusOne(start: Int) {
 
 fun highestPowerOf2(n: Int): Int = n and (n - 1).inv()
 
-
+// powers of 1 arent working but maybe only for low numbers. use filter instead of take to get the right answer and improve later
 fun factor(number: Int): Set<Factor> =
-    primes.take(primes.indexOfFirst { it > number / 2 }).filter { number % it == 0 }
+    primes.takeWhile { it <= number }.filter { number % it == 0 }
         .map { Factor(it, getPower(it, number)) }.toSet()
 
 fun getPower(base: Int, number: Int): Int {
