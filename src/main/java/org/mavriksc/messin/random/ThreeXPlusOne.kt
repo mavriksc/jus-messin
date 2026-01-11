@@ -2,10 +2,12 @@ package org.mavriksc.messin.random
 
 import java.io.File
 
+import java.math.BigInteger
+
 val primeFile = File("primes.txt")
 val factorsFile = File("factors.txt")
 const val n = 46_000
-val primes = primeFile.readText().split(",").map { it.toInt() }
+val primes = primeFile.readText().split(",").map { it.trim().toBigInteger() }
 val map = mutableMapOf<Int, MNode>()
 
 
@@ -62,7 +64,7 @@ fun doThreeXPlusOne(start: Int) {
     var previous = 0
     var next: Int
     do {
-        map[current] = MNode(current, factor(current), previous)
+        map[current] = MNode(current, factor(current.toBigInteger()), previous)
         next = if (current % 2 == 0)
             current / 2
         else
@@ -78,14 +80,14 @@ fun doThreeXPlusOne(start: Int) {
 fun highestPowerOf2(n: Int): Int = n and (n - 1).inv()
 
 // powers of 1 arent working but maybe only for low numbers. use filter instead of take to get the right answer and improve later
-fun factor(number: Int): Set<Factor> =
-    primes.takeWhile { it <= number }.filter { number % it == 0 }
+fun factor(number: BigInteger): Set<Factor> =
+    primes.takeWhile { it <= number }.filter { number % it == BigInteger.ZERO }
         .map { Factor(it, getPower(it, number)) }.toSet()
 
-fun getPower(base: Int, number: Int): Int {
-    var x = number / base;
-    var pow = 1;
-    while (x % base == 0) {
+fun getPower(base: BigInteger, number: BigInteger): BigInteger {
+    var x = number / base
+    var pow = BigInteger.ONE
+    while (x % base == BigInteger.ZERO) {
         x /= base
         pow++
     }
@@ -93,7 +95,7 @@ fun getPower(base: Int, number: Int): Int {
 }
 
 class TNode(val number: Int, val parent: TNode?) {
-    val factors = factor(number)
+    val factors = factor(number.toBigInteger())
     var twoTimes: TNode? = null
         private set
     var minusOneDivThree: TNode? = null
@@ -108,4 +110,4 @@ class TNode(val number: Int, val parent: TNode?) {
 }
 
 data class MNode(val number: Int, val factors: Set<Factor>, var previous: Int)
-data class Factor(val base: Int, val power: Int)
+data class Factor(val base: BigInteger, val power: BigInteger)
