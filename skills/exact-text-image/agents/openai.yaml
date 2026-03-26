@@ -1,0 +1,3 @@
+display_name: Exact Text Image
+short_description: Render exact text into images from JSON specs with bounding boxes and fonts.
+default_prompt: Generate a JSON spec with explicit bounding boxes for each text item, then render the image using the bundled script.

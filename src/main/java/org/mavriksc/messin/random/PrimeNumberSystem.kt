@@ -16,11 +16,14 @@ fun BigInteger.pow(exponent: BigInteger): BigInteger {
 }
 
 fun main() {
-    (2..1000).forEach { source ->
+    val firstXPrimes = primes.take(7).fold(BigInteger.ONE) { acc, bigInteger -> acc * bigInteger }.toLong()
+    println(firstXPrimes)
+    println(Long.MAX_VALUE > firstXPrimes)
+    (2..firstXPrimes).forEach { source ->
         val factor = factor(source.toBigInteger())
         val newNum = factor.map {
             it.power * BigInteger.TEN.pow(BigInteger.valueOf(primes.indexOf(it.base).toLong()))
         }.fold(BigInteger.ZERO) { acc, bigInteger -> acc + bigInteger }
-        println("$source -> $newNum")
+        println("${source.toString().padStart(5, ' ')} -> (${factor.size}) ->  $newNum")
     }
 }

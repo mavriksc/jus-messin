@@ -1,7 +1,7 @@
 package org.mavriksc.messin.bs;
 
 public class Node {
-    private int value;
+    private final int value;
     private Node left;
     private Node right;
 
@@ -28,4 +28,5 @@ public class Node {
     public Node getRight() {
         return right;
     }
+
 }

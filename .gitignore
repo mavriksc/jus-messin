@@ -23,8 +23,6 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-/out
-out
 /.gradle
 /build
 /.idea
@@ -32,3 +30,4 @@ out
 /private_key.der
 /primes2.txt
 /src/main/resources/obrc/measurements3.txt
+out/
