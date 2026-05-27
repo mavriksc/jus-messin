@@ -1,0 +1,53 @@
+{
+"name": "faceswap_1080ti_optimized",
+"nodes": [
+{
+"id": 1,
+"type": "LoadVideo"
+},
+{
+"id": 2,
+"type": "VideoFrameExtract",
+"inputs": { "video": 1 }
+},
+{
+"id": 3,
+"type": "ReActorFaceSwap",
+"inputs": {
+"image": 2,
+"model": "inswapper_128.onnx",
+"face_index": 0,
+"detection_size": 640
+}
+},
+{
+"id": 4,
+"type": "CodeFormer",
+"inputs": {
+"image": 3,
+"fidelity": 0.8
+}
+},
+{
+"id": 5,
+"type": "FrameBlend",
+"inputs": {
+"frames": 4,
+"strength": 0.25
+}
+},
+{
+"id": 6,
+"type": "ESRGANUpscale",
+"inputs": {
+"image": 5,
+"scale": 2
+}
+},
+{
+"id": 7,
+"type": "VideoCombine",
+"inputs": { "frames": 6 }
+}
+]
+}

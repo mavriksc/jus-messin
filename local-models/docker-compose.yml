@@ -1,0 +1,61 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    volumes:
+      - /data/models/ollama:/root/.ollama
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [ "gpu" ]
+    healthcheck:
+      test: [ "CMD-SHELL", "OLLAMA_HOST=http://localhost:11434 ollama list >/dev/null 2>&1 || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  ollama-init:
+    image: ollama/ollama:latest
+    container_name: ollama-init
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    volumes:
+      - /data/models/ollama:/root/.ollama
+    entrypoint:
+      - /bin/sh
+      - -lc
+      - |
+        set -e
+        ollama pull llama3.1:8b
+        cat > /tmp/Modelfile <<'EOF'
+        FROM llama3.1:8b
+        PARAMETER num_ctx 16384
+        EOF
+        ollama create llama3.1:8b-16k -f /tmp/Modelfile
+        ollama pull nomic-embed-text
+    restart: "no"
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    ports:
+      - "8080:8080"
+    volumes:
+      - /data/models/open-webui:/app/backend/data
+    restart: unless-stopped

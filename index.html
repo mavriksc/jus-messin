@@ -1,0 +1,40 @@
+<<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+<style>
+	:root {
+  --bg: #ffffff;
+  --text: #111111;
+  --card: #f2f2f2;
+}
+
+[data-theme="dark"] {
+  --bg: #111111;
+  --text: #eeeeee;
+  --card: #1e1e1e;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+</style>
+<script>const next = document.documentElement.dataset.theme === "dark"
+  ? "light"
+  : "dark";
+
+document.documentElement.dataset.theme = next;
+localStorage.setItem("theme", next);</script>
+<script>const saved = localStorage.getItem("theme");
+const systemDark = matchMedia("(prefers-color-scheme: dark)").matches;
+
+document.documentElement.dataset.theme =
+  saved ?? (systemDark ? "dark" : "light");</script>
+</head>
+<body>
+          how are things doing 
+</body>
+</html>

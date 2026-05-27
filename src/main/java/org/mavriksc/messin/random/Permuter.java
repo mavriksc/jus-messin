@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 
 public class Permuter {
-    private static List<String> source = asList("A", "B", "C", "D", "E","F");
-    private static int N = source.size();
+    private static final List<String> source = asList("A", "B", "C", "D", "E","F");
+    private static final int N = source.size();
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -83,8 +83,7 @@ public class Permuter {
     private static String rotateString(String s) {
         if (s == null || s.length() == 1) return s;
         else {
-            StringBuilder sb = new StringBuilder();
-            return sb.append(s.substring(1)).append(s.substring(0, 1)).toString();
+            return s.substring(1) + s.charAt(0);
         }
     }
 

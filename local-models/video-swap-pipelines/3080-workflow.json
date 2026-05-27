@@ -1,0 +1,86 @@
+{
+"name": "faceswap_3080ti_max_quality",
+"nodes": [
+{
+"id": 1,
+"type": "LoadVideo"
+},
+{
+"id": 2,
+"type": "VideoFrameExtract",
+"inputs": { "video": 1 }
+},
+{
+"id": 3,
+"type": "ReActorFaceSwap",
+"inputs": {
+"image": 2,
+"model": "inswapper_128.onnx",
+"face_index": 0,
+"detection_size": 1024
+}
+},
+{
+"id": 4,
+"type": "FaceParsingMask",
+"inputs": { "image": 3 }
+},
+{
+"id": 5,
+"type": "MaskBlur",
+"inputs": {
+"mask": 4,
+"radius": 14
+}
+},
+{
+"id": 6,
+"type": "CodeFormer",
+"inputs": {
+"image": 3,
+"fidelity": 0.65
+}
+},
+{
+"id": 7,
+"type": "StableDiffusionImg2Img",
+"inputs": {
+"image": 6,
+"mask": 5,
+"denoise": 0.3,
+"steps": 25,
+"cfg": 5,
+"prompt": "high detail face, natural skin texture, cinematic lighting, sharp focus"
+}
+},
+{
+"id": 8,
+"type": "CodeFormer",
+"inputs": {
+"image": 7,
+"fidelity": 0.85
+}
+},
+{
+"id": 9,
+"type": "FrameBlend",
+"inputs": {
+"frames": 8,
+"strength": 0.4
+}
+},
+{
+"id": 10,
+"type": "ESRGANUpscale",
+"inputs": {
+"image": 9,
+"scale": 2
+}
+},
+{
+"id": 11,
+"type": "VideoCombine",
+"inputs": { "frames": 10 }
+}
+]
+}

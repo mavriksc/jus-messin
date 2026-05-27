@@ -31,3 +31,4 @@ hs_err_pid*
 /primes2.txt
 /src/main/resources/obrc/measurements3.txt
 out/
+/graphify-out/

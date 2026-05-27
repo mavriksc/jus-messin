@@ -1,6 +1,5 @@
 package org.mavriksc.messin.hackerrank
 
-import java.io.File
 import java.util.*
 import kotlin.math.*
 
@@ -36,44 +35,30 @@ import kotlin.math.*
 
 
 fun main() {
-    //TODO get recources working right
-
-    val scan = Scanner(File("D:\\code\\jus-messin\\src\\main\\resources\\DNA-2.txt"))
-    val start = Date()
-
-    val n = scan.nextLine().trim().toInt()
-
-    val genes = scan.nextLine().split(" ").toTypedArray()
-
-    val health = scan.nextLine().split(" ").map { it.trim().toInt() }.toTypedArray()
-
-    val s = scan.nextLine().trim().toInt()
-    val inputs = Array<StrandInfo?>(s) { null }
-    val geneCat = StringBuilder()
-    for (inputRow in 0 until s) {
-        val firstLastD = scan.nextLine().split(" ")
-        val first = firstLastD[0].trim().toInt()
-        val last = firstLastD[1].trim().toInt()
-        val d = firstLastD[2]
-        geneCat.append(d).append("^")
-        inputs[inputRow] = StrandInfo(first, last)
-    }
-    val geneString = geneCat.toString()
-    var count = 0
-    val textToStrand = Array(geneString.length) { i ->
-        if (geneString[i] == '^') {
-            count++
-            count - 1
-        } else
-            count
-    }
-    val tree = UKKSuffixTree(geneString)
-    scoreAllStrands(tree, inputs, genes, health, textToStrand)
-
-    val end = Date()
-    println(end.time - start.time)
+    println(solveDnaHealth(Scanner(System.`in`)))
 }
 
+fun solveDnaHealth(scan: Scanner): String {
+    val n = scan.nextInt()
+    val genes = Array(n) { scan.next() }
+    val health = Array(n) { scan.nextInt() }
+    val fsm = AhoCorasickHealthFSM(genes)
+
+    var minScore = Long.MAX_VALUE
+    var maxScore = Long.MIN_VALUE
+    val strandCount = scan.nextInt()
+
+    for (i in 0 until strandCount) {
+        val first = scan.nextInt()
+        val last = scan.nextInt()
+        val strand = scan.next()
+        val score = fsm.scoreStrand(strand, StrandInfo(first, last), health)
+        minScore = min(minScore, score)
+        maxScore = max(maxScore, score)
+    }
+
+    return "$minScore $maxScore"
+}
 
 fun scoreAllStrands(tree: UKKSuffixTree, inputs: Array<StrandInfo?>, genes: Array<String>, health: Array<Int>, textToStrand: Array<Int>) {
     val cache = mutableMapOf<String, List<Int>>()
