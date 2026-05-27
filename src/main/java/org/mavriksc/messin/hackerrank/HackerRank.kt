@@ -93,7 +93,7 @@ fun appendAndDelete(s: String, t: String, k: Int): String {
 }
 
 fun designerPdfViewer(h: Array<Int>, word: String) =
-    word.length * word.toLowerCase().chars().map { h[it - 'a'.toInt()] }.max().asInt
+    word.length * word.lowercase().chars().map { h[it - 'a'.toInt()] }.max().asInt
 
 fun bonAppetit(bill: Array<Int>, k: Int, b: Int) {
     val fair = (bill.sum() - bill[k]) / 2 - b

@@ -268,7 +268,7 @@ private fun trajectoryLength(seed: Long): Int {
     return steps
 }
 
-private fun String.toBooleanStrictOrNullCompat(): Boolean? = when (trim().toLowerCase()) {
+private fun String.toBooleanStrictOrNullCompat(): Boolean? = when (trim().lowercase()) {
     "true" -> true
     "false" -> false
     else -> null

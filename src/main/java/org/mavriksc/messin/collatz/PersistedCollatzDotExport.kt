@@ -142,7 +142,7 @@ private fun StringBuilder.appendLineCompat(value: String) {
     append('\n')
 }
 
-private fun String.toBooleanStrictOrNullCompat(): Boolean? = when (trim().toLowerCase()) {
+private fun String.toBooleanStrictOrNullCompat(): Boolean? = when (trim().lowercase()) {
     "true" -> true
     "false" -> false
     else -> null
