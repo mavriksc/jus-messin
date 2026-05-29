@@ -28,13 +28,13 @@ class KPermuterTest {
         val ids = HashSet<String>()
 
         for (column in columns) {
-            for (rotation in column.rotations) {
+            for (rotation in column.orientations) {
                 ids.add(rotation.joinToString(","))
             }
         }
 
         assertEquals(KPermuter.permutations(n).size, ids.size)
-        assertEquals(KPermuter.permutations(n).size, columns.sumBy { it.rotations.size })
+        assertEquals(KPermuter.permutations(n).size, columns.sumOf { it.orientations.size })
     }
 
     @Test
@@ -109,5 +109,20 @@ class KPermuterTest {
 
         assertEquals(120, columns.size)
         assertEquals(120, arrangement.order.size)
+    }
+
+    @Test
+    fun orientedColumnBeamProducesAValidSixSymbolCandidate() {
+        val columns = KPermuter.rotationColumns(6)
+        val result = KPermuter.arrangeOrientedColumnsParallel(columns, 12, 4)
+
+        assertTrue(KPermuter.containsAllPermutations(result.sequence, 6))
+    }
+
+    @Test
+    fun graphBeamProducesAValidFiveSymbolCandidate() {
+        val result = KPermuter.arrangePermutationGraphParallel(5, 12, 4)
+
+        assertTrue(KPermuter.containsAllPermutations(result.sequence, 5))
     }
 }

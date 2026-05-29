@@ -1,14 +1,19 @@
 package org.mavriksc.messin.random
 
 import java.util.PriorityQueue
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import kotlin.system.measureNanoTime
 
 object KPermuter {
     private const val DEFAULT_N = 6
-    private const val DEFAULT_BEAM_WIDTH = 200
+    private const val DEFAULT_COLUMN_BEAM_WIDTH = 48
+    private const val DEFAULT_GRAPH_BEAM_WIDTH = 18
+    private const val DEFAULT_PARALLEL_ATTEMPTS = 8
 
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = runBlocking {
         val n = args.firstOrNull()?.toIntOrNull() ?: DEFAULT_N
         var candidate = IntArray(0)
         val elapsed = measureNanoTime {
@@ -19,7 +24,19 @@ object KPermuter {
         val expected = expectedRecursiveLength(n)
         val columns = rotationColumns(n)
         val greedy = arrangeColumnsGreedy(columns)
-        val beam = arrangeColumnsBeam(columns, DEFAULT_BEAM_WIDTH)
+        val fixedBeam = arrangeColumnsBeam(columns, DEFAULT_COLUMN_BEAM_WIDTH)
+
+        val rotationDeferred = async {
+            timed("rotation-oriented-beam") {
+                arrangeOrientedColumnsParallel(columns, DEFAULT_COLUMN_BEAM_WIDTH, DEFAULT_PARALLEL_ATTEMPTS)
+            }
+        }
+        val graphDeferred = async {
+            timed("graph-permutation-beam") {
+                arrangePermutationGraphParallel(n, DEFAULT_GRAPH_BEAM_WIDTH, DEFAULT_PARALLEL_ATTEMPTS)
+            }
+        }
+        val alternates = awaitAll(rotationDeferred, graphDeferred)
 
         println("n=$n")
         println("length=${candidate.size}")
@@ -29,7 +46,14 @@ object KPermuter {
         println("candidate=$rendered")
         println("rotationColumns=${columns.size}")
         println("greedyColumnLength=${greedy.sequence.size}")
-        println("beamColumnLength=${beam.sequence.size}")
+        println("fixedBeamColumnLength=${fixedBeam.sequence.size}")
+        for (result in alternates) {
+            println("${result.name}Length=${result.sequence.size}")
+            println("${result.name}Valid=${containsAllPermutations(result.sequence, n)}")
+            println("${result.name}Explored=${result.explored}")
+            println("${result.name}ElapsedMs=${result.elapsedNanos / 1_000_000.0}")
+            println("${result.name}Candidate=${render(result.sequence)}")
+        }
     }
 
     fun recursiveSuperpermutation(n: Int): IntArray {
@@ -217,6 +241,153 @@ object KPermuter {
         return buildArrangement(winner.order.toList(), columns)
     }
 
+    fun arrangeOrientedColumnsParallel(
+        columns: List<ColumnBlock>,
+        beamWidth: Int,
+        attempts: Int
+    ): SearchResult = runBlocking {
+        require(attempts > 0) { "attempts must be positive" }
+        (0 until attempts).map { attempt ->
+            async {
+                arrangeOrientedColumnsBeam(columns, beamWidth, attempt, attempts)
+            }
+        }.awaitAll().minBy { it.sequence.size }
+    }
+
+    fun arrangeOrientedColumnsBeam(
+        columns: List<ColumnBlock>,
+        beamWidth: Int,
+        startOffset: Int = 0,
+        startStride: Int = 1
+    ): SearchResult {
+        require(beamWidth > 0) { "beamWidth must be positive" }
+        require(startStride > 0) { "startStride must be positive" }
+        if (columns.isEmpty()) return SearchResult("rotation-oriented-beam", IntArray(0), 0L, 0L)
+
+        val oriented = orientedColumnBlocks(columns)
+        val orientationCount = columns.first().orientations.size
+        val overlaps = sequenceOverlapMatrix(oriented.map { it.sequence })
+        var explored = 0L
+        var states = oriented.indices
+            .filter { oriented[it].column % startStride == startOffset }
+            .map {
+                OrientedBeamState(
+                    bitSetWith(oriented[it].column, columns.size),
+                    oriented[it].column,
+                    it,
+                    intArrayOf(it),
+                    oriented[it].sequence.size
+                )
+            }
+        if (states.isEmpty()) {
+            states = listOf(
+                OrientedBeamState(
+                    bitSetWith(0, columns.size),
+                    0,
+                    0,
+                    intArrayOf(0),
+                    oriented[0].sequence.size
+                )
+            )
+        }
+
+        repeat(columns.size - 1) {
+            val best = PriorityQueue<OrientedBeamState>(compareByDescending<OrientedBeamState> { it.length }
+                .thenBy { it.order.size })
+
+            for (state in states) {
+                for (nextColumn in columns.indices) {
+                    if (!state.hasUsed(nextColumn)) {
+                        for (orientation in 0 until orientationCount) {
+                            val next = nextColumn * orientationCount + orientation
+                            val extra = oriented[next].sequence.size - overlaps[state.lastOriented][next]
+                            val order = state.order.copyOf(state.order.size + 1)
+                            order[order.lastIndex] = next
+                            best.add(
+                                OrientedBeamState(
+                                    state.usedWith(nextColumn),
+                                    nextColumn,
+                                    next,
+                                    order,
+                                    state.length + extra
+                                )
+                            )
+                            explored++
+                            if (best.size > beamWidth) {
+                                best.poll()
+                            }
+                        }
+                    }
+                }
+            }
+
+            states = best.toList()
+        }
+
+        val winner = states.minBy { it.length }
+        return SearchResult("rotation-oriented-beam", buildSequence(winner.order.map { oriented[it].sequence }), explored, 0L)
+    }
+
+    fun arrangePermutationGraphParallel(
+        n: Int,
+        beamWidth: Int,
+        attempts: Int
+    ): SearchResult = runBlocking {
+        require(attempts > 0) { "attempts must be positive" }
+        val perms = permutations(n)
+        val overlaps = sequenceOverlapMatrix(perms)
+        (0 until attempts).map { attempt ->
+            async {
+                arrangePermutationGraphBeam(perms, overlaps, beamWidth, attempt, attempts)
+            }
+        }.awaitAll().minBy { it.sequence.size }
+    }
+
+    fun arrangePermutationGraphBeam(
+        permutations: List<IntArray>,
+        overlaps: Array<IntArray>,
+        beamWidth: Int,
+        startOffset: Int = 0,
+        startStride: Int = 1
+    ): SearchResult {
+        require(beamWidth > 0) { "beamWidth must be positive" }
+        require(startStride > 0) { "startStride must be positive" }
+        if (permutations.isEmpty()) return SearchResult("graph-permutation-beam", IntArray(0), 0L, 0L)
+
+        var explored = 0L
+        var states = permutations.indices
+            .filter { it % startStride == startOffset }
+            .map { GraphBeamState(bitSetWith(it, permutations.size), it, intArrayOf(it), permutations[it].size) }
+        if (states.isEmpty()) {
+            states = listOf(GraphBeamState(bitSetWith(0, permutations.size), 0, intArrayOf(0), permutations[0].size))
+        }
+
+        repeat(permutations.size - 1) {
+            val best = PriorityQueue<GraphBeamState>(compareByDescending<GraphBeamState> { it.length }
+                .thenBy { it.order.size })
+
+            for (state in states) {
+                for (next in permutations.indices) {
+                    if (!state.hasUsed(next)) {
+                        val extra = permutations[next].size - overlaps[state.last][next]
+                        val order = state.order.copyOf(state.order.size + 1)
+                        order[order.lastIndex] = next
+                        best.add(GraphBeamState(state.usedWith(next), next, order, state.length + extra))
+                        explored++
+                        if (best.size > beamWidth) {
+                            best.poll()
+                        }
+                    }
+                }
+            }
+
+            states = best.toList()
+        }
+
+        val winner = states.minBy { it.length }
+        return SearchResult("graph-permutation-beam", buildSequence(winner.order.map { permutations[it] }), explored, 0L)
+    }
+
     fun render(sequence: IntArray): String {
         val builder = StringBuilder(sequence.size)
         for (symbol in sequence) {
@@ -229,6 +400,14 @@ object KPermuter {
         return Array(columns.size) { left ->
             IntArray(columns.size) { right ->
                 if (left == right) columns[left].sequence.size else overlap(columns[left].sequence, columns[right].sequence)
+            }
+        }
+    }
+
+    fun sequenceOverlapMatrix(sequences: List<IntArray>): Array<IntArray> {
+        return Array(sequences.size) { left ->
+            IntArray(sequences.size) { right ->
+                if (left == right) sequences[left].size else overlap(sequences[left], sequences[right])
             }
         }
     }
@@ -286,6 +465,33 @@ object KPermuter {
         return sequence
     }
 
+    private fun orientedColumnBlocks(columns: List<ColumnBlock>): List<OrientedColumnBlock> {
+        val result = ArrayList<OrientedColumnBlock>()
+        for (column in columns) {
+            for (orientation in column.orientations.indices) {
+                result.add(OrientedColumnBlock(column.id, orientation, cyclicBlock(column.orientations[orientation])))
+            }
+        }
+        return result
+    }
+
+    private fun buildSequence(sequences: List<IntArray>): IntArray {
+        if (sequences.isEmpty()) return IntArray(0)
+        var result = sequences.first()
+        for (i in 1 until sequences.size) {
+            result = appendWithOverlap(result, sequences[i])
+        }
+        return result
+    }
+
+    private fun timed(name: String, block: () -> SearchResult): SearchResult {
+        var result: SearchResult
+        val elapsed = measureNanoTime {
+            result = block()
+        }
+        return result.copy(name = name, elapsedNanos = elapsed)
+    }
+
     private fun buildArrangement(order: List<Int>, columns: List<ColumnBlock>): ColumnArrangement {
         val sequences = order.map { columns[it].sequence }
         return ColumnArrangement(order, mergeWithBestOverlap(sequences))
@@ -314,7 +520,7 @@ object KPermuter {
 
 data class ColumnBlock(
     val id: Int,
-    val rotations: List<IntArray>,
+    val orientations: List<IntArray>,
     val sequence: IntArray
 )
 
@@ -322,6 +528,54 @@ data class ColumnArrangement(
     val order: List<Int>,
     val sequence: IntArray
 )
+
+data class SearchResult(
+    val name: String,
+    val sequence: IntArray,
+    val explored: Long,
+    val elapsedNanos: Long
+)
+
+private data class OrientedColumnBlock(
+    val column: Int,
+    val orientation: Int,
+    val sequence: IntArray
+)
+
+private data class OrientedBeamState(
+    val usedMask: LongArray,
+    val lastColumn: Int,
+    val lastOriented: Int,
+    val order: IntArray,
+    val length: Int
+) {
+    fun hasUsed(index: Int): Boolean {
+        return (usedMask[index / 64] and (1L shl (index % 64))) != 0L
+    }
+
+    fun usedWith(index: Int): LongArray {
+        val next = usedMask.copyOf()
+        next[index / 64] = next[index / 64] or (1L shl (index % 64))
+        return next
+    }
+}
+
+private data class GraphBeamState(
+    val usedMask: LongArray,
+    val last: Int,
+    val order: IntArray,
+    val length: Int
+) {
+    fun hasUsed(index: Int): Boolean {
+        return (usedMask[index / 64] and (1L shl (index % 64))) != 0L
+    }
+
+    fun usedWith(index: Int): LongArray {
+        val next = usedMask.copyOf()
+        next[index / 64] = next[index / 64] or (1L shl (index % 64))
+        return next
+    }
+}
 
 private data class BeamState(
     val usedMask: LongArray,

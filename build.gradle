@@ -59,3 +59,9 @@ kotlin {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
     }
 }
+
+tasks.register('runSudokuWfc', JavaExec) {
+    dependsOn classes
+    mainClass = 'org.mavriksc.messin.random.ValidSudokuKt'
+    classpath = sourceSets.main.runtimeClasspath
+}
