@@ -2,7 +2,7 @@ package org.mavriksc.messin.hackerrank
 
 import java.util.ArrayDeque
 
-class AhoCorasickHealthFSM(private val dict: Array<String>, maxS: Int = dict.sumBy { it.length } + 1) {
+class AhoCorasickHealthFSM(private val dict: Array<String>, maxS: Int = dict.sumOf<String> { it.length } + 1) {
     private val maxC = 26
     private val nodes = ArrayList<Node>(maxS)
     private var cachedScores: Array<Int>? = null

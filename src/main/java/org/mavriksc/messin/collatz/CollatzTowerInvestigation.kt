@@ -172,7 +172,7 @@ private fun printSummary(
         .filterValues { it.size >= 10 }
         .entries
         .sortedByDescending { entry ->
-            entry.value.groupingBy { it.absorbedTowerHeight }.eachCount().values.max() ?: 0
+            entry.value.groupingBy { it.absorbedTowerHeight }.eachCount().values.max()
         }
         .take(8)
         .forEach { (signature, rows) ->

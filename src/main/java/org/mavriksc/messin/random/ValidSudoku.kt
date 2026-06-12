@@ -345,7 +345,12 @@ private class SudokuWaveSolver(initialBoard: Array<CharArray>) {
                 if (r != row || c != col) result += CellPosition(r, c)
             }
         }
-        return result.toList()
+        return result.sortedWith(
+            compareBy<CellPosition> { maxOf(kotlin.math.abs(it.row - row), kotlin.math.abs(it.col - col)) }
+                .thenBy { kotlin.math.abs(it.row - row) + kotlin.math.abs(it.col - col) }
+                .thenBy { it.row }
+                .thenBy { it.col }
+        )
     }
 }
 

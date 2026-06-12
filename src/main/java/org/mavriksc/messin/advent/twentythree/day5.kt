@@ -46,7 +46,7 @@ private fun mapToLocation(seeds: List<Long>, maps: List<List<List<Long>>>): Long
         .map { temperature -> mapResource(temperature, maps[5]) }
         .map { humidity -> mapResource(humidity, maps[6]) }.toList()
         .min()
-    return minLocation!!
+    return minLocation
 }
 
 fun fivePart1(lines: List<String>) {

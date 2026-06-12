@@ -93,7 +93,7 @@ fun appendAndDelete(s: String, t: String, k: Int): String {
 }
 
 fun designerPdfViewer(h: Array<Int>, word: String) =
-    word.length * word.lowercase().chars().map { h[it - 'a'.toInt()] }.max().asInt
+    word.length * word.lowercase().chars().map { h[it - 'a'.code] }.max().asInt
 
 fun bonAppetit(bill: Array<Int>, k: Int, b: Int) {
     val fair = (bill.sum() - bill[k]) / 2 - b
@@ -173,7 +173,7 @@ fun formingMagicSquare(s: Array<Array<Int>>): Int {
         sqList.add(magicSq.transpose())
     }
 
-    return sqList.map { it - s }.min()!!
+    return sqList.map { it - s }.min()
 }
 
 fun <T : Comparable<T>> Iterable<T>.maxWithLimit(limit: T): T? {
@@ -190,7 +190,7 @@ fun <T : Comparable<T>> Iterable<T>.maxWithLimit(limit: T): T? {
 
 fun pickingNumbers(a: Array<Int>): Int {
     val numCountMap = a.groupingBy { it }.eachCount()
-    return numCountMap.map { it.value + max(numCountMap[it.key - 1] ?: 0, numCountMap[it.key + 1] ?: 0) }.max()!!
+    return numCountMap.map { it.value + max(numCountMap[it.key - 1] ?: 0, numCountMap[it.key + 1] ?: 0) }.max()
 }
 
 fun climbingLeaderboard(scores: Array<Int>, alice: Array<Int>): Array<Int> {

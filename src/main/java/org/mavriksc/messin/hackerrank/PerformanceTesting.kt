@@ -73,5 +73,5 @@ fun testArrayFilling() {
 }
 
 fun genRandomStrings(n: Int): List<String> {
-    return (1..n).map { _ -> (1..Random.nextInt(5, 20)).map { _ -> Random.nextInt('a'.toInt(), 'z'.toInt()) }.map { it.toChar() }.joinToString("") }.toList()
+    return (1..n).map { _ -> (1..Random.nextInt(5, 20)).map { _ -> Random.nextInt('a'.code, 'z'.code) }.map { it.toChar() }.joinToString("") }.toList()
 }

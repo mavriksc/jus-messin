@@ -11,7 +11,7 @@ fun minimumDistances(a: Array<Int>): Int {
             .filterValues { it.count() > 1 }
             .map { list ->
                 list.value.filterIndexed { index, _ -> index < list.value.size - 1 }
-                        .mapIndexed { idx, pos -> list.value[idx + 1] - pos }.min() ?: Int.MAX_VALUE
+                        .mapIndexed { idx, pos -> list.value[idx + 1] - pos }.min()
             }
-            .minBy { it } ?: -1
+            .minBy { it }
 }

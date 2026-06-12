@@ -7,7 +7,7 @@ import java.math.BigInteger
 
 val writeToPrimeFile = File("primes2.txt")
 val N = BigInteger("1000000000")
-val chunkSize = N.sqrt()
+val chunkSize = N.mySqrt()
 
 fun main() {
     println(chunkSize)
@@ -63,7 +63,7 @@ private fun firstChunkPrimes(lastValue: BigInteger): List<BigInteger> {
 
 fun min(a: BigInteger, b: BigInteger): BigInteger = if (a <= b) a else b
 
-fun BigInteger.sqrt(): BigInteger {
+fun BigInteger.mySqrt(): BigInteger {
     var div = BigInteger.ZERO.setBit(this.bitLength() / 2)
     var div2 = div
     while (true) {

@@ -150,11 +150,11 @@ class SuffixArray(val text: String) {
 }
 
 fun countingSort(a: Array<Int>, place: Int, base: Int): Array<Int> {
-    val b = Array<Int>(a.size) { 0 }
-    val c = Array<Int>(base) { 0 }
+    val b = Array(a.size) { 0 }
+    val c = Array(base) { 0 }
     for (i in a.indices) {
         val digitOfAi = ((a[i] / base.toDouble().pow(place)) % base).toInt()
-        c[digitOfAi.toInt()] += 1
+        c[digitOfAi] += 1
     }
     for (j in 1 until base) c[j]+=c[j-1]
     for (m in a.indices.reversed()){

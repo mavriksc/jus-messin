@@ -126,7 +126,7 @@ private fun computeBranchDepths(
 
 private fun computeTowerAttachmentHeights(nodes: List<PersistedCollatzNode>): Map<Long, Int> =
     nodes.groupBy { towerInfo(it.number).oddCore }
-        .mapValues { entry -> entry.value.map { it.towerHeight }.max() ?: 0 }
+        .mapValues { entry -> entry.value.map { it.towerHeight }.max() }
 
 private fun StringBuilder.appendLineCompat(value: String) {
     append(value)

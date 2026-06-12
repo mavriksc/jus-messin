@@ -197,7 +197,7 @@ object KPermuter {
 
         while (remaining.isNotEmpty()) {
             val next = remaining.maxWith(compareBy<Int> { overlaps[current][it] }
-                .thenByDescending { -it })!!
+                .thenByDescending { -it })
             order.add(next)
             remaining.remove(next)
             current = next
@@ -237,7 +237,7 @@ object KPermuter {
             states = best.toList()
         }
 
-        val winner = states.minBy { it.length }!!
+        val winner = states.minBy { it.length }
         return buildArrangement(winner.order.toList(), columns)
     }
 
@@ -391,7 +391,7 @@ object KPermuter {
     fun render(sequence: IntArray): String {
         val builder = StringBuilder(sequence.size)
         for (symbol in sequence) {
-            builder.append(('A'.toInt() + symbol).toChar())
+            builder.append(('A'.code + symbol).toChar())
         }
         return builder.toString()
     }

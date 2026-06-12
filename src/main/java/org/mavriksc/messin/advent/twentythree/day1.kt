@@ -17,7 +17,7 @@ fun dayOneB() {
             state = next.first
             next.second
         }.filterNotNull().joinToString("")
-        val rowVal = (mappedRow.first().toInt() - 48) * 10 + mappedRow.last().toInt() - 48
+        val rowVal = (mappedRow.first().code - 48) * 10 + mappedRow.last().code - 48
         //println(rowVal)
         total += rowVal
     }
@@ -39,8 +39,8 @@ fun dayOneB() {
 // fixed by pasting all the initial state edges from other states
 // issue was that it would eat the start of a new number while bailing out of the old instead of going right into new
 private fun transitionFunction(state: Int, input: Char): Pair<Int, Int?> {
-    return if (input.toInt() in 48..57) {
-        Pair(0, input.toInt() - 48)
+    return if (input.code in 48..57) {
+        Pair(0, input.code - 48)
     } else {
         when (state) {
             0 -> {
@@ -373,8 +373,8 @@ private fun dayOneA() {
         var foundNumber = false
         var lastNumber = 0
         it.forEach { c: Char ->
-            if (c.toInt() in 48..57) { // is number
-                lastNumber = c.toInt() - 48
+            if (c.code in 48..57) { // is number
+                lastNumber = c.code - 48
                 if (!foundNumber) { // add 10x number to total
                     total += 10 * lastNumber
                     foundNumber = true

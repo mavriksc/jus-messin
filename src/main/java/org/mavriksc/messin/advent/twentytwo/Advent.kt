@@ -100,7 +100,7 @@ fun dayThreePuzzleTwo() {
         val e1 = it[0].toSet()
         val e2 = it[1].toSet()
         val e3 = it[2].toSet()
-        val item = e1.intersect(e2).intersect(e3).first().toInt()
+        val item = e1.intersect(e2).intersect(e3).first().code
         if (item > 90) item - 96 else item - 38
     }.sum())
 }
@@ -110,7 +110,7 @@ fun dayThreePuzzleOne() {
     println(lines.map {
         val comp1 = it.substring(0, it.length / 2).toSet()
         val comp2 = it.substring(it.length / 2).toSet()
-        val intersect = comp1.intersect(comp2).first().toInt()
+        val intersect = comp1.intersect(comp2).first().code
         if (intersect > 90) intersect - 96 else intersect - 38
     }.sum())
 
