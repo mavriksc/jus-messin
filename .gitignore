@@ -32,3 +32,6 @@ hs_err_pid*
 /src/main/resources/obrc/measurements3.txt
 out/
 /graphify-out/
+/.kcp
+/1000p.txt
+/src/main/resources/advent/
