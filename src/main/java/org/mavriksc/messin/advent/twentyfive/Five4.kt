@@ -1,19 +1,10 @@
-package org.mavriksc.messin.advent.five
+package org.mavriksc.messin.advent.twentyfive
 
 import org.mavriksc.messin.random.readFile
 
 fun main() {
-//    val input = ("..@@.@@@@.\n" +
-//            "@@@.@.@.@@\n" +
-//            "@@@@@.@.@@\n" +
-//            "@.@@@@..@.\n" +
-//            "@@.@@@@.@@\n" +
-//            ".@@@@@@@.@\n" +
-//            ".@.@.@.@@@\n" +
-//            "@.@@@.@@@@\n" +
-//            ".@@@@@@@@.\n" +
-//            "@.@.@@@.@.").split("\n")
-    val input = "advent/five/input4.txt".readFile()
+    val sampleOrInput = "sample"
+    val input = "advent/five/${sampleOrInput}4.txt".readFile()
     println(dfPartOne(input))
     println(dfPartTwo(input))
 }

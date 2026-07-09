@@ -1,4 +1,4 @@
-package org.mavriksc.messin.advent.five
+package org.mavriksc.messin.advent.twentyfive
 
 import org.mavriksc.messin.random.readFile
 
@@ -6,11 +6,14 @@ fun main() {
     partTwo()
 }
 
+private const val sampleOrInput = "sample"
+
+private fun dayOneInput() = "advent/five/${sampleOrInput}1.txt".readFile()
 
 fun partOne() {
     var dial = 50
     var pw = 0
-    val input = "advent/five/input1.txt".readFile()
+    val input = dayOneInput()
     input.forEach {
         when {
             it.startsWith("L") -> dial -= it.drop(1).toInt()
@@ -25,7 +28,7 @@ fun partOne() {
 fun partTwo() {
     var dial = 50
     var pw = 0
-    val input = "advent/five/input1.txt".readFile()
+    val input = dayOneInput()
     input.forEach {
         val newState = partTwoMethod(it, dial, pw)
         dial = newState.first
@@ -61,7 +64,7 @@ private fun countZeroPassesAndStops(dial: Int, turn: Int, turnLeft: Int): Int {
 fun partTwoFullDumb() {
     var dial = 50
     var pw = 0
-    val input = "advent/five/input1.txt".readFile()
+    val input = dayOneInput()
     input.forEach {
         val newState = fullDumbMethod(it, dial, pw)
         dial = newState.first

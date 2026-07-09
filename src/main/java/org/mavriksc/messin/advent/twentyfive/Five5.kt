@@ -1,21 +1,10 @@
-package org.mavriksc.messin.advent.five
+package org.mavriksc.messin.advent.twentyfive
 
 import org.mavriksc.messin.random.readFile
 
 fun main() {
-//    val input = "3-5\n" +
-//            "10-14\n" +
-//            "16-20\n" +
-//            "12-18\n" +
-//            "\n" +
-//            "1\n" +
-//            "5\n" +
-//            "8\n" +
-//            "11\n" +
-//            "17\n" +
-//            "32"
-//    val lines = input.split("\n")
-    val lines = "advent/five/input5.txt".readFile()
+    val sampleOrInput = "sample"
+    val lines = "advent/five/${sampleOrInput}5.txt".readFile()
     fiveDayFivePartOne(lines)
     fiveDayFivePartTwo(lines)
 }

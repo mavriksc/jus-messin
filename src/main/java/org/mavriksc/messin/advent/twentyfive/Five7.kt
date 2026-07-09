@@ -1,28 +1,9 @@
-package org.mavriksc.messin.advent.five
+package org.mavriksc.messin.advent.twentyfive
 
 import org.mavriksc.messin.random.readFile
-import kotlin.text.forEachIndexed
-
 fun main() {
-    val input = if (true)
-        "advent/five/input7.txt".readFile()
-    else
-        (".......S.......\n" +
-                "...............\n" +
-                ".......^.......\n" +
-                "...............\n" +
-                "......^.^......\n" +
-                "...............\n" +
-                ".....^.^.^.....\n" +
-                "...............\n" +
-                "....^.^...^....\n" +
-                "...............\n" +
-                "...^.^...^.^...\n" +
-                "...............\n" +
-                "..^...^.....^..\n" +
-                "...............\n" +
-                ".^.^.^.^.^...^.\n" +
-                "...............").split("\n")
+    val sampleOrInput = "sample"
+    val input = "advent/five/${sampleOrInput}7.txt".readFile()
     fiveDaySevenPartOne(input)
     fiveDaySevenPartTwo(input)
 }

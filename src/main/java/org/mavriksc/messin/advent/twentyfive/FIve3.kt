@@ -1,13 +1,10 @@
-package org.mavriksc.messin.advent.five
+package org.mavriksc.messin.advent.twentyfive
 
 import org.mavriksc.messin.random.readFile
 
 fun main() {
-//    val input = ("987654321111111\n" +
-//            "811111111111119\n" +
-//            "234234234234278\n" +
-//            "818181911112111").split("\n")
-    val input = "advent/five/input3.txt".readFile()
+    val sampleOrInput = "sample"
+    val input = "advent/five/${sampleOrInput}3.txt".readFile()
     // println(partOne(input))
     println(partTwoGreedyWindow(input))
 
